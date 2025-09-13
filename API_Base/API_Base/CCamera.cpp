@@ -5,7 +5,7 @@
 #include "CTimeMgr.h"
 
 
-CCamera::CCamera() : m_tTargetObj(nullptr), m_fTime(1.f), m_fSpeed(0.f), m_fAccTime(0.f), m_fZoom(1.f)
+CCamera::CCamera() : m_tTargetObj(nullptr), m_fTime(1.f), m_fSpeed(0.f), m_fAccTime(0.f)
 {
 	//m_vCurLookAt = {}
 }
