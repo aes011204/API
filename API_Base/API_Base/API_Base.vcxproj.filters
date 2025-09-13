@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="00.MainGame">
+      <UniqueIdentifier>{ff696b1b-11f4-4926-8969-b49ba3bd491c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Object">
+      <UniqueIdentifier>{0a909acd-6d9e-4c89-8c89-07bd2f7e82d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Manager">
+      <UniqueIdentifier>{8d81cea5-85b7-45cf-b438-f376df31e87f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Design">
+      <UniqueIdentifier>{926cef62-093f-409d-b331-31ca6bd1f810}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Utils">
+      <UniqueIdentifier>{c54c057d-152a-47f4-9d17-fdf106910858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Object\00.Creature">
+      <UniqueIdentifier>{9644debe-ce42-4341-a5fa-43cdbea94c66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Object\01.NonCreature">
+      <UniqueIdentifier>{4516b98c-b9c2-4a28-84e0-3eb240354bbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Manager\00.Bmp">
+      <UniqueIdentifier>{bd6f12f8-8b54-4642-a815-c372a64ec9cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Scene">
+      <UniqueIdentifier>{86744d25-4224-48ac-910a-e85aedab4814}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="API_Base.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CMainGame.h">
+      <Filter>00.MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="CObj.h">
+      <Filter>01.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimeMgr.h">
+      <Filter>02.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CCreature.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="CObjMgr.h">
+      <Filter>01.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CNonCreature.h">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>04.Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CAbstractFactory.h">
+      <Filter>03.Design</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyMgr.h">
+      <Filter>02.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneMgr.h">
+      <Filter>02.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CMyBmp.h">
+      <Filter>02.Manager\00.Bmp</Filter>
+    </ClInclude>
+    <ClInclude Include="CBmpMgr.h">
+      <Filter>02.Manager\00.Bmp</Filter>
+    </ClInclude>
+    <ClInclude Include="CStage.h">
+      <Filter>05.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene.h">
+      <Filter>05.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CMainMenu.h">
+      <Filter>05.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CVillage.h">
+      <Filter>05.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionMgr.h">
+      <Filter>02.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>02.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonster.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="API_Base.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CMainGame.cpp">
+      <Filter>00.MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="CObj.cpp">
+      <Filter>01.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimeMgr.cpp">
+      <Filter>02.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CCreature.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="CObjMgr.cpp">
+      <Filter>01.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CNonCreature.cpp">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>04.Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CAbstractFactory.cpp">
+      <Filter>03.Design</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyMgr.cpp">
+      <Filter>02.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneMgr.cpp">
+      <Filter>02.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CMyBmp.cpp">
+      <Filter>02.Manager\00.Bmp</Filter>
+    </ClCompile>
+    <ClCompile Include="CBmpMgr.cpp">
+      <Filter>02.Manager\00.Bmp</Filter>
+    </ClCompile>
+    <ClCompile Include="CStage.cpp">
+      <Filter>05.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene.cpp">
+      <Filter>05.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CMainMenu.cpp">
+      <Filter>05.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CVillage.cpp">
+      <Filter>05.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollisionMgr.cpp">
+      <Filter>02.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>02.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonster.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="API_Base.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="API_Base.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
