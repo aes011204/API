@@ -136,6 +136,8 @@
     <ClInclude Include="CCollisionMgr.h" />
     <ClInclude Include="CCreature.h" />
     <ClInclude Include="CKeyMgr.h" />
+    <ClInclude Include="CLine.h" />
+    <ClInclude Include="CLineManager.h" />
     <ClInclude Include="CMainGame.h" />
     <ClInclude Include="CMainMenu.h" />
     <ClInclude Include="CMonster.h" />
@@ -164,6 +166,8 @@
     <ClCompile Include="CCollisionMgr.cpp" />
     <ClCompile Include="CCreature.cpp" />
     <ClCompile Include="CKeyMgr.cpp" />
+    <ClCompile Include="CLine.cpp" />
+    <ClCompile Include="CLineManager.cpp" />
     <ClCompile Include="CMainGame.cpp" />
     <ClCompile Include="CMainMenu.cpp" />
     <ClCompile Include="CMonster.cpp" />

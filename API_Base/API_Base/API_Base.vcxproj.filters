@@ -120,6 +120,12 @@
     <ClInclude Include="CMonster.h">
       <Filter>01.Object\00.Creature</Filter>
     </ClInclude>
+    <ClInclude Include="CLine.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CLineManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_Base.cpp">
@@ -187,6 +193,12 @@
     </ClCompile>
     <ClCompile Include="CMonster.cpp">
       <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="CLine.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CLineManager.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

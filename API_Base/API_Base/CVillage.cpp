@@ -7,6 +7,7 @@
 #include "CBmpMgr.h"
 #include "CMonster.h"
 #include "CKeyMgr.h"
+#include "CLineManager.h"
 
 CVillage::CVillage()
 {
@@ -21,10 +22,15 @@ void CVillage::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Ground.bmp", L"Ground");
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
-	//CCamera::Get_Instance()->SetLookAt({ WINCX * .5, WINCY * .5f });
-	//CCamera::Get_Instance()->SetTarget(CObjMgr::Get_Instance()->Get_Player());
+	
 	CCamera::Get_Instance()->Bootstrap({WINCX*.5f, WINCY*.5f});
+	CCamera::Get_Instance()->SetTarget(CObjMgr::Get_Instance()->Get_Player());
 
+
+	//Line 테스트
+	Vector2 tPoint[2] =
+	{ {0.f,(500.f)}, {150.f,500.f} };
+	CLineManager::Get_Instance()->Create_Line(tPoint, 2);
 }
 
 int CVillage::Update()
@@ -55,6 +61,10 @@ void CVillage::Render(HDC hdc)
 	BitBlt(hdc, RenderPos.x, RenderPos.y, 1920, 1280, hGroundDC, 0, 0, SRCCOPY);
 
 	CObjMgr::Get_Instance()->Render(hdc);
+
+	//Line 테스트
+	CLineManager::Get_Instance()->Render(hdc);
+
 
 }
 

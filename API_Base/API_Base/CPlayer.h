@@ -4,6 +4,9 @@ class CPlayer :
     public CCreature
 {
 public:
+	enum PLAYERSTATE { IDLE, WALK, ATTACK, HIT, DEAD, PS_END };
+
+public:
 	CPlayer();
 	virtual ~CPlayer();
 public:
@@ -14,6 +17,14 @@ public:
 	void Release();
 
 	virtual void On_Collision(CObj* obj);
+
 	void Key_Input();
+	void Motion_Change();
+
+private:
+
+	PLAYERSTATE	m_eCurState;
+	PLAYERSTATE	m_ePreState;
+	
 };
 

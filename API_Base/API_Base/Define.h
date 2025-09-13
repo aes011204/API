@@ -21,7 +21,25 @@ extern HWND g_hWnd;
 template<typename T>
 void	Safe_Delete(T& P) { if (P) { delete P; P = nullptr; } }
 
+typedef struct tagFrame
+{
+	int		iStart;
+	int		iEnd;
+	int		iMotion;
+	double	dwSpeed;
+	double	dwTime;
 
+}FRAME;
+
+
+enum DIRECTION
+{
+	DIR_LEFT,
+	DIR_RIGHT,
+	DIR_UP,
+	DIR_DOWN,
+	DIR_END
+};
 
 enum CREATURE_ID
 {
@@ -50,18 +68,21 @@ enum SCENEID
 #include "Vector2.h"
 typedef struct tagLine
 {
-	Vector2 LPoint;
-	Vector2 RPoint;
+	Vector2 tLeft;
+	Vector2 tRight;
 
 	tagLine()
 	{
 		ZeroMemory(this, sizeof(tagLine));
 	}
 
-	tagLine(Vector2 left, Vector2 right)
-		: LPoint(left), RPoint(right) {
+	tagLine(Vector2 _tLeft, Vector2 _tRight)
+		: tLeft(_tLeft), tRight(_tRight)
+	{
 	}
-}LINE;
+}
+LINE;
+
 
 
 typedef struct tagFinder

@@ -14,18 +14,32 @@ CPlayer::~CPlayer()
 
 void CPlayer::Initialize()
 {
-    m_vSize = { 22.f,22.f };
+    m_vSize = { 78.f, 60.f };
     m_vPosition = { WINCX*.5f,WINCY*.5f };
-    m_fSpeed = 200.f;
+    m_fSpeed = 300.f;
 
     m_ID = PLAYER;
 
-    CBmpMgr::Get_Instance()->Insert_Bmp(L"..\\Image\\Heart.bmp", L"Heart");
+	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_DOWN.bmp", L"Player_DOWN");
+	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_UP.bmp", L"Player_UP");
+	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_LEFT.bmp", L"Player_LEFT");
+	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_RIGHT.bmp", L"Player_RIGHT");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/PlayerIdle.bmp", L"PlayerIdle");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/PlayerRun.bmp", L"PlayerRun");
+
+	m_pFrameKey = L"PlayerIdle";
+
+	m_tFrame.iStart = 0;
+	m_tFrame.iEnd = 5;
+	m_tFrame.iMotion = 0;
+	m_tFrame.dwSpeed = .2f;
+	m_tFrame.dwTime = 0.f;
 }
 
 int CPlayer::Update()
 {
     __super::Update_Rec();
+	CCreature::Move_Frame();
 
     Key_Input();
     return 0;
@@ -34,6 +48,7 @@ int CPlayer::Update()
 
 void CPlayer::Late_Update()
 {
+	Motion_Change();
 }
 
 void CPlayer::Render(HDC hdc)
@@ -44,7 +59,9 @@ void CPlayer::Render(HDC hdc)
 
     Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
 
-    HDC hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Heart");
+   // HDC hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Heart");
+
+	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKey);
 
     GdiTransparentBlt(hdc,
         RenderPos.x - m_vSize.x,
@@ -52,11 +69,11 @@ void CPlayer::Render(HDC hdc)
         (int)m_vSize.x,
         (int)m_vSize.y,
         hMemDC,
-        0,
-        0,
+		m_tFrame.iStart * (int)m_vSize.x,
+		m_tFrame.iMotion * (int)m_vSize.y,
         (int)m_vSize.x,
         (int)m_vSize.y,
-        RGB(255, 255, 255));
+        RGB(255, 0, 255));
 
    // BitBlt(hdc, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom, hMemDC, 0, 0, SRCCOPY); // 지우는 거 안쓸거면 이거 해야 랜더링됨
 }
@@ -77,26 +94,104 @@ void CPlayer::Key_Input()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 	{
         m_vPosition.x -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+		m_pFrameKey = L"PlayerRun";
+		m_eCurState = WALK;
+
 
 	}
 
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
 	{
         m_vPosition.x += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+		m_pFrameKey = L"PlayerRun";
+
+
+		m_eCurState = WALK;
 
 	}
 
 
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
 	{
-        m_vPosition.y -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+        //m_vPosition.y -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+		m_pFrameKey = L"Player_UP";
+
+
+		//m_eCurState = WALK;
 
 	}
 
 
-	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
+	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN)&& CKeyMgr::Get_Instance()->Key_Up(VK_SPACE))
 	{
         m_vPosition.y += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+		m_pFrameKey = L"Player_DOWN";
+		m_eCurState = WALK;
 
 	}
+
+	else  if (CKeyMgr::Get_Instance()->Key_Up(VK_SPACE))
+	{
+		//m_bJump = true;
+	}
+
+	else
+	{
+		m_pFrameKey = L"PlayerIdle";
+
+		m_eCurState = IDLE;
+	}
+}
+
+void CPlayer::Motion_Change()
+{
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{
+		case IDLE:
+			m_tFrame.iStart = 0;
+			m_tFrame.iEnd = 5;
+			//m_tFrame.iMotion = 0;
+			m_tFrame.dwSpeed = .2f;
+			m_tFrame.dwTime = 0.f;
+			break;
+
+		case WALK:
+			m_tFrame.iStart = 0;
+			m_tFrame.iEnd = 8;
+			//m_tFrame.iMotion = 0;
+			m_tFrame.dwSpeed = .2f;
+			m_tFrame.dwTime = 0.f;
+			break;
+
+		case ATTACK:
+			m_tFrame.iStart = 0;
+			m_tFrame.iEnd = 5;
+			//m_tFrame.iMotion = 2;
+			m_tFrame.dwSpeed = .2f;
+			m_tFrame.dwTime = 0.f;
+			break;
+
+		case HIT:
+			m_tFrame.iStart = 0;
+			m_tFrame.iEnd = 1;
+			m_tFrame.iMotion = 3;
+			m_tFrame.dwSpeed = .2f;
+			m_tFrame.dwTime = 0.f;
+			break;
+
+		case DEAD:
+			m_tFrame.iStart = 0;
+			m_tFrame.iEnd = 3;
+			m_tFrame.iMotion = 4;
+			m_tFrame.dwSpeed =.2f;
+			m_tFrame.dwTime = 0.f;
+			break;
+
+		}
+
+		m_ePreState = m_eCurState;
+	}
+
 }
