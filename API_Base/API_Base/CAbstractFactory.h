@@ -1,5 +1,7 @@
 #pragma once
 #include "CObj.h"
+#include "CUI.h"
+#include "CButton.h"
 
 template<typename T>
 class CAbstractFactory
@@ -22,6 +24,23 @@ public:
 		obj->SetPosition(pos);
 
 		return obj;
+	}
+
+	static CUI* CreateUIButton(Vector2 pos, Vector2 Size, const TCHAR* off, const TCHAR* on,const function<void()>& fn)
+	{
+		CButton* ui = new T;
+		ui->Initialize();
+
+		ui->SetPosition(pos);
+		ui->SetSize(Size);
+
+		ui->Set_FrameKeyOff(off);
+		ui->Set_FrameKeyOn(on);
+
+		ui->SetOnClick(fn);
+
+
+		return ui;
 	}
 };
 

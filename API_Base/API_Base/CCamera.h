@@ -17,11 +17,19 @@ public:
 
 	
 
-	//Vector2 GetRenderPos(Vector2 worldPos);
+	//Vector2 GetRenderPos(Vector2 vPos) { return (vPos - m_vDiff); }
+	//Vector2 GetRealPos(Vector2 vRenderPos) { return vRenderPos + m_vDiff; }
 
-	Vector2 GetRenderPos(Vector2 vPos) { return (vPos - m_vDiff); }
-	Vector2 GetRealPos(Vector2 vRenderPos) { return vRenderPos + m_vDiff; }
+	Vector2 GetRenderPos(Vector2 vPos) {
+		Vector2 center = vWinResolution * 0.5f;
+		return (vPos - m_vCurLookAt) * m_fZoom + center;
+	}
+	Vector2 GetRealPos(Vector2 vRenderPos) {
+		Vector2 center = vWinResolution * 0.5f;
+		return (vRenderPos - center) / m_fZoom + m_vCurLookAt;
+	}
 	Vector2 GetLookAt() { return m_vCurLookAt; }
+	float GetZoom() { return m_fZoom; }
 
 	void Update();
 private:
@@ -37,15 +45,15 @@ private:
 
 	Vector2 vWinResolution = {WINCX, WINCY};
 
-	//float m_fZoom;
+	float m_fZoom ;
 
 #pragma region Singleton
 public:
 	static CCamera* Get_Instance() //멤버 함수 자체를 정적으로 만들어서, 객체 없이 호출 가능
 	{
-		static CCamera* m_Instance = new CCamera; // 지역 정적 변수를 만들어서, 싱글톤 인스턴스를 단 한 번만 생성
+		static CCamera m_Instance; // 지역 정적 변수를 만들어서, 싱글톤 인스턴스를 단 한 번만 생성
 
-		return m_Instance;
+		return &m_Instance;
 	}
 #pragma endregion
 };

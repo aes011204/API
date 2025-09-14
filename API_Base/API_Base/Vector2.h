@@ -34,6 +34,10 @@ public:
 	{
 		return Vector2(x * _scalar, y * _scalar);
 	}
+	Vector2 operator/(const float& _scalar)				// this * 실수 | 반환값 : 값 벡터
+	{
+		return Vector2(x / _scalar, y / _scalar);
+	}
 	Vector2& operator*=(const int& _scalar)				// this *= 정수 | 반환값 : this
 	{
 		x *= _scalar;

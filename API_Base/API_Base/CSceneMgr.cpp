@@ -18,8 +18,12 @@ void CSceneMgr::Change_Stage(SCENEID eID)
 {
 	if (m_eCurSceneID == eID)
 		return;
-	if(m_pScene)
+	if (m_pScene)
+	{
+		m_pScene->Release();
 		Safe_Delete<CScene*>(m_pScene);
+
+	}
 
 	switch (eID)
 	{

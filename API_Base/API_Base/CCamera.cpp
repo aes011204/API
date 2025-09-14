@@ -5,9 +5,9 @@
 #include "CTimeMgr.h"
 
 
-CCamera::CCamera() : m_tTargetObj(nullptr), m_fTime(1.f), m_fSpeed(0.f), m_fAccTime(0.f)
+CCamera::CCamera() : m_tTargetObj(nullptr), m_fTime(1.f), m_fSpeed(0.f), m_fAccTime(0.f), m_fZoom(1.f)
 {
-	//m_vCurLookAt = {}
+
 }
 
 CCamera::~CCamera()
@@ -78,7 +78,17 @@ void CCamera::Update()
 
 	}
 
+	else if (CKeyMgr::Get_Instance()->Key_Down('2'))
+	{
+		
+		const float STEP = 1.25f;  // 한 번에 25% 확대
+		const float MINZ = 0.25f;  // 최소/최대 보호 (선택)
+		const float MAXZ = 4.0f;
 
+		m_fZoom *= STEP;
+		if (m_fZoom > MAXZ) m_fZoom = MAXZ;  // 클램프
+		if (m_fZoom < MINZ) m_fZoom = MINZ;
+	}
 	
 
 	CalDiff();

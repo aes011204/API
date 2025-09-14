@@ -3,7 +3,10 @@
 #include "CBmpMgr.h"
 #include "CSceneMgr.h"
 #include "CKeyMgr.h"
-CMainMenu::CMainMenu()
+#include "CUIMgr.h"
+#include "CAbstractFactory.h"
+#include "CButton.h"
+CMainMenu::CMainMenu() : m_vLogoSize({  156.f,75.f  })
 {
 }
 CMainMenu::~CMainMenu()
@@ -12,12 +15,26 @@ CMainMenu::~CMainMenu()
 }
 void CMainMenu::Initialize()
 {
-   //CBmpMgr::Get_Instance()->Insert_Bmp(,)
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/Cloud1.bmp", L"CloudBack");
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/Cloud2.bmp", L"CloudFront");
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/MainLogo.bmp", L"MainLogo");
+    // UI
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/OptionOn_Kor.bmp", L"OptionOn");
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/OptionOff_Kor.bmp", L"OptionOff");
+    CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CButton>::
+        CreateUIButton({ WINCX * .5f, WINCY * .5f }, { 20.f, 12.f }, L"OptionOff", L"OptionOn", []() {CSceneMgr::Get_Instance()->Change_Stage(SC_VILLAGE);}));
+
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOn_Kor.bmp", L"PlayOn");
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOff_Kor.bmp", L"PlayOff");
+
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/ExitOn_Kor.bmp", L"ExitOn");
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/ExitOff_Kor.bmp", L"ExitOff");
+
 }
 
 int CMainMenu::Update()
 {
-
+    CUIMgr::Get_Instance()->Update();
     if (GetAsyncKeyState('1'))//CKeyMgr::Get_Instance()->Key_Down(VK_RETURN))
     {
         CSceneMgr::Get_Instance()->Change_Stage(SC_VILLAGE);
@@ -28,13 +45,79 @@ int CMainMenu::Update()
 
 void CMainMenu::Late_Update()
 {
+    CUIMgr::Get_Instance()->Late_Update();
+
 }
 
 void CMainMenu::Render(HDC hdc)
 {
-    Rectangle(hdc, 100, 100, WINCX-100, WINCY-100);
+
+    {
+
+    // Brush  세팅
+    HBRUSH newBrush = CreateSolidBrush(RGB(122, 182, 247));
+    HPEN newPen = CreatePen(PS_SOLID, 1, RGB(122, 182, 247));
+
+    HBRUSH prevBrush = (HBRUSH)SelectObject(hdc, newBrush);
+    HPEN prevPen = (HPEN)SelectObject(hdc, newPen);
+
+    Rectangle(hdc, 0, 0, WINCX, WINCY);
+
+    // 사용한 Brush 삭제하고 원래대로 돌리기
+    SelectObject(hdc, prevBrush);
+    SelectObject(hdc, prevPen);
+    DeleteObject(newBrush);
+    DeleteObject(newPen);
+
+    }
+    {
+        // 렌더 메인 로고 
+        Vector2 logoPos{ (WINCX * .5f),(WINCY * .5f) * 3.f / 5.f };
+        HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"MainLogo");
+        Vector2 resize = m_vLogoSize * 3.f;
+        //SetStretchBltMode(hdc, COLORONCOLOR); // (부드럽게면 HALFTONE)
+
+        //BitBlt(hdc, WINCX- m_vLogoSize.x*.5f, logoPosY - m_vLogoSize.y * .5f, WINCX + m_vLogoSize.x * .5f, logoPosY + m_vLogoSize.y * .5f, hMemDC, 0, 0, SRCCOPY); // 지우는 거 안쓸거면 이거 해야 랜더링됨
+        GdiTransparentBlt(hdc,
+            logoPos.x - resize.x * .5f,
+            logoPos.y - resize.y * .5f,
+            (int)resize.x,
+            (int)resize.y,
+            hMemDC,
+            0, 0,
+            (int)m_vLogoSize.x,
+            (int)m_vLogoSize.y,
+            RGB(255, 255, 255));
+    }
+   
+    {
+        //함수 만들어야 할듯 스피드를 받아서 오른쪽으로 가게 하기, 화면 끝나면 다시 처음으로 
+
+
+    }
+    CUIMgr::Get_Instance()->Render(hdc);
+
 }
 
 void CMainMenu::Release()
 {
+    CUIMgr::Get_Instance()->Release();
+
+}
+
+void CMainMenu::Render_MovingBG(HDC hdc, float _speed, TCHAR* name, Vector2 size)
+{
+  //  HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(name);
+  //  
+  //
+  //  GdiTransparentBlt(hdc,
+  //      logoPos.x - resize.x * .5f,
+  //      logoPos.y - resize.y * .5f,
+  //      (int)size.x,
+  //      (int)size.y,
+  //      hMemDC,
+  //      0, 0,
+  //      (int)size.x,
+  //      (int)size.y,
+  //      RGB(255, 255, 255));
 }

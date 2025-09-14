@@ -60,7 +60,10 @@ void CMainGame::Render()
 
 
 	//CObjMgr::Get_Instance()->Render(hBackDC);
-	CSceneMgr::Get_Instance()->Render(hBackDC);
+	CSceneMgr::Get_Instance()->Render(hBackDC); 
+
+	SetStretchBltMode(hBackDC, COLORONCOLOR); // (부드럽게면 HALFTONE)
+
 	BitBlt(m_hDC, 0, 0, WINCX, WINCY, hBackDC, 0, 0, SRCCOPY);
 }
 

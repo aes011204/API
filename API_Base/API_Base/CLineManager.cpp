@@ -5,7 +5,7 @@
 #include "CStage.h"
 
 
-CLineManager* CLineManager::m_pInstance = nullptr;
+
 
 CLineManager::CLineManager()
 {

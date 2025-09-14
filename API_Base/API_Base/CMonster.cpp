@@ -34,8 +34,15 @@ void CMonster::Late_Update()
 void CMonster::Render(HDC hdc)
 {
 	Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
+	float zoom = CCamera::Get_Instance()->GetZoom();
 
-	Rectangle(hdc, RenderPos.x-m_vSize.x, RenderPos.y - m_vSize.y, RenderPos.x + m_vSize.x, RenderPos.y + m_vSize.y );
+	float RenderSizeX = m_vSize.x * zoom;
+	float RenderSizeY = m_vSize.y * zoom;
+	// 좌상단 기준
+	float LeftTopX = RenderPos.x - RenderSizeX * .5f;
+	float LeftTopY = RenderPos.y - RenderSizeY* .5f;
+
+	Rectangle(hdc, LeftTopX, LeftTopY, LeftTopX + RenderSizeX, LeftTopY + RenderSizeY );
 
 
 

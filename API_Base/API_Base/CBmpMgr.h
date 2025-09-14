@@ -21,9 +21,9 @@ private:
 public:
 	static CBmpMgr* Get_Instance()
 	{
-		static CBmpMgr* s_Instance = new CBmpMgr();
+		static CBmpMgr s_Instance;
 
-		return s_Instance;
+		return &s_Instance;
 	}
 #pragma endregion
 };

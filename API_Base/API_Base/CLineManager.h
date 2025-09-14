@@ -43,24 +43,11 @@ private:
 
 #pragma region Singleton
 public:
-	static CLineManager* Get_Instance()
+	static CLineManager* Get_Instance() //멤버 함수 자체를 정적으로 만들어서, 객체 없이 호출 가능
 	{
-		if (nullptr == m_pInstance)
-			m_pInstance = new CLineManager;
+		static CLineManager m_Instance; // 지역 정적 변수를 만들어서, 싱글톤 인스턴스를 단 한 번만 생성
 
-		return m_pInstance;
+		return &m_Instance;
 	}
-
-	static void Destroy_Instance()
-	{
-		if (m_pInstance)
-		{
-			delete m_pInstance;
-			m_pInstance = nullptr;
-		}
-	}
-
-private:
-	static CLineManager* m_pInstance;
 #pragma endregion
 };
