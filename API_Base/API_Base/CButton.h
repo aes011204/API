@@ -19,11 +19,16 @@ public:
 
     bool IsColl() override;
 
+    void Update_ResizeRect();
+
     void			Set_FrameKeyOff(const TCHAR* pFrameKey) { m_pFrameKeyOff = pFrameKey; }
     void			Set_FrameKeyOn(const TCHAR* pFrameKey) { m_pFrameKeyOn = pFrameKey; }
 
     void SetOnClick(std::function<void()> callback) { m_OnClick = callback; }
 
+    void SetSizeMul(float sizeMul) { m_vSizeMul = sizeMul; }
+
+private:
     std::function<void()> m_OnClick;
 
     const TCHAR* m_pFrameKeyOff;	
@@ -31,6 +36,10 @@ public:
 
     bool m_bClick;
     bool m_bOnMouse;
+
+    float m_vSizeMul;
+    Vector2 resize;
+    RECT m_ResizeRect;
 
 };
 

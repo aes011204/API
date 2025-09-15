@@ -1,6 +1,6 @@
 #pragma once
 
-#define	WINCX		900//1280
+#define	WINCX			900//1280
 #define	WINCY			600//720
 
 #define PURE			= 0
@@ -25,7 +25,6 @@ typedef struct tagFrame
 {
 	int		iStart;
 	int		iEnd;
-	int		iMotion;
 	double	dwSpeed;
 	double	dwTime;
 

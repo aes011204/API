@@ -25,13 +25,13 @@ void CPlayer::Initialize()
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_LEFT.bmp", L"Player_LEFT");
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_RIGHT.bmp", L"Player_RIGHT");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_idle.bmp", L"PlayerIdle");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/PlayerRun.bmp", L"PlayerRun");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_run.bmp", L"PlayerRun");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/player_jump.bmp", L"PlayerJump");
 
 	m_pFrameKey = L"PlayerIdle";
 
 	m_tFrame.iStart = 0;
 	m_tFrame.iEnd = 5;
-	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = .2f;
 	m_tFrame.dwTime = 0.f;
 }
@@ -39,16 +39,16 @@ void CPlayer::Initialize()
 int CPlayer::Update()
 {
     __super::Update_Rec();
-	CCreature::Move_Frame();
 
     Key_Input();
+	CCreature::Move_Frame();
     return 0;
-	Motion_Change();
 
 }
 
 void CPlayer::Late_Update()
 {
+	Motion_Change(); 
 }
 
 void CPlayer::Render(HDC hdc)
@@ -59,29 +59,25 @@ void CPlayer::Render(HDC hdc)
 
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKey);
 	{
-		//gpt의 손길
+		
 		Vector2 centerS = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
-		float   zoom = CCamera::Get_Instance()->GetZoom(); // 또는 m_fZoom
-	
-		// 목적지(그려질) 크기 = 원본 프레임 크기 * 줌
-		int dstW = (int)(m_vSize.x * zoom);
-		int dstH = (int)(m_vSize.y * zoom);
+		
+		Vector2 RenderSize = CCamera::Get_Instance()->GetRenderSize(m_vSize);
 	
 		// 화면에 찍을 좌상단 (중심 기준 반 사이즈만큼 빼기)
-		int dstX = (int)(centerS.x - dstW * 0.5f);
-		int dstY = (int)(centerS.y - dstH * 0.5f);
+		int dstX = (int)(centerS.x - RenderSize.x * 0.5f);
+		int dstY = (int)(centerS.y - RenderSize.y * 0.5f);
 	
 		// 스프라이트시트에서 가져올 소스 사각형(프레임)
 		int srcX = m_tFrame.iStart * (int)m_vSize.x; // 열 인덱스
-		int srcY = m_tFrame.iMotion * (int)m_vSize.y; // 행 인덱스
+		
 	
-		// 픽셀아트면 선명하게(해당 dc에 한번만)
-		//SetStretchBltMode(hdc, COLORONCOLOR); // (부드럽게면 HALFTONE)
+
 	
 		// 투명색 키(마젠타)로 블릿
 		GdiTransparentBlt(
-			hdc, dstX, dstY, dstW, dstH,
-			hMemDC, srcX, srcY, (int)m_vSize.x, (int)m_vSize.y,
+			hdc, dstX, dstY, RenderSize.x, RenderSize.y,
+			hMemDC, srcX, 0, (int)m_vSize.x, (int)m_vSize.y,
 			RGB(255, 255, 255));
 	
 	}
@@ -116,8 +112,13 @@ void CPlayer::On_Collision(CObj* obj)
 void CPlayer::Key_Input()
 {
 	float fY(0.f);
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_SPACE))
+	{
+		//m_bJump = true;
+		m_pFrameKey = L"PlayerJump";
+		m_eCurState = JUMP;
+	}
+	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 	{
         m_vPosition.x -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
 		m_pFrameKey = L"PlayerRun";
@@ -140,10 +141,7 @@ void CPlayer::Key_Input()
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
 	{
         m_vPosition.y -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
-		m_pFrameKey = L"Player_UP";
 
-
-		//m_eCurState = WALK;
 
 	}
 
@@ -156,10 +154,7 @@ void CPlayer::Key_Input()
 
 	}
 
-	else  if (CKeyMgr::Get_Instance()->Key_Up(VK_SPACE))
-	{
-		//m_bJump = true;
-	}
+
 
 	else
 	{
@@ -177,32 +172,42 @@ void CPlayer::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iStart = 0;
-			m_tFrame.iEnd = 5;
-			//m_tFrame.iMotion = 0;
+			m_tFrame.iEnd = 4;
+			
 			m_tFrame.dwSpeed = .2f;
 			m_tFrame.dwTime = 0.f;
+			m_vSize = { 15.f, 20.f };
 			break;
 
 		case WALK:
 			m_tFrame.iStart = 0;
-			m_tFrame.iEnd = 8;
-			//m_tFrame.iMotion = 0;
-			m_tFrame.dwSpeed = .2f;
+			m_tFrame.iEnd = 7;
+			
+			m_tFrame.dwSpeed = .1f;
 			m_tFrame.dwTime = 0.f;
+			m_vSize = { 17.f, 20.f };
+			break;
+
+		case JUMP:
+			m_tFrame.iStart = 0;
+			m_tFrame.iEnd = 0;
+			
+			m_tFrame.dwSpeed = 2.f;
+			m_tFrame.dwTime = 0.f;
+			m_vSize = { 17.f, 21.f };
 			break;
 
 		case ATTACK:
 			m_tFrame.iStart = 0;
 			m_tFrame.iEnd = 5;
-			//m_tFrame.iMotion = 2;
+			
 			m_tFrame.dwSpeed = .2f;
 			m_tFrame.dwTime = 0.f;
 			break;
-
 		case HIT:
 			m_tFrame.iStart = 0;
 			m_tFrame.iEnd = 1;
-			m_tFrame.iMotion = 3;
+			
 			m_tFrame.dwSpeed = .2f;
 			m_tFrame.dwTime = 0.f;
 			break;
@@ -210,7 +215,7 @@ void CPlayer::Motion_Change()
 		case DEAD:
 			m_tFrame.iStart = 0;
 			m_tFrame.iEnd = 3;
-			m_tFrame.iMotion = 4;
+			
 			m_tFrame.dwSpeed =.2f;
 			m_tFrame.dwTime = 0.f;
 			break;

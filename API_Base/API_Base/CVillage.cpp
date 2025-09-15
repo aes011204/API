@@ -23,7 +23,8 @@ void CVillage::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
 	
-	CCamera::Get_Instance()->Bootstrap({WINCX*.5f, WINCY*.5f});
+	CCamera::Get_Instance()->Bootstrap(CObjMgr::Get_Instance()->Get_Player()->GetPosition());
+	CCamera::Get_Instance()->SetBackSize({ 1920.f, 1280.f });
 	//CCamera::Get_Instance()->SetTarget(CObjMgr::Get_Instance()->Get_Player());
 
 

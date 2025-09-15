@@ -6,7 +6,8 @@
 #include "CUIMgr.h"
 #include "CAbstractFactory.h"
 #include "CButton.h"
-CMainMenu::CMainMenu() : m_vLogoSize({  156.f,75.f  })
+#include "CTimeMgr.h"
+CMainMenu::CMainMenu() : m_vLogoSize({  156.f,75.f  }),m_fMovePosX1(0.f), m_fMovePosX2(0.f)
 {
 }
 CMainMenu::~CMainMenu()
@@ -17,18 +18,23 @@ void CMainMenu::Initialize()
 {
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/Cloud1.bmp", L"CloudBack");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/Cloud2.bmp", L"CloudFront");
+
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/MainLogo.bmp", L"MainLogo");
     // UI
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/OptionOn_Kor.bmp", L"OptionOn");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/OptionOff_Kor.bmp", L"OptionOff");
     CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CButton>::
-        CreateUIButton({ WINCX * .5f, WINCY * .5f }, { 20.f, 12.f }, L"OptionOff", L"OptionOn", []() {CSceneMgr::Get_Instance()->Change_Stage(SC_VILLAGE);}));
+        CreateUIButton({ WINCX * .5f, WINCY * .7f }, { 20.f, 12.f }, L"OptionOff", L"OptionOn", []() {/*CSceneMgr::Get_Instance()->Scene_Change(SC_EDIT);*/}, 3.f));
 
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOn_Kor.bmp", L"PlayOn");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOff_Kor.bmp", L"PlayOff");
+    CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CButton>::
+        CreateUIButton({ WINCX * .5f, WINCY * .6f }, { 36.f, 12.f }, L"PlayOff", L"PlayOn", []() {CSceneMgr::Get_Instance()->Change_Stage(SC_VILLAGE);}, 3.f));
 
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/ExitOn_Kor.bmp", L"ExitOn");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/ExitOff_Kor.bmp", L"ExitOff");
+    CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CButton>::
+        CreateUIButton({ WINCX * .5f, WINCY * .8f }, { 21.f, 12.f }, L"ExitOff", L"ExitOn", []() {DestroyWindow(g_hWnd);}, 3.f));
 
 }
 
@@ -40,6 +46,9 @@ int CMainMenu::Update()
         CSceneMgr::Get_Instance()->Change_Stage(SC_VILLAGE);
         return 0;
     }
+
+
+
     return 0;
 }
 
@@ -70,6 +79,9 @@ void CMainMenu::Render(HDC hdc)
     DeleteObject(newPen);
 
     }
+    Render_MovingBG(hdc, 150, L"CloudBack", { 2564, 768 }, m_fMovePosX1);
+
+    Render_MovingBG(hdc, 300, L"CloudFront", { 2304, 768 },m_fMovePosX2);
     {
         // 렌더 메인 로고 
         Vector2 logoPos{ (WINCX * .5f),(WINCY * .5f) * 3.f / 5.f };
@@ -102,22 +114,38 @@ void CMainMenu::Render(HDC hdc)
 void CMainMenu::Release()
 {
     CUIMgr::Get_Instance()->Release();
-
+    //?? bmp매니져는 release 해야하나?? 여기서?? 씬마다?? 근대 그럼 다시못만들지 않나? static이니까
 }
 
-void CMainMenu::Render_MovingBG(HDC hdc, float _speed, TCHAR* name, Vector2 size)
+void CMainMenu::Render_MovingBG(HDC hdc, float _speed, const TCHAR* name, Vector2 size, float& accSpeed)
 {
-  //  HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(name);
-  //  
-  //
-  //  GdiTransparentBlt(hdc,
-  //      logoPos.x - resize.x * .5f,
-  //      logoPos.y - resize.y * .5f,
-  //      (int)size.x,
-  //      (int)size.y,
-  //      hMemDC,
-  //      0, 0,
-  //      (int)size.x,
-  //      (int)size.y,
-  //      RGB(255, 255, 255));
+    HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(name);
+    
+    
+    accSpeed += _speed * (CTimeMgr::Get_Instance()->GetDeltaTime());
+    
+     if (accSpeed >= size.x)
+         accSpeed = 0.f;
+
+    GdiTransparentBlt(hdc,
+        -accSpeed,
+        0,
+        (int)size.x,
+        (int)size.y,
+        hMemDC,
+        0, 0,
+        (int)size.x,
+        (int)size.y,
+        RGB(255, 0, 255));
+
+    GdiTransparentBlt(hdc,
+        size.x- accSpeed,
+        0,
+        (int)size.x,
+        (int)size.y,
+        hMemDC,
+        0, 0,
+        (int)size.x,
+        (int)size.y,
+        RGB(255, 0, 255));
 }

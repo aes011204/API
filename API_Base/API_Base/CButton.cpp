@@ -3,9 +3,10 @@
 #include "CBmpMgr.h"
 #include "CKeyMgr.h"
 
-CButton::CButton(): m_bClick(false), m_bOnMouse(false)
+CButton::CButton(): m_bClick(false), m_bOnMouse(false), m_vSizeMul(0.f)
 {
-	ZeroMemory(&m_tRect, sizeof(m_tRect));
+	ZeroMemory(&m_ResizeRect, sizeof(m_ResizeRect));
+
 }
 
 CButton::~CButton()
@@ -14,6 +15,7 @@ CButton::~CButton()
 
 void CButton::Initialize()
 {
+	resize = m_vSize * m_vSizeMul;
 }
 
 int CButton::Update()
@@ -32,15 +34,18 @@ int CButton::Late_Update()
 
 void CButton::Render(HDC hdc)
 {
+
+
+
 	if (m_bOnMouse)
 	{
 	HDC	hMemDC =CBmpMgr::Get_Instance()->Find_Img(m_pFrameKeyOn);
 
 	GdiTransparentBlt(hdc,
-		m_tRect.left,
-		m_tRect.top,
-		(int)m_vSize.x,
-		(int)m_vSize.y,
+		m_vPosition.x - resize.x * .5f,
+		m_vPosition.y - resize.y * .5f,
+		(int)resize.x,
+		(int)resize.y,
 		hMemDC,
 		0,
 		0,
@@ -54,10 +59,10 @@ void CButton::Render(HDC hdc)
 		HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKeyOff);
 
 		GdiTransparentBlt(hdc,
-			m_tRect.left,
-			m_tRect.top,
-			(int)m_vSize.x,
-			(int)m_vSize.y,
+			m_vPosition.x - resize.x * .5f,
+			m_vPosition.y - resize.y * .5f,
+			(int)resize.x,
+			(int)resize.y,
 			hMemDC,
 			0,
 			0,
@@ -81,7 +86,9 @@ bool CButton::IsColl()
 	mouse.x = (LONG)CKeyMgr::Get_Instance()->GetMousePos().x;
 	mouse.y = (LONG)CKeyMgr::Get_Instance()->GetMousePos().y;
 
-	if (PtInRect(&m_tRect, mouse))
+	Update_ResizeRect();
+
+	if (PtInRect(&m_ResizeRect, mouse))
 	{
 		if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 		{
@@ -96,4 +103,14 @@ bool CButton::IsColl()
 		m_bOnMouse = false;
 	}
 	return false;
+}
+
+
+void CButton::Update_ResizeRect()
+{
+	m_ResizeRect.left = m_vPosition.x - (resize.x * .5f);
+	m_ResizeRect.top = m_vPosition.y - (resize.y * .5f);
+	m_ResizeRect.right = m_vPosition.x + (resize.x * .5f);
+	m_ResizeRect.bottom = m_vPosition.y + (resize.y * .5f);
+
 }

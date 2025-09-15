@@ -2,6 +2,7 @@
 #include "CUI.h"
 CUI::CUI()
 {
+	ZeroMemory(&m_tRect, sizeof(m_tRect));
 }
 
 CUI::~CUI()

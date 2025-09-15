@@ -15,15 +15,24 @@ public:
 	void CalDiff();
 
 
-	
+	void SetBackSize(Vector2 _backSize) {m_vBackSize = _backSize;}
 
 	//Vector2 GetRenderPos(Vector2 vPos) { return (vPos - m_vDiff); }
 	//Vector2 GetRealPos(Vector2 vRenderPos) { return vRenderPos + m_vDiff; }
 
-	Vector2 GetRenderPos(Vector2 vPos) {
+	Vector2 GetRenderPos(Vector2 WorldPos) {
 		Vector2 center = vWinResolution * 0.5f;
-		return (vPos - m_vCurLookAt) * m_fZoom + center;
+		return (WorldPos - m_vCurLookAt) * m_fZoom + center;
 	}
+
+	Vector2 GetRenderSize(Vector2 WorldSize) {
+		// 목적지(그려질) 크기 = 원본 프레임 크기 * 줌
+		Vector2 RenderSize = {};
+		RenderSize.x = (int)(WorldSize.x * m_fZoom);
+		RenderSize.y = (int)(WorldSize.y * m_fZoom);
+		return RenderSize;
+	}
+
 	Vector2 GetRealPos(Vector2 vRenderPos) {
 		Vector2 center = vWinResolution * 0.5f;
 		return (vRenderPos - center) / m_fZoom + m_vCurLookAt;
@@ -46,6 +55,8 @@ private:
 	Vector2 vWinResolution = {WINCX, WINCY};
 
 	float m_fZoom ;
+
+	Vector2 m_vBackSize;
 
 #pragma region Singleton
 public:

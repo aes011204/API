@@ -121,15 +121,8 @@ bool CLineManager::Collision_Line(Vector2 PlayerPos, float* pY)
 
 void CLineManager::Create_Line(Vector2* tPoint, int Num)
 {
-
-
-
-
 	for (int i = 0;i < Num - 1; i++)
 	{
 		m_LineList.push_back(new CLine(tPoint[i], tPoint[i + 1]));
-
-
-
 	}
 }

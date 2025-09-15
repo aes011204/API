@@ -26,10 +26,9 @@ public:
 		return obj;
 	}
 
-	static CUI* CreateUIButton(Vector2 pos, Vector2 Size, const TCHAR* off, const TCHAR* on,const function<void()>& fn)
+	static CUI* CreateUIButton(Vector2 pos, Vector2 Size, const TCHAR* off, const TCHAR* on,const function<void()>& fn, float SizeMul=1.f)
 	{
 		CButton* ui = new T;
-		ui->Initialize();
 
 		ui->SetPosition(pos);
 		ui->SetSize(Size);
@@ -38,8 +37,9 @@ public:
 		ui->Set_FrameKeyOn(on);
 
 		ui->SetOnClick(fn);
+		ui->SetSizeMul(SizeMul);
 
-
+		ui->Initialize();
 		return ui;
 	}
 };

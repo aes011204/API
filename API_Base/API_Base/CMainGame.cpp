@@ -26,7 +26,7 @@ void CMainGame::Initialize()
 
 
 	CSceneMgr::Get_Instance()->Change_Stage(SC_MAINMENU);
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Back.bmp", L"Back");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/Sky.bmp", L"Back");
 
 
 	
