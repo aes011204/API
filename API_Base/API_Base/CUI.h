@@ -1,4 +1,8 @@
 #pragma once
+
+enum class HP_DIR { LeftToRight, RightToLeft };
+
+
 class CUI
 {
 public:
@@ -33,5 +37,7 @@ protected:
 public:
 
 	void Update_Rect();
+	void Font(HDC hdc, Vector2 pos, const WCHAR* str, int nHeight, int nWidth, int nWeight, int line);
+	void DrawHP(HDC hDC, float x, float y, float width, float height, float Hp, float MaxHp, HP_DIR dir = HP_DIR::LeftToRight);
 };
 

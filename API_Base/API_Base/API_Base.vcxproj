@@ -44,6 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -142,6 +143,7 @@
     <ClInclude Include="CLineManager.h" />
     <ClInclude Include="CMainGame.h" />
     <ClInclude Include="CMainMenu.h" />
+    <ClInclude Include="CMainUI.h" />
     <ClInclude Include="CMonster.h" />
     <ClInclude Include="CMyBmp.h" />
     <ClInclude Include="CNonCreature.h" />
@@ -151,6 +153,7 @@
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSceneMgr.h" />
     <ClInclude Include="CStage.h" />
+    <ClInclude Include="CStateBar.h" />
     <ClInclude Include="CUI.h" />
     <ClInclude Include="CUIMgr.h" />
     <ClInclude Include="CVillage.h" />
@@ -175,6 +178,7 @@
     <ClCompile Include="CLineManager.cpp" />
     <ClCompile Include="CMainGame.cpp" />
     <ClCompile Include="CMainMenu.cpp" />
+    <ClCompile Include="CMainUI.cpp" />
     <ClCompile Include="CMonster.cpp" />
     <ClCompile Include="CMyBmp.cpp" />
     <ClCompile Include="CNonCreature.cpp" />
@@ -184,6 +188,7 @@
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CSceneMgr.cpp" />
     <ClCompile Include="CStage.cpp" />
+    <ClCompile Include="CStateBar.cpp" />
     <ClCompile Include="CUI.cpp" />
     <ClCompile Include="CUIMgr.cpp" />
     <ClCompile Include="CVillage.cpp" />

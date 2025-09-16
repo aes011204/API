@@ -31,7 +31,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     // _CrtSetBreakAlloc() //  <- Input line number
 
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    // 오류 대화상자에 나온 "after Normal block (#508)"의 숫자로 멈추기
 
+    _CrtSetBreakAlloc(508);
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 

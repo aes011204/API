@@ -46,14 +46,14 @@ int CUIMgr::Late_Update()
 		int result = (*it)->Late_Update();
 		if (result == OBJ_DEAD)
 		{
-			if (!m_UIList.empty())
+			//if (!m_UIList.empty())
 			{
 				Safe_Delete<CUI*>(*it);
 				m_UIList.erase(it);
 
 			}
-			else
-				return OBJ_DEAD;
+			//else
+				//return OBJ_DEAD;
 		}
 		else
 		{

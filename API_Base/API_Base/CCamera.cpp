@@ -81,32 +81,12 @@ void CCamera::Update()
 	if (m_vBackSize.y)
 		m_vCurLookAt.y = std::clamp(m_vCurLookAt.y, (WINCY / m_fZoom) * .5f, m_vBackSize.y - (WINCY / m_fZoom) * .5f);
 
-
-	// 테스트 움직임
-	/*if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
-	{
-		m_vLookAt.x -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
-
-	}
-	else if (CKeyMgr::Get_Instance()->Key_Pressing('D'))
-	{
-		m_vLookAt.x += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
-
-	}
-	else if (CKeyMgr::Get_Instance()->Key_Pressing('W'))
-	{
-		m_vLookAt.y -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
-
-	}
-	else if (CKeyMgr::Get_Instance()->Key_Pressing('S'))
-	{
-		m_vLookAt.y += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
-
-	}*/
+	//TODO : 미세떨림 보정 기능추가
+	
 
 	if (CKeyMgr::Get_Instance()->Key_Down('2'))
 	{
-		
+		//const int STEP = 2;
 		const float STEP = 1.25f;  // 한 번에 25% 확대
 		const float MINZ = 0.25f;  // 최소/최대 보호 (선택)
 		const float MAXZ = 4.0f;

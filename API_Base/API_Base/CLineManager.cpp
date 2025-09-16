@@ -18,21 +18,6 @@ CLineManager::~CLineManager()
 
 void CLineManager::Initialize()
 {
-#pragma region Legacy : Stage04 테스트용
-	/*
-	CStage* pStage = CStageManager::Get_Instance()->Get_CurrentStage();
-
-	if (auto* pStage04 = dynamic_cast<CStage04*>(pStage))
-		m_LineList = pStage04->Get_LineList();
-	*/
-#pragma endregion
-
-	//Vector2 tPoint[4] =
-	//{ {200.f,200.f},{400.f,200.f},{600.f,400.f},{800.f,400.f} };
-	//
-	//m_LineList.push_back(new CLine(tPoint[0], tPoint[1]));
-	//m_LineList.push_back(new CLine(tPoint[1], tPoint[2]));
-	//m_LineList.push_back(new CLine(tPoint[2], tPoint[3]));
 }
 
 int CLineManager::Update()
@@ -54,8 +39,11 @@ void CLineManager::Render(HDC hDC)
 
 void CLineManager::Release()
 {
-	for (auto& pLine : m_LineList)
+	for (auto& pLine : m_LineList) {
+		// 힙 포인터가 유효한지 체크(디버그 CRT)
+		_ASSERTE(pLine == nullptr || _CrtIsValidHeapPointer(pLine));
 		Safe_Delete(pLine);
+	}
 	m_LineList.clear();
 }
 
@@ -77,6 +65,7 @@ bool CLineManager::Collision_Line(Vector2 PlayerPos, float* pY)
 
 	if (targetLine.empty())
 		return false;
+
 	prevDistance = FLT_MAX;
 
 	if (targetLine.size() == 1)

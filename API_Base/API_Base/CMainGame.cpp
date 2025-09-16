@@ -8,7 +8,7 @@
 #include "CSceneMgr.h"
 #include "CCamera.h"
 #include "CKeyMgr.h"
-CMainGame::CMainGame()
+CMainGame::CMainGame() :m_hDC(nullptr)
 {
 }
 

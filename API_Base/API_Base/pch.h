@@ -8,6 +8,8 @@
 #include <map>
 #include <algorithm>
 #include <cassert>
+#include <iostream>
+#include <crtdbg.h>
 
 #include "Define.h"
 #include "Vector2.h"

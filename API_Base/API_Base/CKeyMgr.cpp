@@ -22,7 +22,7 @@ bool CKeyMgr::Key_Pressing(int iKey)
 
 bool CKeyMgr::Key_Up(int iKey)
 {
-	if (!m_bPrevKeyState[iKey] && m_bCurKeyState[iKey])
+	if (m_bPrevKeyState[iKey] && !m_bCurKeyState[iKey])
 		return true;
 	else
 		return false;
@@ -30,7 +30,7 @@ bool CKeyMgr::Key_Up(int iKey)
 
 bool CKeyMgr::Key_Down(int iKey)
 {
-	if (m_bPrevKeyState[iKey] && !m_bCurKeyState[iKey])
+	if (!m_bPrevKeyState[iKey] && m_bCurKeyState[iKey])
 		return true;
 	else
 		return false;

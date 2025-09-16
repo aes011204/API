@@ -26,9 +26,9 @@ int CButton::Update()
 
 int CButton::Late_Update()
 {
+	IsColl();
 	
-	if(true==IsColl())
-		return OBJ_DEAD;
+		return 0;
 	
 }
 

@@ -15,12 +15,18 @@ public:
 	void		Render(HDC hDC);
 	void		Release();
 
+
+	void Rq_changeScene(SCENEID next);
 private:
 
 	CScene* m_pScene;
 
 	SCENEID		m_eCurSceneID;
 	//SCENEID		m_ePreSceneID;
+
+
+	bool m_bChange = false;
+	SCENEID nextScene;
 
 
 #pragma region Singleton

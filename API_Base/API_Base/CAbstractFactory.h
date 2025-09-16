@@ -26,6 +26,13 @@ public:
 		return obj;
 	}
 
+	static CUI* CreateUI()
+	{
+		CUI* ui = new T;
+		ui->Initialize();
+
+		return ui;
+	}
 	static CUI* CreateUIButton(Vector2 pos, Vector2 Size, const TCHAR* off, const TCHAR* on,const function<void()>& fn, float SizeMul=1.f)
 	{
 		CButton* ui = new T;

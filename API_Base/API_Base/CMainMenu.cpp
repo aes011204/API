@@ -29,7 +29,7 @@ void CMainMenu::Initialize()
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOn_Kor.bmp", L"PlayOn");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOff_Kor.bmp", L"PlayOff");
     CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CButton>::
-        CreateUIButton({ WINCX * .5f, WINCY * .6f }, { 36.f, 12.f }, L"PlayOff", L"PlayOn", []() {CSceneMgr::Get_Instance()->Change_Stage(SC_VILLAGE);}, 3.f));
+        CreateUIButton({ WINCX * .5f, WINCY * .6f }, { 36.f, 12.f }, L"PlayOff", L"PlayOn", []() {CSceneMgr::Get_Instance()->Rq_changeScene(SC_VILLAGE);}, 3.f));
 
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/ExitOn_Kor.bmp", L"ExitOn");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/ExitOff_Kor.bmp", L"ExitOff");
@@ -55,6 +55,7 @@ int CMainMenu::Update()
 void CMainMenu::Late_Update()
 {
     CUIMgr::Get_Instance()->Late_Update();
+
 
 }
 
@@ -122,7 +123,7 @@ void CMainMenu::Render_MovingBG(HDC hdc, float _speed, const TCHAR* name, Vector
     HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(name);
     
     
-    accSpeed += _speed * (CTimeMgr::Get_Instance()->GetDeltaTime());
+    accSpeed += _speed * (float)(CTimeMgr::Get_Instance()->GetDeltaTime());
     
      if (accSpeed >= size.x)
          accSpeed = 0.f;

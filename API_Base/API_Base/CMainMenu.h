@@ -20,9 +20,12 @@ private:
 
    // void Render_MovingBG(HDC hdc, float _speed,const TCHAR* name, Vector2 size);
     void Render_MovingBG(HDC hdc, float _speed, const TCHAR* name, Vector2 size, float& accSpeed);
+
+
 private:
     Vector2 m_vLogoSize;
     float m_fMovePosX1;
     float m_fMovePosX2;
+
 };
 

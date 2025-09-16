@@ -18,7 +18,7 @@ public:
 	void Release();
 
 	void Add_Object(CObj* pObj);
-	CCreature* Get_Player() { if (!m_CreatureList[PLAYER].empty()) { return m_CreatureList[PLAYER].front(); } else { assert(false); } }
+	CCreature* Get_Player() { if (!m_CreatureList[PLAYER].empty()) { return m_CreatureList[PLAYER].front(); } else { assert(false); return nullptr; } }
 
 private:
 	list<CCreature*> m_CreatureList[CID_END];

@@ -43,6 +43,9 @@
     <Filter Include="02.Manager\02.Line">
       <UniqueIdentifier>{81648e14-641c-4a88-aabc-57fb2d6689ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06.UI">
+      <UniqueIdentifier>{187507a0-4704-45fc-9a3e-b748ee85ef30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -123,19 +126,25 @@
     <ClInclude Include="CMonster.h">
       <Filter>01.Object\00.Creature</Filter>
     </ClInclude>
-    <ClInclude Include="CUIMgr.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CUI.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CLine.h">
       <Filter>02.Manager\02.Line</Filter>
     </ClInclude>
     <ClInclude Include="CLineManager.h">
       <Filter>02.Manager\02.Line</Filter>
     </ClInclude>
+    <ClInclude Include="CUIMgr.h">
+      <Filter>06.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CUI.h">
+      <Filter>06.UI</Filter>
+    </ClInclude>
     <ClInclude Include="CButton.h">
+      <Filter>06.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CMainUI.h">
+      <Filter>06.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CStateBar.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -206,19 +215,25 @@
     <ClCompile Include="CMonster.cpp">
       <Filter>01.Object\00.Creature</Filter>
     </ClCompile>
-    <ClCompile Include="CUIMgr.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="CUI.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CLine.cpp">
       <Filter>02.Manager\02.Line</Filter>
     </ClCompile>
     <ClCompile Include="CLineManager.cpp">
       <Filter>02.Manager\02.Line</Filter>
     </ClCompile>
+    <ClCompile Include="CUI.cpp">
+      <Filter>06.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIMgr.cpp">
+      <Filter>06.UI</Filter>
+    </ClCompile>
     <ClCompile Include="CButton.cpp">
+      <Filter>06.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CMainUI.cpp">
+      <Filter>06.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CStateBar.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,7 +2,6 @@
 
 class CObj;
 class CUI;
-enum class HP_DIR { LeftToRight, RightToLeft };
 
 class CUIMgr
 {

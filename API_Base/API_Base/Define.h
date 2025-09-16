@@ -1,7 +1,7 @@
 #pragma once
 
-#define	WINCX			900//1280
-#define	WINCY			600//720
+#define	WINCX			1280
+#define	WINCY			720
 
 #define PURE			= 0
 
@@ -17,6 +17,7 @@
 extern HWND g_hWnd;
 
 /////////////////////////////////
+#include "Vector2.h"
 
 template<typename T>
 void	Safe_Delete(T& P) { if (P) { delete P; P = nullptr; } }
@@ -27,6 +28,7 @@ typedef struct tagFrame
 	int		iEnd;
 	double	dwSpeed;
 	double	dwTime;
+	Vector2 vSize;
 
 }FRAME;
 
@@ -64,7 +66,6 @@ enum SCENEID
 	SC_MAINMENU, SC_VILLAGE, SC_STAGE, SC_END
 };
 
-#include "Vector2.h"
 typedef struct tagLine
 {
 	Vector2 tLeft;

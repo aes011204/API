@@ -4,7 +4,7 @@
 #include "CStage.h"
 #include "CVillage.h"
 
-CSceneMgr::CSceneMgr() : m_pScene(nullptr), m_eCurSceneID(SC_END)
+CSceneMgr::CSceneMgr() : m_pScene(nullptr), m_eCurSceneID(SC_END),  nextScene(SC_END)
 {
 }
 
@@ -57,6 +57,12 @@ int CSceneMgr::Update()
 {
 	if (m_pScene)
 		m_pScene->Update();
+
+	if (m_bChange == true)
+	{
+		Change_Stage(nextScene);
+		m_bChange = false;
+	}
 	return 0;
 }
 
@@ -76,3 +82,10 @@ void CSceneMgr::Release()
 {
 	Safe_Delete(m_pScene);
 }
+
+void CSceneMgr::Rq_changeScene(SCENEID next)
+{
+	m_bChange = true;
+	nextScene = next;
+}
+

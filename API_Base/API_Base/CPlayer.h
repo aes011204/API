@@ -21,7 +21,11 @@ public:
 	void Key_Input();
 	void Motion_Change();
 
+	void Move_EffectFrame(HDC hdc);
+
 private:
+
+
 
 	PLAYERSTATE	m_eCurState;
 	PLAYERSTATE	m_ePreState;

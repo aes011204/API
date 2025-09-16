@@ -36,4 +36,5 @@ HDC CBmpMgr::Find_Img(const TCHAR* pImgKey)
 void CBmpMgr::Release()
 {
 	for_each(m_mapBit.begin(), m_mapBit.end(), [](auto& p) {if (p.second) delete p.second; p.second = nullptr;});
+	m_mapBit.clear();
 }

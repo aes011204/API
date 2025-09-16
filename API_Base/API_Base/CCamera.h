@@ -28,8 +28,8 @@ public:
 	Vector2 GetRenderSize(Vector2 WorldSize) {
 		// 목적지(그려질) 크기 = 원본 프레임 크기 * 줌
 		Vector2 RenderSize = {};
-		RenderSize.x = (int)(WorldSize.x * m_fZoom);
-		RenderSize.y = (int)(WorldSize.y * m_fZoom);
+		RenderSize.x = (WorldSize.x * m_fZoom);
+		RenderSize.y = (WorldSize.y * m_fZoom);
 		return RenderSize;
 	}
 

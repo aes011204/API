@@ -18,7 +18,7 @@ CLine::~CLine()
 
 void CLine::Render(HDC hDC)
 {
-
+	// 이건 면적이 없어서 그냥 pos만 해도 되는 건갑네
 
 	Vector2 RenderPosL = CCamera::Get_Instance()->GetRenderPos(m_tLine.tLeft);
 	Vector2 RenderPosR = CCamera::Get_Instance()->GetRenderPos(m_tLine.tRight);
