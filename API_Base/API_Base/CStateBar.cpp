@@ -2,7 +2,7 @@
 #include "CStateBar.h"
 #include "CBmpMgr.h"
 
-CStateBar::CStateBar() :TargetCurInfo(0.f), TargetMaxInfo(0.f)
+CStateBar::CStateBar() :TargetCurInfo(0), TargetMaxInfo(0), OtherInfo(0)
 {
 }
 
@@ -12,8 +12,6 @@ CStateBar::~CStateBar()
 
 void CStateBar::Initialize()
 {
-	TargetCurInfo = 10.f;
-	TargetMaxInfo = 100.f;
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/PlayerLifeBase.bmp", L"base");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/PlayerLifeBack.bmp", L"back");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/LifeWave.bmp", L"wave");
@@ -21,6 +19,16 @@ void CStateBar::Initialize()
 
 int CStateBar::Update()
 {
+	if (m_tTarget)
+	{
+		TargetCurInfo = m_tTarget->Get_HP();
+		TargetMaxInfo = m_tTarget->Get_MaxHP();
+		if (m_tTarget->Get_ID() == PLAYER)
+			OtherInfo = m_tTarget->Get_Level();;
+
+		// 추후 수저 ㅇ 주소 값으로
+	}
+
     return 0;
 }
 
@@ -45,11 +53,14 @@ void CStateBar::Render(HDC hdc)
 			hdc,
 			pos.x,
 			pos.y,
-			size.x, size.y-10,
+			size.x, size.y,
 			hMemDC, 0, 0, size.x, size.y,
 			RGB(255, 0, 255));
 
-		CUI::DrawHP(hdc, pos.x+100, pos.y, size.x, size.y - 10-1, TargetCurInfo, TargetMaxInfo);
+		Vector2 redPos = { pos.x + 80 , pos.y };// 좌상단 기준
+		Vector2 redSize = { size.x - 80 -5,size.y- 1 };
+
+		CUI::DrawHP(hdc, redPos.x, redPos.y, redSize.x, redSize.y, TargetCurInfo, TargetMaxInfo);
 		
 
 		HDC	hMemDC2 = CBmpMgr::Get_Instance()->Find_Img(L"base");
@@ -59,13 +70,23 @@ void CStateBar::Render(HDC hdc)
 			hdc,
 			pos.x,
 			pos.y,
-			size.x, size.y - 10,
+			size.x, size.y,
 			hMemDC2, 0, 0, size.x, size.y,
 			RGB(255, 0, 255));
 
+		WCHAR buffer[32];
+		swprintf_s(buffer, 32, L"%d / %d", TargetCurInfo, TargetMaxInfo);
 
-    //Vector2 pos1 = { 50,50 };
-    //CUI::Font(hdc, pos1, L"안녀ㅑㅇ",30,0,700, 3);
+		RECT rc = {redPos.x,redPos.y, redPos.x + redSize.x, redPos.y + redSize.y  };
+		CUI::Font(hdc, rc, buffer, 40, 30, 1000, 6);
+
+		if (OtherInfo != 0)
+		{
+			WCHAR tmpBuffer[8];
+			swprintf_s(tmpBuffer, 8, L"%d ", OtherInfo);
+			RECT tmp = { pos.x+10, pos.y, pos.x + 80+10, pos.y + size.y };
+			CUI::Font(hdc, tmp, tmpBuffer,40,30,1000, 6);
+		}
 }
 
 void CStateBar::Release()

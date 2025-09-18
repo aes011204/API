@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "CSceneMgr.h"
 #include "CMainMenu.h"
-#include "CStage.h"
+#include "CStage01.h"
 #include "CVillage.h"
-
+#include "CBossStage.h"
+#include "CEdit.h"
 CSceneMgr::CSceneMgr() : m_pScene(nullptr), m_eCurSceneID(SC_END),  nextScene(SC_END)
 {
 }
@@ -20,7 +21,7 @@ void CSceneMgr::Change_Stage(SCENEID eID)
 		return;
 	if (m_pScene)
 	{
-		m_pScene->Release();
+		//m_pScene->Release();
 		Safe_Delete<CScene*>(m_pScene);
 
 	}
@@ -29,22 +30,23 @@ void CSceneMgr::Change_Stage(SCENEID eID)
 	{
 	case SC_MAINMENU:
 		m_pScene = new CMainMenu;
+
 		break;
 	case SC_VILLAGE:
 		m_pScene = new CVillage;
 		break;
-	case SC_STAGE:
-		m_pScene = new CStage;
+	case SC_STAGE01:
+		m_pScene = new CStage01;
 		break;
-	//case SC_MAINMENU:
-	//	m_pScene = new CMainMenu;
-	//	break;
-	//case SC_MAINMENU:
-	//	m_pScene = new CMainMenu;
-	//	break;
-	//case SC_MAINMENU:
-	//	m_pScene = new CMainMenu;
-	//	break;
+	case SC_BOSS:
+		m_pScene = new CBossStage;
+		break;
+	case SC_STAGE02:
+	//	m_pScene = new CStage02;
+		break;
+	case SC_EDIT:
+		m_pScene = new CEdit;
+		break;
 	}
 
 	m_pScene->Initialize();

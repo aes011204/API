@@ -16,5 +16,8 @@ public:
 
     // CNonCreature을(를) 통해 상속됨
     void On_Collision(CObj* obj) override;
+
+	// CCreature을(를) 통해 상속됨
+	void Take_Damage(int _damage) override;
 };
 

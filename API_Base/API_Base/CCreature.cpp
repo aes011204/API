@@ -3,7 +3,7 @@
 #include "CCamera.h"
 #include "CTimeMgr.h"
 #include "CLineManager.h"
-CCreature::CCreature() : m_ID(CID_END), m_bDead(false), m_tTarget(nullptr), m_eDir(DIR_END),
+CCreature::CCreature() : m_bDead(false), m_tTarget(nullptr),  m_eDir(DIR_END),m_iDamage(0), m_iLevel(0), m_iMaxHP(0), m_iHP(0),
 			m_bJump(false),
 			m_fSpeedY(0.f),
 			m_iPlayerJumpCount(0),
@@ -38,13 +38,14 @@ int CCreature::Update()
 		m_iPlayerJumpCount += 1;
 		// 플레이어가 점프를 하는 중일때 점프 하나 증가, 현재 2 이상이 되면 점프 제한
 		m_bPlayerLanded = false;
+
 	}
-
-
-	m_fSpeedY += 3000.f *CTimeMgr::Get_Instance()->GetDeltaTime();
-	//! Y속도 += 가속도(중력가속도 * 화면 보정값) * dt : 속도의 적분
-	m_vPosition.y += m_fSpeedY * CTimeMgr::Get_Instance()->GetDeltaTime();
-
+	if(m_bPlayerLanded != true)
+	{
+		m_fSpeedY += 3000.f * CTimeMgr::Get_Instance()->GetDeltaTime();
+		//! Y속도 += 가속도(중력가속도 * 화면 보정값) * dt : 속도의 적분
+		m_vPosition.y += m_fSpeedY * CTimeMgr::Get_Instance()->GetDeltaTime();
+	}
 
 	// Collision_Line이 제대로 수행되지 않았을 경우 떨어질 높이를 설정
 	m_fGroundY = WINCY + 100.f;
@@ -58,10 +59,10 @@ int CCreature::Update()
 		m_fSpeedY = 0.f;
 		m_iPlayerJumpCount = 0;
 
-		m_bPlayerLanded = true;
-		
+		//m_bPlayerLanded = true;
+		m_bJump = false;
 	}
-	cout << m_vPosition.x << endl;
+	
 
 	return 0;
 }
@@ -85,6 +86,7 @@ void CCreature::Render(HDC hdc)
 
 void CCreature::Release()
 {
+
 }
 
 void CCreature::Move_Frame()
@@ -125,3 +127,5 @@ void CCreature::Move_EffectFrame()
 	}
 
 }
+
+

@@ -2,7 +2,7 @@
 #include "CLineManager.h"
 #include "Vector2.h"
 
-#include "CStage.h"
+#include "CStage01.h"
 
 
 

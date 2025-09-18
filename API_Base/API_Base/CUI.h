@@ -2,6 +2,7 @@
 
 enum class HP_DIR { LeftToRight, RightToLeft };
 
+class CCreature;
 
 class CUI
 {
@@ -24,6 +25,8 @@ public:
 	void SetSize(const Vector2& size) { m_vSize = size; }
 
 	const RECT* Get_Rect() { return &m_tRect; }
+
+	void Set_Target(CCreature* tTarget) { m_tTarget = tTarget; }
 protected:
 	RECT			m_tRect;		// °´Ã¼ÀÇ ·»´õ ¹üÀ§
 
@@ -33,11 +36,13 @@ protected:
 	Vector2			m_vSize;		// °´Ã¼ÀÇ Å©±â
 	Vector2			m_vCollSize;
 
+	CCreature* m_tTarget;
+
 	virtual bool IsColl()= 0 ;
 public:
 
 	void Update_Rect();
-	void Font(HDC hdc, Vector2 pos, const WCHAR* str, int nHeight, int nWidth, int nWeight, int line);
+	void Font(HDC hdc, RECT rc, const WCHAR* str, int nHeight, int nWidth, int nWeight, int line);
 	void DrawHP(HDC hDC, float x, float y, float width, float height, float Hp, float MaxHp, HP_DIR dir = HP_DIR::LeftToRight);
 };
 

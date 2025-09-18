@@ -46,6 +46,9 @@
     <Filter Include="06.UI">
       <UniqueIdentifier>{187507a0-4704-45fc-9a3e-b748ee85ef30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Scene\00.Stage">
+      <UniqueIdentifier>{68966643-8152-4f23-b551-3e314a1eef13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -96,25 +99,13 @@
     <ClInclude Include="CPlayer.h">
       <Filter>01.Object\00.Creature</Filter>
     </ClInclude>
-    <ClInclude Include="CSceneMgr.h">
-      <Filter>02.Manager</Filter>
-    </ClInclude>
     <ClInclude Include="CMyBmp.h">
       <Filter>02.Manager\00.Bmp</Filter>
     </ClInclude>
     <ClInclude Include="CBmpMgr.h">
       <Filter>02.Manager\00.Bmp</Filter>
     </ClInclude>
-    <ClInclude Include="CStage.h">
-      <Filter>05.Scene</Filter>
-    </ClInclude>
     <ClInclude Include="CScene.h">
-      <Filter>05.Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="CMainMenu.h">
-      <Filter>05.Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="CVillage.h">
       <Filter>05.Scene</Filter>
     </ClInclude>
     <ClInclude Include="CCollisionMgr.h">
@@ -144,7 +135,40 @@
     <ClInclude Include="CMainUI.h">
       <Filter>06.UI</Filter>
     </ClInclude>
+    <ClInclude Include="CMainMenu.h">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CStage01.h">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CVillage.h">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneMgr.h">
+      <Filter>05.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossStage.h">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClInclude>
     <ClInclude Include="CStateBar.h">
+      <Filter>06.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlatform.h">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClInclude>
+    <ClInclude Include="CNpc.h">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClInclude>
+    <ClInclude Include="CBoss.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="CEdit.h">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CTileMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CTile.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -185,25 +209,13 @@
     <ClCompile Include="CPlayer.cpp">
       <Filter>01.Object\00.Creature</Filter>
     </ClCompile>
-    <ClCompile Include="CSceneMgr.cpp">
-      <Filter>02.Manager</Filter>
-    </ClCompile>
     <ClCompile Include="CMyBmp.cpp">
       <Filter>02.Manager\00.Bmp</Filter>
     </ClCompile>
     <ClCompile Include="CBmpMgr.cpp">
       <Filter>02.Manager\00.Bmp</Filter>
     </ClCompile>
-    <ClCompile Include="CStage.cpp">
-      <Filter>05.Scene</Filter>
-    </ClCompile>
     <ClCompile Include="CScene.cpp">
-      <Filter>05.Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="CMainMenu.cpp">
-      <Filter>05.Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="CVillage.cpp">
       <Filter>05.Scene</Filter>
     </ClCompile>
     <ClCompile Include="CCollisionMgr.cpp">
@@ -233,7 +245,40 @@
     <ClCompile Include="CMainUI.cpp">
       <Filter>06.UI</Filter>
     </ClCompile>
+    <ClCompile Include="CMainMenu.cpp">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="CStage01.cpp">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="CVillage.cpp">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneMgr.cpp">
+      <Filter>05.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossStage.cpp">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClCompile>
     <ClCompile Include="CStateBar.cpp">
+      <Filter>06.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlatform.cpp">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClCompile>
+    <ClCompile Include="CNpc.cpp">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClCompile>
+    <ClCompile Include="CBoss.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="CEdit.cpp">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="CTile.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CTileMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

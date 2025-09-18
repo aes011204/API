@@ -1,5 +1,6 @@
 #pragma once
 #include "CUI.h"
+#include "CCreature.h"
 class CStateBar :
     public CUI
 {
@@ -15,9 +16,13 @@ public:
     void Release() override;
     bool IsColl() override;
 
+ 
 
 private:
-    float TargetCurInfo;
-    float TargetMaxInfo;
+    int TargetCurInfo;
+    int TargetMaxInfo;
+    int OtherInfo;
+
+
 };
 

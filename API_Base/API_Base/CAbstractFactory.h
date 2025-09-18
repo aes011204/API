@@ -2,7 +2,8 @@
 #include "CObj.h"
 #include "CUI.h"
 #include "CButton.h"
-
+#include "CCreature.h"
+#include "CTile.h"
 template<typename T>
 class CAbstractFactory
 {
@@ -16,19 +17,33 @@ public:
 		return obj;
 	}
 
-	static CObj* Create(Vector2 pos)
+	static CObj* Create(Vector2 pos, Vector2 size)
 	{
 		CObj* obj = new T;
 		obj->Initialize();
 
 		obj->SetPosition(pos);
+		obj->SetSize(size);
 
 		return obj;
 	}
 
-	static CUI* CreateUI()
+	//static CTile* CreateTile(Vector2 pos, Vector2 size)
+	//{
+	//	CTile* obj = new T;
+	//	obj->Initialize();
+	//
+	//	obj->SetPosition(pos);
+	//	obj->SetSize(size);
+	//
+	//	return obj;
+	//}
+
+	static CUI* CreateUI(CCreature* creature)
 	{
 		CUI* ui = new T;
+		ui->Set_Target(creature);
+
 		ui->Initialize();
 
 		return ui;

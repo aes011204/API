@@ -15,11 +15,10 @@ public:
 
 	virtual void On_Collision(CObj* obj) = 0;
 public:
-	NONCREATURE_ID Get_ID() { return m_ID; }
-	void Set_ID(NONCREATURE_ID id) { m_ID = id; }
+
 
 protected:
-	NONCREATURE_ID m_ID;
+
 
 };
 

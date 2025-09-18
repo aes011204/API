@@ -3,6 +3,7 @@
 #include "CCreature.h"
 #include "CNonCreature.h"
 #include "CObj.h"
+#include "CCollisionMgr.h"
 CObjMgr::CObjMgr()
 {
 }
@@ -16,15 +17,15 @@ CObjMgr::~CObjMgr()
 
 int CObjMgr::Update()
 {
-	for (int i = 0; i < CID_END; i++)
+	for (int i = 0; i < OBJ_END; i++)
 	{
-		for (auto it = m_CreatureList[i].begin(); it != m_CreatureList[i].end();)
+		for (auto it = m_ObjList[i].begin(); it != m_ObjList[i].end();)
 		{
 			int result =(*it)->Update();
 			if (result == OBJ_DEAD)
 			{
-				Safe_Delete<CCreature*>(*it);
-				m_CreatureList[i].erase(it);
+				Safe_Delete<CObj*>(*it);
+				m_ObjList[i].erase(it);
 			}
 			else
 			{
@@ -34,80 +35,66 @@ int CObjMgr::Update()
 	}
 	//
 
-	for (int i = 0; i < NCID_END; i++)
-	{
-		for (auto it = m_NonCreatureList[i].begin(); it != m_NonCreatureList[i].end();)
-		{
-			int result = (*it)->Update();
-			if (result == OBJ_DEAD)
-			{
-				Safe_Delete<CNonCreature*>(*it);
-				m_NonCreatureList[i].erase(it);
-			}
-			else
-			{
-				++it;
-			}
-		}
-	}
 
 	return 0;
 }
 
 void CObjMgr::Late_Update()
 {
-	for (int i = 0; i < CID_END; i++)
+	for (int i = 0; i < OBJ_END; i++)
 	{
-		for (auto& iter : m_CreatureList[i])
+		for (auto& iter : m_ObjList[i])
 		{
 			iter->Late_Update();
 		}
 	}
 
+	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[ITEM]);
+	//CCollisionMgr::Collision_Circle(m_ObjList[PL_BULLET], m_ObjList[MONSTER]);
+	//CCollisionMgr::Collision_Circle(m_ObjList[MON_BULLET], m_ObjList[PLAYER]);
+	CCollisionMgr::Collision_Rect(m_ObjList[MONSTER], m_ObjList[PLAYER]);
+	
 
-	for (int i = 0; i < NCID_END; i++)
-	{
-		for (auto& iter : m_NonCreatureList[i])
-		{
-			iter->Late_Update();
-		}
-	}
+#pragma region ÇÃ·¹ÀÌ¾î - ÇÃ·§Æû °£ Ãæµ¹
+	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[PLATFORM]);
+#pragma endregion
+
+#pragma region ¸ó½ºÅÍ - ÇÃ·§Æû °£ Ãæµ¹
+	CCollisionMgr::Collision_Rect(m_ObjList[MONSTER], m_ObjList[PLATFORM]);
+#pragma endregion
+
+#pragma region ÃÑ¾Ë - ÇÃ·§Æû °£ Ãæµ¹
+	//CCollisionMgr::Collision_Rect(m_ObjList[PL_BULLET], m_ObjList[PLATFORM]);
+	//CCollisionMgr::Collision_Rect(m_ObjList[MON_BULLET], m_ObjList[PLATFORM]);
+#pragma endregion
+
+
 }
 
 void CObjMgr::Render(HDC hdc)
 {
-	for (int i = 0; i < CID_END; i++)
+	for (int i = 0; i < OBJ_END; i++)
 	{
-		for (auto& iter : m_CreatureList[i])
+		for (auto& iter : m_ObjList[i])
 		{
 			iter->Render(hdc);
 		}
 	}
 
-	for (int i = 0; i < NCID_END; i++)
-	{
-		for (auto& iter : m_NonCreatureList[i])
-		{
-			iter->Render(hdc);
-		}
-	}
 }
 
 void CObjMgr::Release()
 {
-	for (int i = 0; i < CID_END; i++)
+	for (int i = 0; i < OBJ_END; i++)
 	{
-		for_each(m_CreatureList[i].begin(), m_CreatureList[i].end(),
+		for_each(m_ObjList[i].begin(), m_ObjList[i].end(),
 			[](auto& p) {if (p) { delete p; p = nullptr; }});
 
-		m_CreatureList[i].clear();
+		m_ObjList[i].clear();
 	}
 
 
-	for (int i = 0; i < NCID_END; i++)
-	{
-		for_each(m_NonCreatureList[i].begin(), m_NonCreatureList[i].end(), [](auto& p) {if (p) { delete p; p = nullptr; }});
-	}
+
 
 }
 
@@ -115,16 +102,11 @@ void CObjMgr::Add_Object(CObj* pObj)
 {
 	if (pObj == nullptr)
 		return;
-	if (CCreature* creature = dynamic_cast<CCreature*>(pObj) )
-	{
 
-		m_CreatureList[creature->Get_ID()].push_back(creature);
+		m_ObjList[pObj->Get_ID()].push_back(pObj);
 
-	}
-	else if (CNonCreature* creature = dynamic_cast<CNonCreature*>(pObj))
-	{
-		m_NonCreatureList[creature->Get_ID()].push_back(creature);
-	}
+
+
 }
 
 

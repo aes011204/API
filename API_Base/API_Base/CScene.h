@@ -11,6 +11,7 @@ public:
 	virtual void Render(HDC hdc) = 0;
 	virtual void Release() = 0;
 
-
+	
+	void RenderBG(HDC hdc, HDC hGroundDC, Vector2 startPos, Vector2 size);
 };
 

@@ -26,7 +26,7 @@ void CMainGame::Initialize()
 
 
 	CSceneMgr::Get_Instance()->Change_Stage(SC_MAINMENU);
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/Sky.bmp", L"Back");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Ground.bmp", L"Back");
 
 
 	
@@ -38,7 +38,7 @@ int CMainGame::Update()
 	CTimeMgr::Get_Instance()->Update();
 
 	CSceneMgr::Get_Instance()->Update();
-	//CObjMgr::Get_Instance()->Update();
+
 	CKeyMgr::Get_Instance()->Key_Update();
 	//CCamera::Get_Instance()->Update();
 	return 0;
@@ -59,7 +59,7 @@ void CMainGame::Render()
 	//BitBlt(hBackDC, 0, 0, WINCX, WINCY, hGroundDC, 0, 0, SRCCOPY);
 
 
-	//CObjMgr::Get_Instance()->Render(hBackDC);
+	
 	CSceneMgr::Get_Instance()->Render(hBackDC); 
 
 	SetStretchBltMode(hBackDC, COLORONCOLOR); // (부드럽게면 HALFTONE)
@@ -69,7 +69,7 @@ void CMainGame::Render()
 
 void CMainGame::Release()
 {
-	//CObjMgr::Get_Instance()->Release();
+	
 	CSceneMgr::Get_Instance()->Release();
 
 

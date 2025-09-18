@@ -24,7 +24,7 @@ void CMainMenu::Initialize()
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/OptionOn_Kor.bmp", L"OptionOn");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/OptionOff_Kor.bmp", L"OptionOff");
     CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CButton>::
-        CreateUIButton({ WINCX * .5f, WINCY * .7f }, { 20.f, 12.f }, L"OptionOff", L"OptionOn", []() {/*CSceneMgr::Get_Instance()->Scene_Change(SC_EDIT);*/}, 3.f));
+        CreateUIButton({ WINCX * .5f, WINCY * .7f }, { 20.f, 12.f }, L"OptionOff", L"OptionOn", []() {CSceneMgr::Get_Instance()->Rq_changeScene(SC_EDIT);}, 3.f));
 
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOn_Kor.bmp", L"PlayOn");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/BG/PlayOff_Kor.bmp", L"PlayOff");

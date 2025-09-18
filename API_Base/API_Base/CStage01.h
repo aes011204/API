@@ -1,6 +1,6 @@
 #pragma once
 #include "CScene.h"
-class CStage : public CScene
+class CStage01 : public CScene
 {
 	// CScene을(를) 통해 상속됨
 	void Initialize() override;

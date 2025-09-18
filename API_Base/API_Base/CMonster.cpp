@@ -6,6 +6,10 @@ void CMonster::On_Collision(CObj* obj)
 {
 }
 
+void CMonster::Take_Damage(int _damage)
+{
+}
+
 CMonster::CMonster()
 {
 }
@@ -16,14 +20,19 @@ CMonster::~CMonster()
 
 void CMonster::Initialize()
 {
-	m_vPosition = { 600,600 };
+	m_vPosition = { 600,300 };
 	m_vSize = { 100,100 };
 
+	m_iMaxHP = 500.f;
+	m_iHP = m_iMaxHP;
+	m_iDamage = 1;
 	m_ID = MONSTER;
 }
 
 int CMonster::Update()
 {
+
+	Update_Rec();
 	return 0;
 }
 

@@ -24,7 +24,16 @@ public:
 	void SetSize(const Vector2& size) { m_vSize = size; }
 
 	const RECT* Get_Rect() { return &m_tRect; }
+
+	OBJID Get_ID() { return m_ID; }
+	void Set_ID(OBJID id) { m_ID = id; }
+
+	bool Get_Dead() { return m_bDead; }
+
 protected:
+
+	OBJID m_ID;
+
 
 	// Renderer
 	RECT			m_tRect;		// °´Ã¼ÀÇ ·»´õ ¹üÀ§
@@ -37,6 +46,6 @@ protected:
 
 	float m_fSpeed;
 	
-
+	bool m_bDead;
 };
 

@@ -44,9 +44,9 @@ void CCamera::Update()
 	//카메라 가 화면밖으로 나가지 않게 하는 보정  
 	if (m_tTargetObj)
 	{
-		CCreature* creature = dynamic_cast<CCreature*>(m_tTargetObj);
 		
-		if (creature->Get_Dead())
+		
+		if (m_tTargetObj->Get_Dead())
 		{
 			m_tTargetObj = nullptr;
 		}
@@ -124,12 +124,12 @@ void CCamera::CalDiff()
 	//m_vPrevLookAt = m_vCurLookAt;
 
 
-	//const float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
-	//// t = 1 - exp(-k*dt) : 프레임레이트에 덜 민감, k=6 정도가 따라가는 감도 적당
-	//const float t = 1.f - expf(-6.f * dt);
-	//
-	//// ★ 한 줄! 현재값을 목표로 스무스하게
-	//m_vCurLookAt += (m_vLookAt - m_vCurLookAt) * t;
+	const float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
+	// t = 1 - exp(-k*dt) : 프레임레이트에 덜 민감, k=6 정도가 따라가는 감도 적당
+	const float t = 1.f - expf(-6.f * dt);
+	
+	// ★ 한 줄! 현재값을 목표로 스무스하게
+	m_vCurLookAt += (m_vLookAt - m_vCurLookAt) * t;
 }
 
 

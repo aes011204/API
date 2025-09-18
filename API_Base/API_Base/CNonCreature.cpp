@@ -2,7 +2,7 @@
 #include "CNonCreature.h"
 #include "CCamera.h"
 
-CNonCreature::CNonCreature(): m_ID(NCID_END)
+CNonCreature::CNonCreature()
 {
 }
 
@@ -25,12 +25,27 @@ void CNonCreature::Late_Update()
 
 void CNonCreature::Render(HDC hdc)
 {
-	Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
+	//Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
+	//Vector2 RenderSize = CCamera::Get_Instance()->GetRenderPos(m_vSize);
 
-	//Rectangle(hdc, RenderPos.x - m_vSize.x,
-	//	RenderPos.y - m_vSize.y,
-	//	RenderPos.x + m_vSize.x,
-	//	RenderPos.y + m_vSize.y);
+	//Rectangle(hdc, RenderPos.x - RenderSize.x*.5f,
+	//	RenderPos.y - RenderSize.y * .5f,
+	//	RenderPos.x + RenderSize.x,
+	//	RenderPos.y + RenderSize.y);
+
+	Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
+	float zoom = CCamera::Get_Instance()->GetZoom();
+
+	float RenderSizeX = m_vSize.x * zoom;
+	float RenderSizeY = m_vSize.y * zoom;
+	// 좌상단 기준
+	float LeftTopX = RenderPos.x - RenderSizeX * .5f;
+	float LeftTopY = RenderPos.y - RenderSizeY * .5f;
+
+	Rectangle(hdc, LeftTopX, LeftTopY, LeftTopX + RenderSizeX, LeftTopY + RenderSizeY);
+
+
+
 }
 
 void CNonCreature::Release()

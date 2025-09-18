@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CUI.h"
-CUI::CUI()
+#include "CCreature.h"
+CUI::CUI() : m_tTarget(nullptr)
 {
 	ZeroMemory(&m_tRect, sizeof(m_tRect));
 }
@@ -41,11 +42,11 @@ void CUI::Update_Rect()
 
 }
 
-void CUI::Font(HDC hdc, Vector2 pos, const WCHAR* str, int nHeight, int nWidth, int nWeight, int line)
+void CUI::Font(HDC hdc, RECT rc, const WCHAR* str, int nHeight, int nWidth, int nWeight, int line) // weight 0~1000
 {
 	AddFontResource((L"../Font/AaCassiopeia.ttf"));
 	HFONT currentFont = CreateFont(nHeight, nWidth, 0, 0, nWeight, 0, 0, 0,
-		HANGEUL_CHARSET, 0, 0,0, VARIABLE_PITCH | FF_ROMAN, TEXT("AaCassiopeia"));
+		HANGEUL_CHARSET,0, 0,0, VARIABLE_PITCH | FF_ROMAN, TEXT("AaCassiopeia"));
 	HFONT oldFont = (HFONT)SelectObject(hdc, currentFont);
 
 	SetBkMode(hdc, TRANSPARENT); // 뒷배경 투명
@@ -53,15 +54,23 @@ void CUI::Font(HDC hdc, Vector2 pos, const WCHAR* str, int nHeight, int nWidth, 
 	SetTextColor(hdc, 0x00ffffff);
 
 	// 그림자 , 상하 좌우로 같은 스타일의 글자를 뿌려준다.
-	TextOut(hdc, pos.x + line, pos.y, str, wcslen(str));
-	TextOut(hdc, pos.x - line, pos.y, str, wcslen(str));
-	TextOut(hdc, pos.x, pos.y + line, str, wcslen(str));
-	TextOut(hdc, pos.x, pos.y - line, str, wcslen(str));
+	//TextOut(hdc, pos.x + line, pos.y, str, wcslen(str));
+	//TextOut(hdc, pos.x - line, pos.y, str, wcslen(str));
+	//TextOut(hdc, pos.x, pos.y + line, str, wcslen(str));
+	//TextOut(hdc, pos.x, pos.y - line, str, wcslen(str));
+	RECT rcTop = { rc.left, rc.top - line, rc.right, rc.bottom };
+	DrawText(hdc, str, -1, &rcTop, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	RECT rcLeft = { rc.left - line, rc.top, rc.right, rc.bottom };
+	DrawText(hdc, str, -1, &rcLeft, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	RECT rcBottom = { rc.left, rc.top, rc.right, rc.bottom + line };
+	DrawText(hdc, str, -1, &rcBottom, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	RECT rcRight = { rc.left, rc.top, rc.right + line, rc.bottom };
+	DrawText(hdc, str, -1, &rcRight, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 	SetTextColor(hdc, 0x00000000);
 	
-	TextOut(hdc, pos.x, pos.y, str, wcslen(str));
-
+	//TextOut(hdc, pos.x, pos.y, str, wcslen(str));
+	DrawText(hdc, str, -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	SelectObject(hdc, oldFont);
 	DeleteObject(currentFont);
 }

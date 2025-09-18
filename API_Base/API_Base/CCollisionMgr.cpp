@@ -91,7 +91,6 @@ void CCollisionMgr::Collision_RectEx(list<CObj*> src, list<CObj*> dst)
 	}
 
 }
-
 bool CCollisionMgr::Check_Rect(CObj* src, CObj* dst, float* pX, float* pY)
 {
 	float distanceX = abs(src->GetPosition().x - dst->GetPosition().x);

@@ -1,7 +1,13 @@
 #pragma once
 
-#define	WINCX			1280
-#define	WINCY			720
+#define	WINCX			900//1280
+#define	WINCY			600//720
+
+#define TILECX		16
+#define TILECY		16
+
+#define TILEX		100
+#define TILEY		100
 
 #define PURE			= 0
 
@@ -21,11 +27,17 @@ extern HWND g_hWnd;
 
 template<typename T>
 void	Safe_Delete(T& P) { if (P) { delete P; P = nullptr; } }
-
+enum DR
+{
+	RIGHT,
+	LEFT,
+	DIR_END
+};
 typedef struct tagFrame
 {
 	int		iStart;
 	int		iEnd;
+	DR		dir;
 	double	dwSpeed;
 	double	dwTime;
 	Vector2 vSize;
@@ -33,37 +45,29 @@ typedef struct tagFrame
 }FRAME;
 
 
-enum DIRECTION
-{
-	DIR_LEFT,
-	DIR_RIGHT,
-	DIR_UP,
-	DIR_DOWN,
-	DIR_END
-};
 
-enum CREATURE_ID
+
+
+
+enum OBJID
 {
 	PLAYER,
 	MONSTER,
+	BOSS,
 	PET,
-	CID_END
-};
-enum NONCREATURE_ID
-{
 	ITEM,
 	WEAPON,
 	BULLET,
 	PLATFORM,
 	EFFECT,
-	NCID_END
-};
 
+	OBJ_END
+};
 
 
 enum SCENEID
 {
-	SC_MAINMENU, SC_VILLAGE, SC_STAGE, SC_END
+	SC_MAINMENU, SC_VILLAGE, SC_STAGE01, SC_STAGE02, SC_BOSS, SC_EDIT, SC_END
 };
 
 typedef struct tagLine

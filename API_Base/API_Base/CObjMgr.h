@@ -18,11 +18,11 @@ public:
 	void Release();
 
 	void Add_Object(CObj* pObj);
-	CCreature* Get_Player() { if (!m_CreatureList[PLAYER].empty()) { return m_CreatureList[PLAYER].front(); } else { assert(false); return nullptr; } }
+	CObj* Get_Player() { if (!m_ObjList[PLAYER].empty()) { return m_ObjList[PLAYER].front(); } else { assert(false); return nullptr; } }
 
 private:
-	list<CCreature*> m_CreatureList[CID_END];
-	list<CNonCreature*> m_NonCreatureList[NCID_END];
+	list <CObj*> m_ObjList[OBJ_END];
+
 
 #pragma region Singleton
 public:

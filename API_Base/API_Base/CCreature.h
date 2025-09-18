@@ -21,36 +21,36 @@ public:
 	virtual void On_Collision(CObj* obj) = 0;
 
 public:
-	CREATURE_ID Get_ID() { return m_ID; }
-	void Set_ID(CREATURE_ID id) { m_ID = id; }
-	bool Get_Dead() { return m_bDead; }
 
 	void			Set_FrameKey(const TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }
-
-	void			Set_Direction(DIRECTION eDir) { m_eDir = eDir; }
+	virtual void	Take_Damage(int _damage)=0;
+	//void			Set_Direction(DIRECTION eDir) { m_eDir = eDir; }
 
 public: // Object's stats getter-setter 
-	float			Get_HP() { return m_fHP; }
-	float			Get_MaxHP() { return m_fMaxHP; }
-	float			Get_Damage() { return m_fDamage; }
+	int			Get_HP() { return m_iHP; }
+	int			Get_MaxHP() { return m_iMaxHP; }
+	int			Get_Damage() { return m_iDamage; }
+	DR				Get_Dir()	const { return m_eDir; }
+	int			Get_Level() { return m_iLevel; }
 
-	void			Set_HP(float _HP) { m_fHP = _HP; }
-	void			Set_MaxHP(float _HP) { m_fMaxHP = _HP; }
-	void			Set_Damage(float _damage) { m_fDamage = _damage; }
+	void			Set_HP(int _HP) { m_iHP = _HP; }
+	void			Set_MaxHP(int _HP) { m_iMaxHP = _HP; }
+	void			Set_Damage(int _damage) { m_iDamage = _damage; }
+	void			Set_Dir(DR dir) { m_eDir = dir; }
 
 protected:
-	CREATURE_ID m_ID;
 
 	Vector2 m_vBarrelDir;
-
+	Vector2 m_vBarrelPos;
 	CObj* m_tTarget;
 
 	bool m_bDead;
-	DIRECTION	m_eDir;
+	//DIRECTION	m_eDir;
 
 	// 애니메이션
 	FRAME		m_tFrame;
 	const TCHAR* m_pFrameKey;
+	DR		m_eDir;
 
 	//이팩트 애니메이션
 	Vector2 m_vEFPos;
@@ -66,8 +66,9 @@ protected:
 	bool  m_bPlayerLanded;			// 플레이어가 착지 중일 때 true
 
 
-	float			m_fHP;
-	float			m_fMaxHP;
-	float			m_fDamage;
+	int			m_iHP;
+	int			m_iMaxHP;
+	int			m_iDamage;
+	int			m_iLevel;
 };
 
