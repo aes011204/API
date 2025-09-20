@@ -6,7 +6,7 @@
 #include "CCamera.h"
 #include "CMonster.h"
 #include "CCollisionMgr.h"
-CPlayer::CPlayer() : m_eCurState(PS_END), m_ePreState(PS_END)
+CPlayer::CPlayer() : m_eCurState(PS_END), m_ePreState(PS_END), m_fInvincibleTime(0.f)
 {
 }
 
@@ -26,6 +26,7 @@ void CPlayer::Initialize()
 	m_iDamage = 1;
     m_ID = PLAYER;
 
+	m_fInvincibleTime = 0.5f;
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_DOWN.bmp", L"Player_DOWN");
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_UP.bmp", L"Player_UP");
 	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_LEFT.bmp", L"Player_LEFT");
@@ -58,6 +59,10 @@ int CPlayer::Update()
 		m_pFrameKey = L"PlayerDie";
 		//return OBJ_DEAD;// 일단 플레이어는 삭제 하면 안되는데 일단 임시로
 	}
+	// 누적시간 제는용
+	float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
+	accTime += dt;
+
     __super::Update_Rec();
 	CCreature::Update();
 
@@ -104,9 +109,9 @@ void CPlayer::Render(HDC hdc)
 		Move_EffectFrame(hdc);
 	//
 
-	m_vBarrelPos = centerS + ( m_vBarrelDir*50);
+	m_vBarrelPos = centerS + ( m_vBarrelDir*30);
 
-	MoveToEx(hdc, static_cast<int>(m_vPosition.x) , static_cast<int>(m_vPosition.y) , nullptr);
+	MoveToEx(hdc, static_cast<int>(centerS.x) , static_cast<int>(centerS.y) , nullptr);
 	LineTo(hdc, static_cast<int>(m_vBarrelPos.x) , static_cast<int>(m_vBarrelPos.y));
 
 	
@@ -176,44 +181,6 @@ void CPlayer::On_Collision(CObj* obj)
 	break;
 	default:
 		break;
-	}
-}
-void CPlayer::Landed_Platform(CObj* pObj)
-{
-	float fX = 0.f, fY = 0.f;
-
-	if (CCollisionMgr::Check_Rect(this, pObj, &fX, &fY))
-	{
-		if (fX > fY)	// 상하 충돌
-		{
-			if (m_vPosition.y < pObj->GetPosition().y && m_fSpeedY >= 0.f)		//	상 충돌
-			{
-				m_fSpeedY = 0.f;
-				m_iPlayerJumpCount = 0;
-				m_vPosition.y = pObj->GetPosition().y - (pObj->GetSize().y / 2.f + m_vSize.y / 2.f);
-
-				m_bPlayerLanded = true;
-				m_bJump = false;
-			}
-			else //-------------------------------------------	하 충돌
-			{
-				//m_fSpeedY = 0.f;
-				//m_vPosition.y = pObj->Get_Position().y + (pObj->Get_Size().y / 2.f + m_vSize.y / 2.f);
-				//! 천장 필요하면 사용하기
-			}
-		}
-
-		if (fX < fY)		// 좌우 충돌
-		{
-			if (m_vPosition.x < pObj->GetPosition().x)		//	좌 충돌
-			{
-				m_vPosition.x = pObj->GetPosition().x - (pObj->GetSize().x / 2.f + m_vSize.x / 2.f);
-			}
-			else //-------------------------------------------	우 충돌
-			{
-				m_vPosition.x = pObj->GetPosition().x + (pObj->GetSize().x / 2.f + m_vSize.x / 2.f);
-			}
-		}
 	}
 }
 
@@ -402,12 +369,17 @@ void CPlayer::Move_EffectFrame(HDC hdc)
 void CPlayer::Take_Damage(int damage)
 {
 
-	if (m_iHP - damage > 0)
-		Set_HP(m_iHP - damage);
-	else
+	
+	if (accTime > m_fInvincibleTime)
 	{
-		Set_HP(0);
-		m_bDead = true;
-		//todo 죽었어! 플레이어 사망 조건 true로 설정
+		if (m_iHP - damage > 0)
+			Set_HP(m_iHP - damage);
+		else
+		{
+			Set_HP(0);
+			m_bDead = true;
+			//todo 죽었어! 플레이어 사망 조건 true로 설정
+		}
+		accTime = 0.f;
 	}
 }

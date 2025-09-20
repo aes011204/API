@@ -15,12 +15,26 @@ public:
 	void	Render(HDC hDC);
 	void	Release();
 
-	void Picking(POINT pt, Vector2 iDrawID, int iOption);
+	const Vector2& Get_StartCurser() const { return m_vStartCurser; }
+	const Vector2& Get_EndCurser()   const { return m_vEndCurser; }
 
-	//void    Picking(POINT pt, int iDrawID, int iOption);
+	void Set_StartCurser(const Vector2& vStart) { m_vStartCurser = vStart; }
+	void Set_EndCurser(const Vector2& vEnd) { m_vEndCurser = vEnd; }
+
+	bool Is_Selecting() const { return m_bSelecting; }
+
+	void Set_Selecting(bool bFlag) { m_bSelecting = bFlag; }
+
+
 public:
 	void		Save_Data();
 	void		Load_Data();
+	//void Picking(Vector2 pt, Vector2 iDrawID, int iOption, bool isLeft);
+	void Picking(Vector2 pt, Vector2 iDrawID, int iOption, TILEDIR dir);
+	void FillRec();
+
+	void Set_PipetID(Vector2 mos);
+
 
 #pragma region Singleton
 public:
@@ -34,5 +48,15 @@ public:
 	vector<CObj*>	m_vecTile;
 
 	Vector2 m_vTileSize;
+	Vector2 m_vOriTileSize;
+	Vector2 m_vTileSiteSize = {512,512};
+	Vector2 m_vTotalTileNum;
+	Vector2 m_vMapSize;
+
+	Vector2 m_vStartCurser, m_vEndCurser;
+
+	Vector2 m_vPipetID;
+
+	bool m_bSelecting;
 };
 

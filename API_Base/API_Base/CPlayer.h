@@ -18,7 +18,7 @@ public:
 
 	virtual void On_Collision(CObj* obj);
 
-	void Landed_Platform(CObj* pObj);
+	//void Landed_Platform(CObj* pObj);
 
 	void Key_Input();
 	void Motion_Change();
@@ -32,6 +32,8 @@ private:
 
 	PLAYERSTATE	m_eCurState;
 	PLAYERSTATE	m_ePreState;
+	float m_fInvincibleTime;
+	float accTime = 0.f;
 	
 };
 

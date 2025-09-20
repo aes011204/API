@@ -77,26 +77,30 @@ void CCamera::Update()
 
 	// 화면 크기가 스크린 보다 작을 경우 대비 필요
 	if (m_vBackSize.x)
-		m_vCurLookAt.x = std::clamp(m_vCurLookAt.x, (WINCX / m_fZoom) * .5f, m_vBackSize.x - (WINCX / m_fZoom) * .5f);
+		m_vCurLookAt.x = std::clamp(m_vCurLookAt.x, (WINCX / m_fZoom) * .5f,max( m_vBackSize.x - (WINCX / m_fZoom) * .5f, (WINCX / m_fZoom) * .5f));
 	if (m_vBackSize.y)
-		m_vCurLookAt.y = std::clamp(m_vCurLookAt.y, (WINCY / m_fZoom) * .5f, m_vBackSize.y - (WINCY / m_fZoom) * .5f);
+		m_vCurLookAt.y = std::clamp(m_vCurLookAt.y, (WINCY / m_fZoom) * .5f, max(m_vBackSize.y - (WINCY / m_fZoom) * .5f, (WINCY / m_fZoom) * .5f));
 
 	//TODO : 미세떨림 보정 기능추가
 	
-
+	  // 한 번에 25% 확대
+	const float MINZ = 0.25f;  // 최소/최대 보호 (선택)
+	const float MAXZ = 4.0f;
 	if (CKeyMgr::Get_Instance()->Key_Down('2'))
 	{
-		//const int STEP = 2;
-		const float STEP = 1.25f;  // 한 번에 25% 확대
-		const float MINZ = 0.25f;  // 최소/최대 보호 (선택)
-		const float MAXZ = 4.0f;
-
+		const float STEP = 1.25f;
 		m_fZoom *= STEP;
 		if (m_fZoom > MAXZ) m_fZoom = MAXZ;  // 클램프
 		if (m_fZoom < MINZ) m_fZoom = MINZ;
 	}
 	
-
+	if (CKeyMgr::Get_Instance()->Key_Down('4'))
+	{
+		const float STEP = 0.85f;
+		m_fZoom *= STEP;
+		if (m_fZoom > MAXZ) m_fZoom = MAXZ;  // 클램프
+		if (m_fZoom < MINZ) m_fZoom = MINZ;
+	}
 }
 
 void CCamera::CalDiff()

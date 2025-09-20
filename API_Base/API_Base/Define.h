@@ -1,13 +1,13 @@
 #pragma once
 
-#define	WINCX			900//1280
+#define	WINCX			950//1280
 #define	WINCY			600//720
 
-#define TILECX		16
-#define TILECY		16
+//#define TILECX		16
+//#define TILECY		16
 
-#define TILEX		100
-#define TILEY		100
+//#define TILEX		32
+//#define TILEY		32
 
 #define PURE			= 0
 
@@ -44,7 +44,13 @@ typedef struct tagFrame
 
 }FRAME;
 
-
+enum TILEDIR
+{
+	TDIR_TOP,
+	TDIR_DOWN, 
+	TDIR_LEFT,
+	TDIR_RIGHT
+};
 
 
 

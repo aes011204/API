@@ -16,6 +16,16 @@ public:
 
 		return obj;
 	}
+	static CObj* Create(Vector2 pos)
+	{
+		CObj* obj = new T;
+		obj->Initialize();
+
+		obj->SetPosition(pos);
+
+
+		return obj;
+	}
 
 	static CObj* Create(Vector2 pos, Vector2 size)
 	{

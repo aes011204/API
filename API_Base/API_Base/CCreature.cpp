@@ -3,6 +3,7 @@
 #include "CCamera.h"
 #include "CTimeMgr.h"
 #include "CLineManager.h"
+#include "CCollisionMgr.h"
 CCreature::CCreature() : m_bDead(false), m_tTarget(nullptr),  m_eDir(DIR_END),m_iDamage(0), m_iLevel(0), m_iMaxHP(0), m_iHP(0),
 			m_bJump(false),
 			m_fSpeedY(0.f),
@@ -31,24 +32,26 @@ int CCreature::Update()
 	if (m_fSpeedY > 1000.f)
 		m_fSpeedY = 1000.f;
 
+
 	if (m_bJump && m_iPlayerJumpCount < m_iPlayerMaxJump)
 	{
 		m_fSpeedY = -900.f; 
 		// 임의로 준 점프 스피드, 점프할때만 필요하므로 이 때 값을 집어넣는다.
 		m_iPlayerJumpCount += 1;
 		// 플레이어가 점프를 하는 중일때 점프 하나 증가, 현재 2 이상이 되면 점프 제한
-		m_bPlayerLanded = false;
-
+		
+		//m_bPlayerLanded = false;
 	}
-	if(m_bPlayerLanded != true)
+	//if(m_bPlayerLanded == false)
 	{
 		m_fSpeedY += 3000.f * CTimeMgr::Get_Instance()->GetDeltaTime();
 		//! Y속도 += 가속도(중력가속도 * 화면 보정값) * dt : 속도의 적분
 		m_vPosition.y += m_fSpeedY * CTimeMgr::Get_Instance()->GetDeltaTime();
 	}
 
+
 	// Collision_Line이 제대로 수행되지 않았을 경우 떨어질 높이를 설정
-	m_fGroundY = WINCY + 100.f;
+	m_fGroundY = WINCY + 500.f;
 
 	CLineManager::Get_Instance()->Collision_Line(m_vPosition, &m_fGroundY);
 
@@ -62,7 +65,7 @@ int CCreature::Update()
 		//m_bPlayerLanded = true;
 		m_bJump = false;
 	}
-	
+
 
 	return 0;
 }
@@ -87,6 +90,44 @@ void CCreature::Render(HDC hdc)
 void CCreature::Release()
 {
 
+}
+void CCreature::Landed_Platform(CObj* pObj)
+{
+	float fX = 0.f, fY = 0.f;
+
+	if (CCollisionMgr::Check_Rect(this, pObj, &fX, &fY))
+	{
+		if (fX > fY)	// 상하 충돌
+		{
+			if (m_vPosition.y < pObj->GetPosition().y && m_fSpeedY >= 0.f)		//	상 충돌
+			{
+				m_fSpeedY = 0.f;
+				m_iPlayerJumpCount = 0;
+				m_vPosition.y = pObj->GetPosition().y - (pObj->GetSize().y / 2.f + m_vSize.y / 2.f);
+
+				m_bPlayerLanded = true;
+				m_bJump = false;
+			}
+			else //-------------------------------------------	하 충돌
+			{
+				//m_fSpeedY = 0.f;
+				//m_vPosition.y = pObj->Get_Position().y + (pObj->Get_Size().y / 2.f + m_vSize.y / 2.f);
+				//! 천장 필요하면 사용하기
+			}
+		}
+
+		if (fX < fY)		// 좌우 충돌
+		{
+			if (m_vPosition.x < pObj->GetPosition().x)		//	좌 충돌
+			{
+				m_vPosition.x = pObj->GetPosition().x - (pObj->GetSize().x / 2.f + m_vSize.x / 2.f);
+			}
+			else //-------------------------------------------	우 충돌
+			{
+				m_vPosition.x = pObj->GetPosition().x + (pObj->GetSize().x / 2.f + m_vSize.x / 2.f);
+			}
+		}
+	}
 }
 
 void CCreature::Move_Frame()

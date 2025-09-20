@@ -2,7 +2,7 @@
 #include "CObj.h"
 
 
-CObj::CObj() : m_vPosition({ WINCX * .5f, WINCY * .5f }), m_vDirection({ 0,0 }), m_vSize({ 5.f,5.f }), m_fSpeed(0.f), m_ID(OBJ_END), m_bDead(false)
+CObj::CObj() : m_vPosition({ WINCX * .5f, WINCY * .5f }), m_vDirection({ 0,0 }), m_fSpeed(0.f), m_ID(OBJ_END), m_bDead(false)
 {
 }
 

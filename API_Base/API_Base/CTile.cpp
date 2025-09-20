@@ -15,8 +15,8 @@ CTile::~CTile()
 
 void CTile::Initialize()
 {
-	m_vSize.x = TILECX;
-	m_vSize.y = TILECY;
+
+	m_vReSize = m_vSize * 3;
 
 	// m_tInfo.fCX = TILECX;
 	// m_tInfo.fCY = TILECY;
@@ -24,6 +24,7 @@ void CTile::Initialize()
 
 int CTile::Update()
 {
+	m_vReSize = m_vSize * 3;
 
 	__super::Update_Rec();
 
@@ -36,25 +37,10 @@ void CTile::Late_Update()
 
 void CTile::Render(HDC hDC)
 {
-	// int iScrollX = (int)ScrollMgr::Get_Instance()->Get_ScrollX();
-	// int iScrollY = (int)ScrollMgr::Get_Instance()->Get_ScrollY();
-	//
-
-	//HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Tile");
-	//BitBlt(hDC,
-	//	m_tRect.left /* + iScrollX*/,
-	//	m_tRect.top /* + iScrollY*/,
-	//	TILECX,
-	//	TILECY,
-	//	hMemDC,
-	//	m_iDrawID.x * TILECX,
-	//	m_iDrawID.y * TILECX,
-	//	SRCCOPY);
-
 
 
 	Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
-	Vector2 RenderSize = CCamera::Get_Instance()->GetRenderSize(m_vSize*2);
+	Vector2 RenderSize = CCamera::Get_Instance()->GetRenderSize(m_vReSize);
 
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Tile");
 
@@ -65,7 +51,7 @@ void CTile::Render(HDC hDC)
 		hDC,
 		RenderPos.x - RenderSize.x * .5f, 
 		RenderPos.y - RenderSize.y * .5f,
-		RenderSize.x, RenderSize.y, 
+		RenderSize.x,  RenderSize.y,
 		hMemDC, 
 		m_iDrawID.x * m_vSize.x, 
 		m_iDrawID.y * m_vSize.y,

@@ -14,6 +14,8 @@ public:
 	void Render(HDC hdc);
 	void Release();
 
+	void Landed_Platform(CObj* pObj);
+
 	void Move_Frame();
 
 	void Move_EffectFrame();
@@ -38,6 +40,13 @@ public: // Object's stats getter-setter
 	void			Set_Damage(int _damage) { m_iDamage = _damage; }
 	void			Set_Dir(DR dir) { m_eDir = dir; }
 
+	bool Get_Jump() const { return m_bJump; }
+	bool Get_PlayerLanded() const { return m_bPlayerLanded; }
+
+	void Set_PlayerLanded(bool bLanded) { m_bPlayerLanded = bLanded; }
+	void Set_Jump(bool bJump) { m_bJump = bJump; }
+	void Set_JumpCount(int JumpCount) { m_iPlayerJumpCount = JumpCount; }
+	void Set_SpeedY(float SpeedY) { m_fSpeedY = SpeedY; }
 protected:
 
 	Vector2 m_vBarrelDir;

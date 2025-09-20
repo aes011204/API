@@ -27,6 +27,7 @@ private:
 
     int     m_iOption;
 
+    Vector2 m_vReSize;
 
     // CObj을(를) 통해 상속됨
     void On_Collision(CObj* obj) override;

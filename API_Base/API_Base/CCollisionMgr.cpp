@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CCollisionMgr.h"
 #include "CObj.h"
+#include "CCreature.h"
 
 void CCollisionMgr::Collision_Rect(list<CObj*> src, list<CObj*> dst)
 {
@@ -50,47 +51,62 @@ bool CCollisionMgr::Check_Circle(CObj* src, CObj* dst)
 	}
 }
 
-void CCollisionMgr::Collision_RectEx(list<CObj*> src, list<CObj*> dst)
-{
-	float fx = 0.f;
-	float fy = 0.f;
-
-	for (auto& Dst : dst)
-	{
-		for (auto& Src : src)
-		{
-			if (Check_Rect(Src, Dst, &fx, &fy))
-			{
-				if (fy>fx) // 좌우 충돌
-				{
-					if (Src->GetPosition().x > Dst->GetPosition().x) // 우 충돌
-					{
-						Src->SetPosition({ Src->GetPosition().x + fx,Src->GetPosition().y });
-					}
-					else // 좌충돌
-					{
-						Src->SetPosition({ Src->GetPosition().x - fx,Src->GetPosition().y });
-
-					}
-				}
-				else // 상하 충돌
-				{
-					if (Src->GetPosition().y > Dst->GetPosition().y) // 하 충돌
-					{
-						Src->SetPosition({ Src->GetPosition().x,Src->GetPosition().y +fy});
-					}
-					else // 상 충돌
-					{
-						Src->SetPosition({ Src->GetPosition().x ,Src->GetPosition().y -fy});
-
-					}
-				}
-
-			}
-		}
-	}
-
-}
+//void CCollisionMgr::Collision_RectEx(list<CObj*> src, list<CObj*> dst)
+//{
+//
+//	bool landedAny = false;   // 이 Src가 이번 프레임에 착지했는지
+//	float fx = 0.f;
+//	float fy = 0.f;
+//
+//	for (auto& Dst : dst)
+//	{
+//		for (auto& Src : src)
+//		{
+//
+//
+//			if (Check_Rect(Src, Dst, &fx, &fy))
+//			{
+//				if (fy>fx) // 좌우 충돌
+//				{
+//					if (Src->GetPosition().x > Dst->GetPosition().x) // 우 충돌
+//					{
+//						Src->SetPosition({ Src->GetPosition().x + fx,Src->GetPosition().y });
+//					}
+//					else // 좌충돌
+//					{
+//						Src->SetPosition({ Src->GetPosition().x - fx,Src->GetPosition().y });
+//
+//					}
+//				}
+//				else // 상하 충돌
+//				{
+//					if (Src->GetPosition().y < Dst->GetPosition().y)
+//					{
+//						//Src->SetPosition({ Src->GetPosition().x ,Src->GetPosition().y -fy});
+//						if (CCreature* creature = dynamic_cast<CCreature*>(Src))
+//						{
+//							
+//							creature->Set_PlayerLanded(true);
+//							creature->Set_JumpCount(0);
+//							creature->Set_Jump(false);
+//							creature->Set_SpeedY(0.f);
+//						}
+//						landedAny = true;   // 이 Src가 이번 프레임에 착지했는지
+//					}
+//					//else if (Src->GetPosition().y > Dst->GetPosition().y) // 하 충돌
+//					//{
+//					//	Src->SetPosition({ Src->GetPosition().x,Src->GetPosition().y +fy});
+//					//}
+//				}
+//
+//			}
+//			if (CCreature* creature = dynamic_cast<CCreature*>(Src))
+//				creature->Set_PlayerLanded(landedAny);
+//		}
+//	}
+//
+//
+//}
 bool CCollisionMgr::Check_Rect(CObj* src, CObj* dst, float* pX, float* pY)
 {
 	float distanceX = abs(src->GetPosition().x - dst->GetPosition().x);
