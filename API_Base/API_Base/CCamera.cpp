@@ -77,9 +77,9 @@ void CCamera::Update()
 
 	// 화면 크기가 스크린 보다 작을 경우 대비 필요
 	if (m_vBackSize.x)
-		m_vCurLookAt.x = std::clamp(m_vCurLookAt.x, (WINCX / m_fZoom) * .5f,max( m_vBackSize.x - (WINCX / m_fZoom) * .5f, (WINCX / m_fZoom) * .5f));
+		m_vCurLookAt.x = Clamp(m_vCurLookAt.x, (WINCX / m_fZoom) * .5f,max( m_vBackSize.x - (WINCX / m_fZoom) * .5f, (WINCX / m_fZoom) * .5f));
 	if (m_vBackSize.y)
-		m_vCurLookAt.y = std::clamp(m_vCurLookAt.y, (WINCY / m_fZoom) * .5f, max(m_vBackSize.y - (WINCY / m_fZoom) * .5f, (WINCY / m_fZoom) * .5f));
+		m_vCurLookAt.y = Clamp(m_vCurLookAt.y, (WINCY / m_fZoom) * .5f, max(m_vBackSize.y - (WINCY / m_fZoom) * .5f, (WINCY / m_fZoom) * .5f));
 
 	//TODO : 미세떨림 보정 기능추가
 	

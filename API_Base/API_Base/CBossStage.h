@@ -9,5 +9,7 @@ class CBossStage :
     void Late_Update() override;
     void Render(HDC hdc) override;
     void Release() override;
+
+    void PlatformInit();
 };
 

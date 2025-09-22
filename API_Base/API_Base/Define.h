@@ -1,7 +1,7 @@
 #pragma once
 
 #define	WINCX			950//1280
-#define	WINCY			600//720
+#define	WINCY			550//720
 
 //#define TILECX		16
 //#define TILECY		16
@@ -17,6 +17,9 @@
 #define	PI				3.14f
 
 #define VK_MAX			0xff
+
+enum RENDERID { RENDER_BACKGROUND, RENDER_GAMEBOJECT, RENDER_EFFECT, RENDER_UI, RENDER_END };
+enum CHANNELID { SOUND_BGM, SOUND_EFFECT, MAXCHANNEL };
 
 /////////////////////////////////
 
@@ -66,7 +69,7 @@ enum OBJID
 	BULLET,
 	PLATFORM,
 	EFFECT,
-
+	WALL,
 	OBJ_END
 };
 
@@ -107,3 +110,10 @@ typedef struct tagFinder
 
 	const TCHAR* m_pTag;
 };
+
+
+template <typename T>
+T Clamp(const T& value, const T& minVal, const T& maxVal)
+{
+	return (value < minVal) ? minVal : (value > maxVal ? maxVal : value);
+}

@@ -27,13 +27,23 @@ public:
 		return obj;
 	}
 
-	static CObj* Create(Vector2 pos, Vector2 size)
+	static CObj* CreateTile(Vector2 pos, Vector2 size)
 	{
-		CObj* obj = new T;
+		CObj* obj = new T();
 		obj->Initialize();
 
 		obj->SetPosition(pos);
 		obj->SetSize(size);
+
+		return obj;
+	}
+	static CObj* Create(Vector2 pos, Vector2 size)
+	{
+		CObj* obj = new T(pos, size);
+		obj->Initialize();
+
+		//obj->SetPosition(pos);
+		//obj->SetSize(size);
 
 		return obj;
 	}

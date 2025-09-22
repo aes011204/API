@@ -5,6 +5,7 @@ class CPlatform :
 {
 public:
 	CPlatform();
+	CPlatform(Vector2 pos, Vector2 size) : CNonCreature(pos, size) {}
 	virtual ~CPlatform();
 public:
 	void Initialize();
@@ -13,7 +14,11 @@ public:
 	void Render(HDC hdc);
 	void Release();
 
-    // CNonCreature을(를) 통해 상속됨
-	void On_Collision(CObj* obj);;
+	void On_Collision(CObj* obj, vector<CColliderComp>::iterator my, vector<CColliderComp>::iterator other);
+	virtual void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other);
+	//void On_Collision(CObj* obj, ColliderType my, ColliderType other);
+
+	
+
 };
 

@@ -12,6 +12,9 @@
 #include "CLineManager.h"
 #include "CStateBar.h"
 #include "CTileMgr.h"
+#include "CBoss.h"
+#include "CWall.h"
+#include "CKeyMgr.h"
 
 void CBossStage::Initialize()
 {
@@ -19,7 +22,9 @@ void CBossStage::Initialize()
 	{
 		//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossMap.bmp", L"BossMap");
 		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create({ WINCX * .5f,800.f}));
-		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
+		//CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
+
+		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CBoss>::Create());
 
 		CCamera::Get_Instance()->Bootstrap(CObjMgr::Get_Instance()->Get_Player()->GetPosition());
 		CCamera::Get_Instance()->SetBackSize({ 1056.f,1056.f });
@@ -32,17 +37,16 @@ void CBossStage::Initialize()
 	//CTileMgr::Get_Instance()->Initialize();
 	CTileMgr::Get_Instance()->Load_Data();
 
+	PlatformInit();
 
 	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI((CCreature*)CObjMgr::Get_Instance()->Get_Player()));
-	{
-	CObjMgr::Get_Instance()
-		->Add_Object(CAbstractFactory<CPlatform>::Create({ WINCX * .5f, 900.f }, { 1000, 20 }));
+
 
 	float Ystart = WINCY * 0.8f;
 	Vector2 tPoint[2] =
 	{ {0.f,(Ystart)}, {150.f,Ystart} };
 	CLineManager::Get_Instance()->Create_Line(tPoint, 2);
-	}
+
 }
 
 int CBossStage::Update()
@@ -53,7 +57,8 @@ int CBossStage::Update()
 	CObjMgr::Get_Instance()->Update();
 	CCamera::Get_Instance()->Update();
 
-
+	Vector2 pos = CCamera::Get_Instance()->GetRealPos(CKeyMgr::Get_Instance()->GetMousePos());
+	
 	return 0;
 }
 
@@ -103,4 +108,44 @@ void CBossStage::Release()
 	CTileMgr::Get_Instance()->Release();
 	CObjMgr::Get_Instance()->Release();
 	CUIMgr::Get_Instance()->Release();
+}
+
+void CBossStage::PlatformInit()
+{
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ WINCX * .5f, 925.f }, { 1100,25 }));
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f, 825.f }, { 380,20 }));
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f - 261.f, 680.f }, { 142,20 }));
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f + 261.f, 680.f }, { 142,20 }));
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f - 312.f, 535.f }, { 142,20 }));
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f + 312.f, 535.f }, { 142,20 }));
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f - 312.f, 392.f }, { 142,20 }));
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f + 312.f, 392.f }, { 142,20 }));
+
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f, 297.f }, { 380*.5f,20.f }));
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CWall>::Create({ 0, 388 }, { 195,670 }));
+
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CWall>::Create({ 1056, 388 }, { 195,670 }));
+
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CWall>::Create({ 1056 * .5f , 45.f }, { 857,100 }));
+
 }

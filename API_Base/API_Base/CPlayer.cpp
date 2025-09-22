@@ -6,8 +6,14 @@
 #include "CCamera.h"
 #include "CMonster.h"
 #include "CCollisionMgr.h"
-CPlayer::CPlayer() : m_eCurState(PS_END), m_ePreState(PS_END), m_fInvincibleTime(0.f)
+#include "CColliderComp.h"
+
+CPlayer::CPlayer() :
+	m_eCurState(PS_END), m_ePreState(PS_END), m_fInvincibleTime(0.f), m_bDash(false), m_DashDuration(0.f), m_DashSpeed(0.f), m_DashTime(0.f),
+	m_bDropDown(false), m_dropRemain(0.f)
 {
+	m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, { 48.f,60.f }, this));
+	m_vCollider.push_back(CColliderComp(ColliderType::ATTACK, { 0,0 }, { 110.f,110.f },this, true));
 }
 
 CPlayer::~CPlayer()
@@ -27,9 +33,13 @@ void CPlayer::Initialize()
     m_ID = PLAYER;
 
 	m_fInvincibleTime = 0.5f;
-	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_DOWN.bmp", L"Player_DOWN");
-	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_UP.bmp", L"Player_UP");
-	//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/Player_LEFT.bmp", L"Player_LEFT");
+
+
+	m_DashSpeed = 500.f;
+	m_DashDuration = 5.f;
+	m_DashTime = .5f;
+
+
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/PlayerIdle.bmp", L"PlayerIdle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/PlayerRun.bmp", L"PlayerRun");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Player/PlayerJump.bmp", L"PlayerJump");
@@ -39,7 +49,7 @@ void CPlayer::Initialize()
 	m_pFrameKey = L"PlayerIdle";
 	m_tFrame.iStart = 0;
 	m_tFrame.iEnd = 5;
-	m_tFrame.dwSpeed = .05f;
+	m_tFrame.dwSpeed = .2f;
 	m_tFrame.dwTime = 0.f;
 	m_tFrame.vSize = { 78.f, 60.f };
 
@@ -49,6 +59,8 @@ void CPlayer::Initialize()
 	m_tEFFrame.dwSpeed = .2f;
 	m_tEFFrame.dwTime = 0.f;
 	m_tEFFrame.vSize = {48,48};
+
+
 }
 
 int CPlayer::Update()
@@ -63,13 +75,25 @@ int CPlayer::Update()
 	float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
 	accTime += dt;
 
+	__super::UpdateColl(m_vPosition);
+	
+
+
+	if (m_bDash)
+	{
+		Dash(m_vDashDir);
+	}
+
     __super::Update_Rec();
+
+
+    Key_Input();
 	CCreature::Update();
 
 	Motion_Change(); 
 
+	LimitPlayerPos();
 
-    Key_Input();
 	CCreature::Move_Frame();
 	CCreature::Move_EffectFrame();
     return 0;
@@ -78,6 +102,13 @@ int CPlayer::Update()
 
 void CPlayer::Late_Update()
 {
+	if (m_bDropDown)
+	{
+		m_dropRemain -= CTimeMgr::Get_Instance()->GetDeltaTime();
+
+		if (m_dropRemain <= 0)
+			m_bDropDown = false;
+	}
 }
 
 void CPlayer::Render(HDC hdc)
@@ -108,6 +139,7 @@ void CPlayer::Render(HDC hdc)
 
 		Move_EffectFrame(hdc);
 	//
+		
 
 	m_vBarrelPos = centerS + ( m_vBarrelDir*30);
 
@@ -131,21 +163,30 @@ void CPlayer::Render(HDC hdc)
 	}
 
    // BitBlt(hdc, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom, hMemDC, 0, 0, SRCCOPY); // 지우는 거 안쓸거면 이거 해야 랜더링됨
+
+	__super::RenderColl(hdc, m_vPosition);
 }
 
 void CPlayer::Release()
 {
 }
 
-void CPlayer::On_Collision(CObj* obj)
+void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
-	m_bPlayerLanded = false;
+	//if (obj->Get_ID() != PLATFORM)
+	//{
+	//	m_bPlayerLanded = false;
+	//}
+
+	
+
+	
 	switch (obj->Get_ID())
 	{
 	case MONSTER:
 	{
-		CMonster* creature = dynamic_cast<CMonster*>(obj);
-		Take_Damage(creature->Get_Damage());
+		if(CMonster* creature = dynamic_cast<CMonster*>(obj))
+			Take_Damage(creature->Get_Damage());
 	}
 	break;
 	//case MON_BULLET:
@@ -173,67 +214,74 @@ void CPlayer::On_Collision(CObj* obj)
 	break;
 	case PLATFORM:
 	{
-		Landed_Platform(obj);
-		m_bPlayerLanded = true;
-		//// 충돌판정용 RECT 갱신
-		CObj::Update_Rec();
+			//CObj::Update_Rec();
+		
+		cout << m_bDropDown << endl;
+		if (!m_bDropDown)
+		{
+			if(my.GetType()==ColliderType::BODY)
+ 				Landed_Platform(obj, my, other);
+		//m_bPlayerLanded = true;
+			//// 충돌판정용 RECT 갱신
+		}
 	}
 	break;
 	default:
 		break;
 	}
+
+	
 }
 
 void CPlayer::Key_Input()
 {
 	float fY(0.f);
-	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
+	{
+		Vector2 mos = CKeyMgr::Get_Instance()->GetMousePos();
+		mos = CCamera::Get_Instance()->GetRealPos(mos);
+		m_vDashDir = (mos - m_vPosition).GetNomalized();
+		m_bDash = true;
+	}
+	else if ( CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && (CKeyMgr::Get_Instance()->Key_Pressing('S')))
+	{
+		m_bDropDown = true;
+		m_dropRemain = .2f;
+			m_pFrameKey = L"PlayerJump";
+		m_eCurState = JUMP;
+	}
+	else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 	{
 		m_bJump = true;
 	}
-	else if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
+	 else if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
 	{
         m_vPosition.x -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
 		m_pFrameKey = L"PlayerRun";
 		m_eCurState = WALK;
 
-		//m_bJump = false;
 	}
-
 	else if (CKeyMgr::Get_Instance()->Key_Pressing('D'))
 	{
         m_vPosition.x += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
 		m_pFrameKey = L"PlayerRun";
 		m_eCurState = WALK;
 
-		//m_bJump = false;
 	}
-
-
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
 	{
         m_vPosition.y -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
 
-		//m_bJump = false;
-	}
-
-
-	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN) && CKeyMgr::Get_Instance()->Key_Up(VK_SPACE))
-	{
-        m_vPosition.y += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
-		m_pFrameKey = L"Player_DOWN";
-		m_eCurState = WALK;
-		//m_bJump = false;
 	}
 	else
 	{
 		m_pFrameKey = L"PlayerIdle";
-
 		m_eCurState = IDLE;
-		//m_bJump = false;
 	}
 
-	if (m_bJump)
+
+
+	if (m_bJump||m_bDash)
 	{
 	m_pFrameKey = L"PlayerJump";
 	m_eCurState = JUMP;
@@ -382,4 +430,56 @@ void CPlayer::Take_Damage(int damage)
 		}
 		accTime = 0.f;
 	}
+}
+
+void CPlayer::Dash(Vector2 tmpdir)
+{
+	//if (m_bDash == true /*&& m_bJump == false*/)
+	{
+		//if (m_Stepback == false)
+		//{
+		//	m_vPosition.x += m_StepBackSpeed * (-tmpdir.x) * m_fDeltaTime;
+		//
+		//	m_StepbackTime -= m_fDeltaTime;
+		//
+		//
+		//	if (m_StepbackTime <= 0.f)
+		//	{
+		//		m_StepbackTime = .5f;
+		//		m_Stepback = true;
+		//	}
+		//
+		//
+		//}
+		//else
+		{
+			//if (tmpdir.y >= 0)
+			//{
+			//	tmpdir.y = 0;
+			//}
+
+			m_vPosition.x += m_DashSpeed *( tmpdir.x * CTimeMgr::Get_Instance()->GetDeltaTime());
+			m_vPosition.y += 1200 *( tmpdir.y * CTimeMgr::Get_Instance()->GetDeltaTime());
+		
+			m_DashTime -= CTimeMgr::Get_Instance()->GetDeltaTime();
+			if (m_DashTime <= 0.f)
+			{
+				m_bDash = false;
+				m_DashTime = .5f;
+				//m_Stepback = false;
+			}
+			m_bPlayerLanded = false;
+
+		}
+	}
+}
+
+
+void CPlayer::LimitPlayerPos()
+{
+	Vector2 pos = m_vPosition;
+	pos.x = Clamp(pos.x, CCamera::Get_Instance()->GetLookAt().x - WINCX * .5f, CCamera::Get_Instance()->GetLookAt().x + WINCX * .5f);
+	pos.y = Clamp(pos.y, CCamera::Get_Instance()->GetLookAt().y- WINCY * .5f, CCamera::Get_Instance()->GetLookAt().y + WINCY * .5f);
+
+	m_vPosition = pos;
 }

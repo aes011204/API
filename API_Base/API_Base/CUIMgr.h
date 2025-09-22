@@ -7,7 +7,7 @@ class CUIMgr
 {
 private:
 	CUIMgr();
-	~CUIMgr();
+	virtual ~CUIMgr();
 
 public:
 	void	Add_Object(CUI* pUI);

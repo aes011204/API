@@ -37,7 +37,7 @@ void CTileMgr::Initialize()
 			float fX = (float)(m_vTileSize.x /2) + (m_vTileSize.x * j);
 			float fY = (float)(m_vTileSize.y /2) + (m_vTileSize.y * i);
 			//사이즈는 원래 16 시트, 값을 넘겨주고 위치는 32기준으로 계산한것을 넣어준다
-			CObj* pTile = CAbstractFactory<CTile>::Create({ fX, fY }, { m_vOriTileSize });
+			CObj* pTile = CAbstractFactory<CTile>::CreateTile({ fX, fY }, { m_vOriTileSize });
 			m_vecTile.push_back(pTile);
 		}
 	}
@@ -237,7 +237,7 @@ void CTileMgr::Load_Data()
 		if (0 == dwByte)
 			break;
 	
-		CObj* pTile = CAbstractFactory<CTile>::Create(pos,size);
+		CObj* pTile = CAbstractFactory<CTile>::CreateTile(pos,size);
 		//m_vMapSize = MapSize;
 		dynamic_cast<CTile*>(pTile)->Set_DrawID(iDrawID);
 		dynamic_cast<CTile*>(pTile)->Set_Option(iOption);

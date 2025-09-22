@@ -40,8 +40,7 @@ void CLineManager::Render(HDC hDC)
 void CLineManager::Release()
 {
 	for (auto& pLine : m_LineList) {
-		// 힙 포인터가 유효한지 체크(디버그 CRT)
-		_ASSERTE(pLine == nullptr || _CrtIsValidHeapPointer(pLine));
+
 		Safe_Delete(pLine);
 	}
 	m_LineList.clear();

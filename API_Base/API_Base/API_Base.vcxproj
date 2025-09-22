@@ -77,6 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,6 +139,7 @@
     <ClInclude Include="CBossStage.h" />
     <ClInclude Include="CButton.h" />
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CColliderComp.h" />
     <ClInclude Include="CCollisionMgr.h" />
     <ClInclude Include="CCreature.h" />
     <ClInclude Include="CEdit.h" />
@@ -162,10 +164,19 @@
     <ClInclude Include="CUI.h" />
     <ClInclude Include="CUIMgr.h" />
     <ClInclude Include="CVillage.h" />
+    <ClInclude Include="CWall.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="fmod.h" />
+    <ClInclude Include="fmod.hpp" />
+    <ClInclude Include="fmod_codec.h" />
+    <ClInclude Include="fmod_dsp.h" />
+    <ClInclude Include="fmod_errors.h" />
+    <ClInclude Include="fmod_memoryinfo.h" />
+    <ClInclude Include="fmod_output.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SoundMgr.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="CTimeMgr.h" />
     <ClInclude Include="CTile.h" />
@@ -180,6 +191,7 @@
     <ClCompile Include="CBossStage.cpp" />
     <ClCompile Include="CButton.cpp" />
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CColliderComp.cpp" />
     <ClCompile Include="CCollisionMgr.cpp" />
     <ClCompile Include="CCreature.cpp" />
     <ClCompile Include="CEdit.cpp" />
@@ -204,12 +216,14 @@
     <ClCompile Include="CUI.cpp" />
     <ClCompile Include="CUIMgr.cpp" />
     <ClCompile Include="CVillage.cpp" />
+    <ClCompile Include="CWall.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CTimeMgr.cpp" />
     <ClCompile Include="CTile.cpp" />
     <ClCompile Include="CTileMgr.cpp" />
+    <ClCompile Include="SoundMgr.cpp" />
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +232,13 @@
   <ItemGroup>
     <Image Include="API_Base.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmodex.dll" />
+    <None Include="fmodexL.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="fmodex_vc.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

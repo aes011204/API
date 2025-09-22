@@ -12,5 +12,8 @@ public:
     void Late_Update() override;
     void Render(HDC hdc) override;
     void Release() override;
+
+private:
+    Vector2 m_vSceneSize;
 };
 

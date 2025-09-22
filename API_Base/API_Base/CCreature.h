@@ -14,14 +14,17 @@ public:
 	void Render(HDC hdc);
 	void Release();
 
-	void Landed_Platform(CObj* pObj);
+	void Landed_Platform(CObj* pObj, CColliderComp& my, CColliderComp& other);
+
+	//void Landed_Platform(CObj* pObj);
 
 	void Move_Frame();
 
 	void Move_EffectFrame();
 
-	virtual void On_Collision(CObj* obj) = 0;
-
+	//virtual void On_Collision(CObj* obj, ColliderType my, ColliderType other) = 0;
+	//virtual void On_Collision(CObj* obj, vector<CColliderComp>::iterator my, vector<CColliderComp>::iterator other) = 0;
+	virtual void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other) = 0;
 public:
 
 	void			Set_FrameKey(const TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }

@@ -2,7 +2,7 @@
 #include "CMonster.h"
 #include "CCamera.h"
 
-void CMonster::On_Collision(CObj* obj)
+void CMonster::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
 }
 

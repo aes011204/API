@@ -64,6 +64,7 @@ void CTile::Release()
 {
 }
 
-void CTile::On_Collision(CObj* obj)
+void CTile::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
 }
+

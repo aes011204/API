@@ -5,6 +5,7 @@ class CTile :
 {
 public:
     CTile();
+    //CTile(Vector2 pos, Vector2 size) {}
     virtual ~CTile();
 
 public:
@@ -30,7 +31,7 @@ private:
     Vector2 m_vReSize;
 
     // CObj을(를) 통해 상속됨
-    void On_Collision(CObj* obj) override;
+    void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)override;
 
 };
 

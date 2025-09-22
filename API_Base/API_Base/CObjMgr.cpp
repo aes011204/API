@@ -63,6 +63,10 @@ void CObjMgr::Late_Update()
 	CCollisionMgr::Collision_Rect(m_ObjList[MONSTER], m_ObjList[PLATFORM]);
 #pragma endregion
 
+
+	CCollisionMgr::Collision_RectEx(m_ObjList[PLAYER], m_ObjList[WALL]);
+
+
 #pragma region ÃÑ¾Ë - ÇÃ·§Æû °£ Ãæµ¹
 	//CCollisionMgr::Collision_Rect(m_ObjList[PL_BULLET], m_ObjList[PLATFORM]);
 	//CCollisionMgr::Collision_Rect(m_ObjList[MON_BULLET], m_ObjList[PLATFORM]);

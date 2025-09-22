@@ -8,6 +8,7 @@ CStateBar::CStateBar() :TargetCurInfo(0), TargetMaxInfo(0), OtherInfo(0)
 
 CStateBar::~CStateBar()
 {
+	Release();
 }
 
 void CStateBar::Initialize()

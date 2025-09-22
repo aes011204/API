@@ -8,7 +8,7 @@ class CUI
 {
 public:
 	CUI();
-	~CUI();
+	virtual ~CUI();
 public:
 	virtual void Initialize()=0;
 	virtual int Update()=0;

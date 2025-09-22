@@ -10,6 +10,7 @@ CUIMgr::CUIMgr()
 
 CUIMgr::~CUIMgr()
 {
+	Release();
 }
 
 //void CUIMgr::Initialize()
@@ -73,6 +74,13 @@ void CUIMgr::Render(HDC hDC)
 
 void CUIMgr::Release()
 {
-	for_each(m_UIList.begin(), m_UIList.end(), [](auto& p) {if (p) { delete p; p = nullptr; }});
-	m_UIList.clear();
+	//for_each(m_UIList.begin(), m_UIList.end(), [](auto& p) {if (p) { delete p; p = nullptr; }});
+	//m_UIList.clear();
+
+	for (auto& p : m_UIList)
+	{
+		delete p;   // 메모리 해제
+		p = nullptr; // 포인터 초기화
+	}
+	m_UIList.clear(); // 컨테이너 초기화
 }

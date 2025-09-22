@@ -13,8 +13,19 @@
 
 #include "Define.h"
 #include "Vector2.h"
+#include < io.h >
 //#include "CUtility.h"
 using namespace std;
+
+// »ç¿îµå 
+#include <Vfw.h>
+#pragma comment(lib, "vfw32.lib")
+
+#include "fmod.h"
+#include "fmod.hpp"
+
+#pragma comment(lib, "fmodex_vc.lib")
+
 
 
 #ifdef _DEBUG

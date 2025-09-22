@@ -49,6 +49,12 @@
     <Filter Include="05.Scene\00.Stage">
       <UniqueIdentifier>{68966643-8152-4f23-b551-3e314a1eef13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{34623d0c-cc73-4b3a-9e4b-b35a04d1164d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Manager\01.Tile">
+      <UniqueIdentifier>{77c336ce-b3f2-4775-aeee-06a5b0883bd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,10 +171,40 @@
     <ClInclude Include="CEdit.h">
       <Filter>05.Scene\00.Stage</Filter>
     </ClInclude>
+    <ClInclude Include="CTile.h">
+      <Filter>02.Manager\01.Tile</Filter>
+    </ClInclude>
     <ClInclude Include="CTileMgr.h">
+      <Filter>02.Manager\01.Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="CColliderComp.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CWall.h">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CTile.h">
+    <ClInclude Include="fmod.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_memoryinfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -276,9 +312,18 @@
       <Filter>05.Scene\00.Stage</Filter>
     </ClCompile>
     <ClCompile Include="CTile.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>02.Manager\01.Tile</Filter>
     </ClCompile>
     <ClCompile Include="CTileMgr.cpp">
+      <Filter>02.Manager\01.Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="CColliderComp.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CWall.cpp">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -294,5 +339,12 @@
     <Image Include="API_Base.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmodex.dll" />
+    <None Include="fmodexL.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="fmodex_vc.lib" />
   </ItemGroup>
 </Project>
