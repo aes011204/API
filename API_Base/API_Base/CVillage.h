@@ -15,5 +15,7 @@ public:
 
 private:
     Vector2 m_vSceneSize;
+
+    float m_SoundTime;
 };
 

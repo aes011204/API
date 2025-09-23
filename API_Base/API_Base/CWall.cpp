@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CWall.h"
 #include "CCamera.h"
+#include "CColliderComp.h"
+
 
 CWall::CWall()
 {

@@ -8,6 +8,7 @@
 #include "CSceneMgr.h"
 #include "CCamera.h"
 #include "CKeyMgr.h"
+#include "SoundMgr.h"
 CMainGame::CMainGame() :m_hDC(nullptr)
 {
 }
@@ -19,6 +20,8 @@ CMainGame::~CMainGame()
 
 void CMainGame::Initialize()
 {
+
+	CSoundMgr::Get_Instance()->Initialize();
 
 	m_hDC = GetDC(g_hWnd);
 
@@ -48,11 +51,11 @@ void CMainGame::Initialize()
 int CMainGame::Update()
 {
 	CTimeMgr::Get_Instance()->Update();
+	
 
 	CSceneMgr::Get_Instance()->Update();
 
 	CKeyMgr::Get_Instance()->Key_Update();
-	
 	return 0;
 }
 
@@ -87,7 +90,7 @@ void CMainGame::Render()
 
 void CMainGame::Release()
 {
-	
+	CSoundMgr::Destroy_Instance();
 	CSceneMgr::Get_Instance()->Release();
 
 

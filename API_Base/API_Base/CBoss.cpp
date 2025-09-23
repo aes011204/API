@@ -3,6 +3,9 @@
 #include "CCamera.h"
 #include "CBmpMgr.h"
 #include "CTimeMgr.h"
+#include "CObjMgr.h"
+#include "CColliderComp.h"
+
 
 CBoss::CBoss() : m_eCurState(ST_END),m_ePreState(ST_END)
 {
@@ -23,6 +26,9 @@ void CBoss::Initialize()
 	m_iDamage = 1;
 
 	m_ID = MONSTER;
+
+	idelTime = 10.f;
+
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossIdle.bmp", L"BossIdle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossAttack.bmp", L"BulletAttack");
@@ -53,13 +59,33 @@ int CBoss::Update()
 	float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
 	accTime += dt;
 
+	switch (m_eCurState)
+	{
+	case BOSSSTATE::IDLE:
+		idelTime -= CTimeMgr::Get_Instance()->GetDeltaTime();
+		if (idelTime <= 0.f)
+		{
+			Do_Attack();
+		}
+		break;
+	case BOSSSTATE::BULLETATTACK:
+		BulletAttack();
+		m_pFrameKey = L"BulletAttack";
+		break;
+	case BOSSSTATE::SWORDATTACK:
+		//Attack2();
+		break;
+	case BOSSSTATE::HANDATTACK:
+		//Attack3();
+		break;
+	}
+
 	__super::UpdateColl(m_vPosition);
 
 
 	__super::Update_Rec();
 
-	//m_pFrameKey = L"BulletAttack";
-	//m_eCurState = BULLETATTACK;
+
 	
 	//CCreature::Update();
 
@@ -120,6 +146,18 @@ void CBoss::Release()
 void CBoss::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
 
+}
+
+void CBoss::BulletAttack()
+{
+}
+
+void CBoss::SwordAttack()
+{
+}
+
+void CBoss::HandAttack()
+{
 }
 
 void CBoss::Motion_Change()
@@ -191,6 +229,21 @@ void CBoss::Motion_Change()
 
 		m_ePreState = m_eCurState;
 	}
+}
+
+void CBoss::Do_Attack()
+{
+	
+	
+	
+
+		if (CObjMgr::Get_Instance()->Get_Player() == nullptr)
+			return;
+
+		m_eCurState = BOSSSTATE::BULLETATTACK;
+
+
+	
 }
 
 void CBoss::Take_Damage(int _damage)

@@ -1,6 +1,6 @@
 #pragma once
-#include "CColliderComp.h"
-
+//class CColliderComp;
+#include "CColliderComp.h" // 정의 포함
 class CObj
 {
 public:
@@ -8,6 +8,7 @@ public:
 	CObj(Vector2 pos, Vector2 size) : m_vPosition(pos), m_vSize(size),
 		m_vDirection({ 0,0 }), m_fSpeed(0.f), m_ID(OBJ_END), m_bDead(false) {}
 	virtual ~CObj();
+
 public:
 	virtual void Initialize() = 0;
 	virtual int Update() = 0;
@@ -39,17 +40,10 @@ public:
 
 	bool Get_Dead() { return m_bDead; }
 
-	void UpdateColl(Vector2 pos)
-	{
-		for (auto& col : m_vCollider)
-			col.ColUpdate(m_vPosition);
-	}
+	void UpdateColl(Vector2 pos);
 
-	void RenderColl(HDC hdc, Vector2 Pos)
-	{
-		for (auto& col : m_vCollider)
-		col.ColRender(hdc, m_vPosition);
-	}
+
+	void RenderColl(HDC hdc, Vector2 Pos);
 
 	vector<CColliderComp>& Get_Collider() { return m_vCollider; }
 

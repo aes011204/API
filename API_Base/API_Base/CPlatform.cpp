@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CPlatform.h"
 #include "CCamera.h"
+#include "CColliderComp.h"
+
 
 
 CPlatform::CPlatform()

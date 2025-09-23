@@ -4,7 +4,7 @@ class CBoss :
     public CCreature
 {
 public:
-	enum BOSSSTATE { IDLE, BULLETATTACK, SWORDATTACK, HANDATTACK , DEMAGE, DEAD, ST_END };
+	enum BOSSSTATE { IDLE=0, BULLETATTACK, SWORDATTACK, HANDATTACK , DEMAGE, DEAD, ST_END };
 public:
 	CBoss();
 	virtual ~CBoss();
@@ -18,11 +18,12 @@ public:
 	
 	virtual void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other);
 
-	void Attack1();
-	void Attack2();
-	void Attack3();
+	void BulletAttack();
+	void SwordAttack();
+	void HandAttack();
 
 	void Motion_Change();
+	void Do_Attack();
 
 
 	void Take_Damage(int damage);
@@ -33,5 +34,6 @@ private:
 	BOSSSTATE	m_ePreState;
 	//BOSSSTATE m_pattern = BOSSSTATE::IDLE;
 	float accTime = 0.f;
+	float idelTime = 0.f;
 };
 

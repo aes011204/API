@@ -7,6 +7,10 @@
 #include "CAbstractFactory.h"
 #include "CButton.h"
 #include "CTimeMgr.h"
+#include "SoundMgr.h"
+
+float	g_fVolume = 20.f;
+
 CMainMenu::CMainMenu() : m_vLogoSize({  156.f,75.f  }),m_fMovePosX1(0.f), m_fMovePosX2(0.f)
 {
 }
@@ -36,10 +40,21 @@ void CMainMenu::Initialize()
     CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CButton>::
         CreateUIButton({ WINCX * .5f, WINCY * .8f }, { 21.f, 12.f }, L"ExitOff", L"ExitOn", []() {DestroyWindow(g_hWnd);}, 3.f));
 
+
+   CSoundMgr::Get_Instance()->PlayBGM(L"Title.wav", g_fVolume);
+
 }
 
 int CMainMenu::Update()
 {
+
+        // if (CKeyMgr::Get_Instance()->Key_Down(VK_F3))
+        //{
+        //    CSoundMgr::Get_Instance()->PlaySound(L"Success.wav", SOUND_EFFECT, g_fVolume);
+        //    return;
+        //}
+
+
     CUIMgr::Get_Instance()->Update();
     if (GetAsyncKeyState('1'))//CKeyMgr::Get_Instance()->Key_Down(VK_RETURN))
     {
@@ -116,6 +131,8 @@ void CMainMenu::Release()
 {
     CUIMgr::Get_Instance()->Release();
     //?? bmp매니져는 release 해야하나?? 여기서?? 씬마다?? 근대 그럼 다시못만들지 않나? static이니까
+
+    CSoundMgr::Get_Instance()->StopAll();
 }
 
 void CMainMenu::Render_MovingBG(HDC hdc, float _speed, const TCHAR* name, Vector2 size, float& accSpeed)
@@ -149,4 +166,6 @@ void CMainMenu::Render_MovingBG(HDC hdc, float _speed, const TCHAR* name, Vector
         (int)size.x,
         (int)size.y,
         RGB(255, 0, 255));
+
+
 }

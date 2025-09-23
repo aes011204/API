@@ -11,8 +11,11 @@
 #include "CUIMgr.h"
 #include "CStateBar.h"
 #include "CSceneMgr.h"
+#include "SoundMgr.h"
 
-CVillage::CVillage()
+
+
+CVillage::CVillage() : m_SoundTime(0.f)
 {
 }
 
@@ -43,6 +46,9 @@ void CVillage::Initialize()
 	//Line 테스트
 	float Ystart = m_vSceneSize.y -29.f;
 
+	Vector2 tPoint[2] =
+	{ {-30.f,Ystart },{ 295.f * 3 +30.f,Ystart }  };
+	CLineManager::Get_Instance()->Create_Line(tPoint, 2);
 
 	Vector2 tPoint2[5] =
 	{ {-30.f,Ystart - 370.f},{32.f,Ystart - 430.f} ,{ 1260.f,Ystart - 430.f },{ 1640.f ,Ystart - 50.f},{1690.f ,Ystart - 50.f} };
@@ -56,6 +62,11 @@ void CVillage::Initialize()
 	Vector2 tPoint5[5] =
 	{ {4278.f,Ystart - 45.f},{ 4324.f,Ystart - 45.f },{4710.f,Ystart - 430.f} ,{ 5931.f ,Ystart - 430.f},{6153.f ,Ystart - 230.f} };
 	CLineManager::Get_Instance()->Create_Line(tPoint5, 5);
+
+	float m_fVolume = 20.f;
+	CSoundMgr::Get_Instance()->PlayBGM(L"BGM_Town.wav", m_fVolume);
+
+	m_SoundTime = 1.5f;
 
 
 }
@@ -81,7 +92,12 @@ int CVillage::Update()
 	// 테스트
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 	{
-	
+		float m_fVolume = 20.f;
+
+		CSoundMgr::Get_Instance()->PlaySoundW(L"DungeonEat2.wav", SOUND_EAT2, m_fVolume);
+		
+		CSoundMgr::Get_Instance()->PlaySoundW(L"DungeonEat.wav", SOUND_EAT1,m_fVolume);
+
 		Vector2  lookat = CCamera::Get_Instance()->GetRealPos( CKeyMgr::Get_Instance()->GetMousePos());
 		CCamera::Get_Instance()->SetLookAt(lookat); 
 	}
@@ -150,6 +166,8 @@ void CVillage::Release()
 	CObjMgr::Get_Instance()->Release();
 	CUIMgr::Get_Instance()->Release();
 	CLineManager::Get_Instance()->Release();
+	CSoundMgr::Get_Instance()->StopAll();
+
 
 
 }

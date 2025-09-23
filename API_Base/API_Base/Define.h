@@ -19,7 +19,7 @@
 #define VK_MAX			0xff
 
 enum RENDERID { RENDER_BACKGROUND, RENDER_GAMEBOJECT, RENDER_EFFECT, RENDER_UI, RENDER_END };
-enum CHANNELID { SOUND_BGM, SOUND_EFFECT, MAXCHANNEL };
+enum CHANNELID { SOUND_BGM, SOUND_EFFECT, SOUND_EAT1, SOUND_EAT2, MAXCHANNEL };
 
 /////////////////////////////////
 
@@ -93,8 +93,8 @@ typedef struct tagLine
 		: tLeft(_tLeft), tRight(_tRight)
 	{
 	}
-}
-LINE;
+
+}LINE;
 
 
 
