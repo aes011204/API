@@ -1,6 +1,7 @@
 #pragma once
 //class CColliderComp;
 #include "CColliderComp.h" // 정의 포함
+#include "CEffectComp.h"
 class CObj
 {
 public:
@@ -39,11 +40,15 @@ public:
 	void Set_ID(OBJID id) { m_ID = id; }
 
 	bool Get_Dead() { return m_bDead; }
+	void Set_Dead(bool dead) { m_bDead = dead; }
 
 	void UpdateColl(Vector2 pos);
-
-
 	void RenderColl(HDC hdc, Vector2 Pos);
+
+
+	void EffUpdate();
+	//void EffUpdate(Vector2& objPos);
+	void EffRender(HDC hdc);
 
 	vector<CColliderComp>& Get_Collider() { return m_vCollider; }
 
@@ -66,5 +71,6 @@ protected:
 	bool m_bDead;
 
 	vector<CColliderComp> m_vCollider;
+	vector<CEffectComp> m_vEffect;
 };
 

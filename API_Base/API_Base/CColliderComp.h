@@ -3,7 +3,7 @@ class CObj;
 
 enum class ColliderType
 {
-BODY,FOOT,ATTACK,
+BODY,FOOT,ATTACK,HAND
 };
 
 class CColliderComp

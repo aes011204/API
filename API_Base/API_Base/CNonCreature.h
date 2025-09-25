@@ -14,12 +14,15 @@ public:
 	void Late_Update();
 	void Render(HDC hdc);
 	void Release();
+
+	void Move_Frame();
 	//virtual void On_Collision(CObj* obj, ColliderType my, ColliderType other) = 0;
 	//virtual void On_Collision(CObj* obj, vector<CColliderComp>::iterator my, vector<CColliderComp>::iterator other) = 0;
 	virtual void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other) = 0;
 
 protected:
 
-
+	const TCHAR* m_pFrameKey;
+	FRAME		m_tFrame;
 };
 

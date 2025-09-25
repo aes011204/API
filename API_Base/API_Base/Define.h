@@ -30,6 +30,8 @@ extern HWND g_hWnd;
 
 template<typename T>
 void	Safe_Delete(T& P) { if (P) { delete P; P = nullptr; } }
+
+
 enum DR
 {
 	RIGHT,
@@ -60,8 +62,9 @@ enum TILEDIR
 
 enum OBJID
 {
-	PLAYER,
+	DOOR,
 	MONSTER,
+	PLAYER,
 	BOSS,
 	PET,
 	ITEM,
@@ -70,6 +73,7 @@ enum OBJID
 	PLATFORM,
 	EFFECT,
 	WALL,
+	NPC,
 	OBJ_END
 };
 
@@ -117,3 +121,11 @@ T Clamp(const T& value, const T& minVal, const T& maxVal)
 {
 	return (value < minVal) ? minVal : (value > maxVal ? maxVal : value);
 }
+
+#include <cstdlib>
+#include <ctime>
+
+inline void InitRand() { std::srand((unsigned)std::time(nullptr)); } // 게임 시작 시 1번
+
+inline int RandInt(int a, int b) { return a + std::rand() % (b - a + 1); }        // [a, b]
+inline float RandFloat(float a, float b) { return a + (std::rand() / (float)RAND_MAX) * (b - a); } // [a, b]

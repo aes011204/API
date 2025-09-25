@@ -64,10 +64,10 @@ protected:
 	const TCHAR* m_pFrameKey;
 	DR		m_eDir;
 
-	//이팩트 애니메이션
-	Vector2 m_vEFPos;
-	FRAME		m_tEFFrame;
-	const TCHAR* m_pEFFrameKey;
+	////이팩트 애니메이션
+	//Vector2 m_vEFPos;
+	//FRAME		m_tEFFrame;
+	//const TCHAR* m_pEFFrameKey;
 
 	// 점프 및 착지 관련 변수
 	bool  m_bJump;

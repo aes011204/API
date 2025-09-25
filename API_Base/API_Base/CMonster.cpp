@@ -12,6 +12,7 @@ void CMonster::Take_Damage(int _damage)
 
 CMonster::CMonster()
 {
+
 }
 
 CMonster::~CMonster()
@@ -27,12 +28,16 @@ void CMonster::Initialize()
 	m_iHP = m_iMaxHP;
 	m_iDamage = 1;
 	m_ID = MONSTER;
+
+	m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, m_vSize, this));
 }
 
 int CMonster::Update()
 {
 
 	Update_Rec();
+
+	__super::UpdateColl(m_vPosition);
 	return 0;
 }
 
@@ -54,6 +59,7 @@ void CMonster::Render(HDC hdc)
 	Rectangle(hdc, LeftTopX, LeftTopY, LeftTopX + RenderSizeX, LeftTopY + RenderSizeY );
 
 
+	__super::RenderColl(hdc, m_vPosition);
 
 
 }

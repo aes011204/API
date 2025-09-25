@@ -5,9 +5,18 @@
 #include "CTimeMgr.h"
 #include "CObjMgr.h"
 #include "CColliderComp.h"
+#include "CBullet.h"
+#include "CAbstractFactory.h"
+#include "CStateBar.h"
+#include "CUIMgr.h"
+#include "CPlayer.h"
+#include "CMonsterBullet.h"
+#include "CBossHand.h"
+#include "CBossBullet.h"
 
 
-CBoss::CBoss() : m_eCurState(ST_END),m_ePreState(ST_END)
+
+CBoss::CBoss() : m_eCurState(ST_END), m_ePreState(ST_END), m_RHand(nullptr), m_LHand(nullptr), m_hitFlash(false), m_bSwordDone(false), SwordCountMax(5)
 {
 }
 
@@ -18,6 +27,8 @@ CBoss::~CBoss()
 
 void CBoss::Initialize()
 {
+	InitRand();
+
 	m_vPosition = { 1056.f * .5f,1056.f * .5f };
 	m_vSize = { 210,285 };
 
@@ -25,27 +36,56 @@ void CBoss::Initialize()
 	m_iHP = m_iMaxHP;
 	m_iDamage = 1;
 
-	m_ID = MONSTER;
+	m_ID = BOSS;
 
-	idelTime = 10.f;
+	idelTime = 3.f;
+	bulletTime = 5.f;
+	idelTimeMax = idelTime;
+	bulletTimeMax = bulletTime;
 
+	HandTime = 15.f;
+	HandTimeMax = HandTime;
+
+	SwordTime = .3f;
+	SwordTimeMax = SwordTime;
+
+	m_HitTime = .01f;
+	m_HitTimeMax = m_HitTime;
+
+	m_iBarrelNum = 4;
+	m_vBarrelDir = { -1,0 };
+
+	//m_TmpSword.reserve(SwordCountMax);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossIdle.bmp", L"BossIdle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossAttack.bmp", L"BulletAttack");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/HandIdle.bmp", L"HandIdle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/HandAttack.bmp", L"HandAttack");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/PlayerDie.bmp", L"PlayerDie");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/SkellBossAttackHit.bmp", L"AttackHit");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/SkellBossIdleHit.bmp", L"IdleHit");
 
 	m_pFrameKey = L"BossIdle";
 	m_tFrame.iStart = 0;
 	m_tFrame.iEnd = 9;
-	m_tFrame.dwSpeed = .2f;
+	m_tFrame.dwSpeed = .3f;
 	m_tFrame.dwTime = 0.f;
 	m_tFrame.vSize = { 210,285 };
 
+
+
 	m_eCurState = IDLE;
 
-	m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, { 48.f,60.f }, this));
+	m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, { 100.f,100.f }, this));
+	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI(this));
+
+	m_LHand = CAbstractFactory<CBossHand>::CreateHand(CBossHand::LR::HAND_LEFT);
+	m_RHand = CAbstractFactory<CBossHand>::CreateHand(CBossHand::LR::HAND_RIGHT);
+
+
+	CObjMgr::Get_Instance()->Add_Object(m_RHand);
+	CObjMgr::Get_Instance()->Add_Object(m_LHand);
+
 }
 
 int CBoss::Update()
@@ -53,30 +93,57 @@ int CBoss::Update()
 	if (m_bDead)
 	{
 		m_pFrameKey = L"BossDie";
-		//return OBJ_DEAD;// 일단 플레이어는 삭제 하면 안되는데 일단 임시로
+		return OBJ_DEAD;
 	}
-	// 누적시간 제는용
 	float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
-	accTime += dt;
+
+	if (m_hitFlash == true)
+	{
+		m_HitTime -= dt;
+		if (m_HitTime <= 0.f)
+			m_hitFlash = false;
+	}
 
 	switch (m_eCurState)
 	{
 	case BOSSSTATE::IDLE:
-		idelTime -= CTimeMgr::Get_Instance()->GetDeltaTime();
+		idelTime -= dt;
 		if (idelTime <= 0.f)
 		{
 			Do_Attack();
+			idelTime = idelTimeMax;
 		}
 		break;
 	case BOSSSTATE::BULLETATTACK:
+		bulletTime -= dt;
+		if (bulletTime <= 0.f)
+		{
+			m_eCurState = IDLE;
+			bulletTime = bulletTimeMax;
+		}
 		BulletAttack();
-		m_pFrameKey = L"BulletAttack";
 		break;
 	case BOSSSTATE::SWORDATTACK:
-		//Attack2();
+
+		if (m_bSwordDone)
+		{
+			m_eCurState = IDLE;
+			SwordCount = 0;
+		}
+		//m_eCurState = IDLE;
+		SwordAttack();
 		break;
 	case BOSSSTATE::HANDATTACK:
-		//Attack3();
+		//HandTime -= dt;
+		if (/*HandTime <= 0.f*/HandCount >= 4)
+		{
+			m_eCurState = IDLE;
+
+			//HandTime = HandTimeMax;
+			HandCount = 0;
+		}
+		//m_eCurState = IDLE;
+		HandAttack();
 		break;
 	}
 
@@ -86,10 +153,11 @@ int CBoss::Update()
 	__super::Update_Rec();
 
 
-	
+
 	//CCreature::Update();
 
-	Motion_Change();
+
+Motion_Change();
 
 	CCreature::Move_Frame();
 
@@ -100,10 +168,26 @@ int CBoss::Update()
 
 void CBoss::Late_Update()
 {
+
 }
 
 void CBoss::Render(HDC hdc)
 {
+	if (m_hitFlash == true)
+	{
+		if (m_eCurState == IDLE || m_eCurState == SWORDATTACK || m_eCurState == HANDATTACK)
+			m_pFrameKey = L"IdleHit";
+		else if (m_eCurState == BULLETATTACK)
+			m_pFrameKey = L"AttackHit";
+
+	}
+	else
+	{
+		if (m_eCurState == IDLE || m_eCurState == SWORDATTACK || m_eCurState == HANDATTACK)
+			m_pFrameKey = L"BossIdle";
+		else if (m_eCurState == BULLETATTACK)
+			m_pFrameKey = L"BulletAttack";
+	}
 
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKey);
 
@@ -125,7 +209,7 @@ void CBoss::Render(HDC hdc)
 		RGB(255, 0, 255));
 
 
-	__super::RenderColl(hdc,m_vPosition);
+	__super::RenderColl(hdc, m_vPosition);
 	//Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
 	//float zoom = CCamera::Get_Instance()->GetZoom();
 
@@ -146,18 +230,138 @@ void CBoss::Release()
 void CBoss::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
 
+	switch (obj->Get_ID())
+	{
+	case PLAYER:
+	{
+		if (other.GetType() == ColliderType::ATTACK)
+		{
+			if (CPlayer* creature = dynamic_cast<CPlayer*>(obj))
+				Take_Damage(creature->Get_Damage());
+
+		}
+	}
+	break;
+	//case MON_BULLET:
+	//{
+	//	{
+	//		Take_Damage(obj->Get_Damage());
+	//
+	//		Vector2 dir = m_vPosition - pObj->Get_Position();
+	//		dir = Vector2::Nomalize(dir);
+	//
+	//		m_vPosition.x += dir.x * 15.f;
+	//		m_vPosition.y += dir.y * 30.f;
+	//	}
+	//}
+	//break;
+
+
+	default:
+		break;
+	}
 }
 
 void CBoss::BulletAttack()
 {
+	accTime += CTimeMgr::Get_Instance()->GetDeltaTime();
+	if (.2f < accTime)
+	{
+		m_iAngle += 10.0;
+		m_iAngle %= 360;
+
+		for (int j = 0; j < m_iBarrelNum; j++)
+		{
+			m_iAngle = (m_iAngle + (90 * j)) % 360;
+			Vector2 dir = RotateVector(m_vBarrelDir, m_iAngle);
+			CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBullet>::Create(m_vPosition, { 20,20 }, dir));
+
+		}
+		accTime = 0.f;
+	}
+
 }
 
 void CBoss::SwordAttack()
 {
+	if (SwordCount != SwordCountMax)
+	{
+		SwordTime -= CTimeMgr::Get_Instance()->GetDeltaTime();
+
+		if (SwordTime <= 0.f)
+		{
+			Vector2 dir = { 0,-1 };
+			CObj* tmp = CAbstractFactory<CBossBullet>::Create({ m_vPosition.x - 150 + 80 * SwordCount,m_vPosition.y - 200 }, { 20,20 }, dir);
+
+			tmp->Initialize();
+			CObjMgr::Get_Instance()->Add_Object(tmp);
+			//m_TmpSword.push_back(tmp);
+			SwordCount++;
+
+
+			SwordTime = SwordTimeMax;
+		}
+
+	}
+	else if (SwordCount == SwordCountMax)
+	{
+
+		m_bSwordDone = true;
+		const auto& bullet = CObjMgr::Get_Instance()->Get_Bullet();
+		if (bullet.empty())
+		{
+
+			return;
+		}
+		for (auto& tmp : bullet)
+		{
+			if (dynamic_cast<CBossBullet*>(tmp))
+			{
+				m_bSwordDone = false;
+				break;
+			}
+
+		}
+
+	}
+
+
+
 }
 
 void CBoss::HandAttack()
 {
+	Vector2 pos = CObjMgr::Get_Instance()->Get_Player()->GetPosition();
+
+
+	if (m_LHand->Get_IsAttack() == false && m_RHand->Get_IsAttack() == false)
+	{
+		Rand = RandInt(0, 1);
+
+
+
+		if (Rand == 0)
+		{
+			m_LHand->SetAttackPos(pos);
+			m_LHand->Set_IsAttack(true);
+		}
+		else
+		{
+
+			m_RHand->SetAttackPos(pos);
+			m_RHand->Set_IsAttack(true);
+		}
+		HandCount++;
+
+	}
+
+	// 다음 손 결정
+
+//m_RHand->SetAttackPos(pos);
+//m_RHand->Set_IsAttack(true);
+//
+
+
 }
 
 void CBoss::Motion_Change()
@@ -167,16 +371,19 @@ void CBoss::Motion_Change()
 		switch (m_eCurState)
 		{
 		case IDLE:
+			m_pFrameKey = L"BossIdle";
+
 			m_tFrame.iStart = 0;
 			m_tFrame.iEnd = 9;
 			m_tFrame.dwSpeed = .2f;
 			m_tFrame.dwTime = 0.f;
 			m_tFrame.vSize = { 210,285 };
-		
+
 			m_vSize = m_tFrame.vSize;
 			break;
 
 		case BULLETATTACK:
+			m_pFrameKey = L"BulletAttack";
 			m_tFrame.iStart = 0;
 			m_tFrame.iEnd = 9;
 			m_tFrame.dwSpeed = .2f;
@@ -186,35 +393,30 @@ void CBoss::Motion_Change()
 			break;
 
 		case SWORDATTACK:
+			m_pFrameKey = L"BossIdle";
+
 			m_tFrame.iStart = 0;
-			m_tFrame.iEnd = 0;
-			m_tFrame.dwSpeed = 2.f;
+			m_tFrame.iEnd = 9;
+			m_tFrame.dwSpeed = .2f;
 			m_tFrame.dwTime = 0.f;
-			m_tFrame.vSize = { 75.f, 60.f };
+			m_tFrame.vSize = { 210,285 };
+
 			m_vSize = m_tFrame.vSize;
 
 			break;
 
 		case HANDATTACK:
+			m_pFrameKey = L"BossIdle";
+
 			m_tFrame.iStart = 0;
-			m_tFrame.iEnd = 5;
+			m_tFrame.iEnd = 9;
 			m_tFrame.dwSpeed = .2f;
 			m_tFrame.dwTime = 0.f;
-			m_tFrame.vSize = { 17.f, 21.f };
+			m_tFrame.vSize = { 210,285 };
+
 			m_vSize = m_tFrame.vSize;
 
 			break;
-
-		case DEMAGE:
-			m_tFrame.iStart = 0;
-			m_tFrame.iEnd = 5;
-			m_tFrame.dwSpeed = .2f;
-			m_tFrame.dwTime = 0.f;
-			m_tFrame.vSize = { 17.f, 21.f };
-			m_vSize = m_tFrame.vSize;
-
-			break;
-
 
 		case DEAD:
 			m_tFrame.iStart = 0;
@@ -233,19 +435,40 @@ void CBoss::Motion_Change()
 
 void CBoss::Do_Attack()
 {
-	
-	
-	
-
-		if (CObjMgr::Get_Instance()->Get_Player() == nullptr)
-			return;
-
-		m_eCurState = BOSSSTATE::BULLETATTACK;
 
 
-	
+	m_nextIndex = (m_nextIndex + 1) % 4;
+	m_eCurState = static_cast<BOSSSTATE>(m_nextIndex);
+	//m_eCurState = HANDATTACK;
+
+
 }
 
 void CBoss::Take_Damage(int _damage)
 {
+	if (m_iHP - _damage > 0)
+		Set_HP(m_iHP - _damage);
+	else
+	{
+		Set_HP(0);
+		m_bDead = true;
+		//todo 죽었어! 플레이어 사망 조건 true로 설정
+	}
+
+	m_hitFlash = true;
+	m_HitTime = m_HitTimeMax;
+
+}
+
+Vector2 CBoss::RotateVector(Vector2& v, float angle)
+{
+	float radian = angle * (PI / 180.f);
+
+	float cosX = cosf(radian);
+	float sinY = sinf(radian);
+
+	Vector2 result;
+	result.x = v.x * cosX - v.y * sinY;
+	result.y = v.x * sinY - v.y * cosX;
+	return result;
 }

@@ -6,7 +6,7 @@
 
 CWall::CWall()
 {
-	cout << m_vSize.x << endl;
+	
 }
 
 CWall::~CWall()

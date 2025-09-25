@@ -22,10 +22,12 @@ int CObjMgr::Update()
 		for (auto it = m_ObjList[i].begin(); it != m_ObjList[i].end();)
 		{
 			int result =(*it)->Update();
+
 			if (result == OBJ_DEAD)
 			{
 				Safe_Delete<CObj*>(*it);
-				m_ObjList[i].erase(it);
+				it = m_ObjList[i].erase(it);
+				
 			}
 			else
 			{
@@ -53,7 +55,14 @@ void CObjMgr::Late_Update()
 	//CCollisionMgr::Collision_Circle(m_ObjList[PL_BULLET], m_ObjList[MONSTER]);
 	//CCollisionMgr::Collision_Circle(m_ObjList[MON_BULLET], m_ObjList[PLAYER]);
 	CCollisionMgr::Collision_Rect(m_ObjList[MONSTER], m_ObjList[PLAYER]);
+	CCollisionMgr::Collision_Rect(m_ObjList[BOSS], m_ObjList[PLAYER]);
+	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[PLAYER]);
+
+	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[DOOR]);
+	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[NPC]);
 	
+	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[WALL]);
+
 
 #pragma region ÇÃ·¹ÀÌ¾î - ÇÃ·§Æû °£ Ãæµ¹
 	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[PLATFORM]);

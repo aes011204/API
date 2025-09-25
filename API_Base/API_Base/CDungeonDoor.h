@@ -15,5 +15,7 @@ public:
 
 	// CNonCreature을(를) 통해 상속됨
 	void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other) override;
+protected:
+	bool m_OnPlayer;
 };
 

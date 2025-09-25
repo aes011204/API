@@ -19,6 +19,7 @@ public:
 
 	void Add_Object(CObj* pObj);
 	CObj* Get_Player() { if (!m_ObjList[PLAYER].empty()) { return m_ObjList[PLAYER].front(); } else { assert(false); return nullptr; } }
+	list <CObj*>& Get_Bullet() { if (!m_ObjList[BULLET].empty()) { return m_ObjList[BULLET]; } else return m_ObjList[BULLET];/*else { assert(false);  }*/ }
 
 private:
 	list <CObj*> m_ObjList[OBJ_END];

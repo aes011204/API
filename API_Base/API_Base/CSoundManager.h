@@ -2,13 +2,13 @@
 
 #include "Define.h"
 
-class CSoundMgr
+class CSoundManager
 {
 public:
-	static CSoundMgr* Get_Instance()
+	static CSoundManager* Get_Instance()
 	{
 		if (nullptr == m_pInstance)
-			m_pInstance = new CSoundMgr; 
+			m_pInstance = new CSoundManager;
 
 		return m_pInstance; 
 	}
@@ -22,8 +22,8 @@ public:
 	}
 
 private:
-	CSoundMgr();
-	~CSoundMgr();
+	CSoundManager();
+	~CSoundManager();
 
 public:
 	void Initialize(); 
@@ -40,10 +40,10 @@ private:
 	void LoadSoundFile(); 
 
 private:
-	static CSoundMgr* m_pInstance; 
+	static CSoundManager* m_pInstance;
 
 	// 사운드 리소스 정보를 갖는 객체 
-	map<TCHAR*, FMOD_SOUND*> m_mapSound; 
+	unordered_map<TCHAR*, FMOD_SOUND*> m_mapSound; 
 	
 	// FMOD_CHANNEL : 재생하고 있는 사운드를 관리할 객체 
 	FMOD_CHANNEL* m_pChannelArr[MAXCHANNEL]; 

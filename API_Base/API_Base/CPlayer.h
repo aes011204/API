@@ -16,23 +16,21 @@ public:
 	void Render(HDC hdc);
 	void Release();
 
-	//void On_Collision(CObj* obj, vector<CColliderComp>::iterator my, vector<CColliderComp>::iterator other);
 
-	//void On_Collision(CObj* obj, ColliderType my, ColliderType other);
 
 	virtual void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other);
-	//void Landed_Platform(CObj* pObj);
 
 	void Key_Input();
 	void Motion_Change();
 
-	void Move_EffectFrame(HDC hdc);
+	//void Move_EffectFrame(HDC hdc);
 	void Take_Damage(int damage);
 	void Dash(Vector2 tmpdir);
 	void LimitPlayerPos();
 public:
 	bool  IsDropping() const { return m_bDropDown; }
 	//void  StartDrop(float t) { m_bDropDown = true; m_dropRemain = t; }
+	void SetStop(bool stop) { m_bStop = stop; }
 private:
 
 	bool  m_bDropDown = false;   // 아래로 내려가는 중인가
@@ -52,7 +50,12 @@ private:
 	float m_DashDuration;
 	Vector2 m_vDashDir;
 
+	bool m_bStop;
+
 	
-	
+	FRAME m_tEFFrame;
+	float EffTime =0.f;
+	float EffTimeMax=0.f;
+
 };
 

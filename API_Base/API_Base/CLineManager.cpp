@@ -6,7 +6,6 @@
 
 
 
-
 CLineManager::CLineManager()
 {
 }

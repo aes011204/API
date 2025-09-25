@@ -40,6 +40,8 @@ public:
 	Vector2 GetLookAt() { return m_vCurLookAt; }
 	float GetZoom() { return m_fZoom; }
 
+	Vector2 Get_WorldSize() {return m_vBackSize;}
+
 	void Update();
 private:
 	Vector2 m_vLookAt; // 카메라가 보는 목표 위치

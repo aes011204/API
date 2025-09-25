@@ -16,6 +16,12 @@ public:
     void Release() override;
     bool IsColl() override;
 
+    void HPBarRender(HDC hdc, const TCHAR* back, const TCHAR* base, Vector2 pos, Vector2 size, Vector2 resize);
+
+   // void HPBarRender(HDC hdc, const TCHAR* back, const TCHAR* base, Vector2 pos, Vector2 size);
+
+   // void HPBarRender(const TCHAR* back, const TCHAR* base);
+
  
 
 private:

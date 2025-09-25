@@ -7,10 +7,12 @@
 #include "CMonster.h"
 #include "CCollisionMgr.h"
 #include "CColliderComp.h"
+#include "CMonsterBullet.h"
 
 CPlayer::CPlayer() :
 	m_eCurState(PS_END), m_ePreState(PS_END), m_fInvincibleTime(0.f), m_bDash(false), m_DashDuration(0.f), m_DashSpeed(0.f), m_DashTime(0.f),
 	m_bDropDown(false), m_dropRemain(0.f)
+	,m_bStop(false)
 {
 	m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, { 48.f,60.f }, this));
 	m_vCollider.push_back(CColliderComp(ColliderType::ATTACK, { 0,0 }, { 110.f,110.f },this, true));
@@ -53,12 +55,17 @@ void CPlayer::Initialize()
 	m_tFrame.dwTime = 0.f;
 	m_tFrame.vSize = { 78.f, 60.f };
 
-	m_pEFFrameKey = L"RushDust";
+	
 	m_tEFFrame.iStart = 0;
 	m_tEFFrame.iEnd = 5;
-	m_tEFFrame.dwSpeed = .2f;
+	m_tEFFrame.dwSpeed = .1f;
 	m_tEFFrame.dwTime = 0.f;
-	m_tEFFrame.vSize = {48,48};
+	m_tEFFrame.vSize = { 48,48 };
+
+	EffTime = .5f;
+	EffTimeMax = EffTime;
+
+	
 
 
 }
@@ -76,7 +83,7 @@ int CPlayer::Update()
 	accTime += dt;
 
 	__super::UpdateColl(m_vPosition);
-	
+	__super::EffUpdate();
 
 
 	if (m_bDash)
@@ -95,7 +102,7 @@ int CPlayer::Update()
 	LimitPlayerPos();
 
 	CCreature::Move_Frame();
-	CCreature::Move_EffectFrame();
+	//CCreature::Move_EffectFrame();
     return 0;
 
 }
@@ -137,7 +144,7 @@ void CPlayer::Render(HDC hdc)
 			RGB(255, 0, 255));
 	
 
-		Move_EffectFrame(hdc);
+		//Move_EffectFrame(hdc);
 	//
 		
 
@@ -165,6 +172,7 @@ void CPlayer::Render(HDC hdc)
    // BitBlt(hdc, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom, hMemDC, 0, 0, SRCCOPY); // 지우는 거 안쓸거면 이거 해야 랜더링됨
 
 	__super::RenderColl(hdc, m_vPosition);
+	__super::EffRender(hdc);
 }
 
 void CPlayer::Release()
@@ -189,19 +197,20 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 			Take_Damage(creature->Get_Damage());
 	}
 	break;
-	//case MON_BULLET:
-	//{
-	//	{
-	//		Take_Damage(obj->Get_Damage());
-	//
-	//		Vector2 dir = m_vPosition - pObj->Get_Position();
-	//		dir = Vector2::Nomalize(dir);
-	//
-	//		m_vPosition.x += dir.x * 15.f;
-	//		m_vPosition.y += dir.y * 30.f;
-	//	}
-	//}
-	//break;
+	case BULLET:
+	{
+		if(CMonsterBullet* mon = dynamic_cast<CMonsterBullet*>(obj))
+		{
+			Take_Damage(mon->Get_Damage());
+	
+			//Vector2 dir = m_vPosition - mon->Get_Position();
+			//dir = Vector2::Nomalize(dir);
+			//
+			//m_vPosition.x += dir.x * 15.f;
+			//m_vPosition.y += dir.y * 30.f;
+		}
+	}
+	break;
 	case ITEM:
 	{
 		//todo 아이템도 다양해지면...
@@ -216,7 +225,7 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 	{
 			//CObj::Update_Rec();
 		
-		cout << m_bDropDown << endl;
+		
 		if (!m_bDropDown)
 		{
 			if(my.GetType()==ColliderType::BODY)
@@ -235,6 +244,15 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 
 void CPlayer::Key_Input()
 {
+	if (m_bStop == true)
+	{
+		m_pFrameKey = L"PlayerIdle";
+		m_eCurState = IDLE;
+		return;
+	}
+
+	float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
+
 	float fY(0.f);
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
 	{
@@ -256,16 +274,27 @@ void CPlayer::Key_Input()
 	}
 	 else if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
 	{
-        m_vPosition.x -= m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+        m_vPosition.x -= m_fSpeed * dt;
 		m_pFrameKey = L"PlayerRun";
 		m_eCurState = WALK;
-
+		EffTime -= dt;
+		if (EffTime < 0.f)
+		{
+			m_vEffect.push_back(CEffectComp({ 24,10 }, this, m_tEFFrame, L"RushDust"));
+			EffTime = EffTimeMax;
+		}
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing('D'))
 	{
-        m_vPosition.x += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+        m_vPosition.x += m_fSpeed * dt;
 		m_pFrameKey = L"PlayerRun";
 		m_eCurState = WALK;
+		EffTime -= dt;
+		if (EffTime < 0.f)
+		{
+			m_vEffect.push_back(CEffectComp({ -24,10 }, this, m_tEFFrame, L"RushDust"));
+			EffTime = EffTimeMax;
+		}
 
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
@@ -392,27 +421,6 @@ void CPlayer::Motion_Change()
 }
 
 
-void CPlayer::Move_EffectFrame(HDC hdc)
-{
-//	HDC	hEFMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pEFFrameKey);
-//
-//	// 먼지 효과 (발생하는 순간 의 좌표 움직이면 안더ㅣㅁ) 지금은 1번 돌떄중복으로 생기지 않음
-//
-//	Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos({ m_vEFPos.x ,m_vEFPos.y + m_tEFFrame.vSize.y * .5f });
-//
-//
-//	Vector2 RenderEFSize = CCamera::Get_Instance()->GetRenderSize(m_tEFFrame.vSize);
-//
-//
-//	GdiTransparentBlt(
-//		hdc, RenderPos.x - RenderEFSize.x*.5f, RenderPos.y - RenderEFSize.y * .5f,
-//		RenderEFSize.x, RenderEFSize.y,
-//		hEFMemDC,
-//		m_tEFFrame.iStart * m_tEFFrame.vSize.x,
-//		0,
-//		m_tEFFrame.vSize.x, m_tEFFrame.vSize.y,
-//		RGB(255, 0, 255));
-}
 
 void CPlayer::Take_Damage(int damage)
 {

@@ -32,3 +32,15 @@ void CObj::RenderColl(HDC hdc, Vector2 Pos)
 	for (auto& col : m_vCollider)
 		col.ColRender(hdc, m_vPosition);
 }
+
+void CObj::EffUpdate()
+{
+	for (auto& col : m_vEffect)
+		col.EffUpdate();
+}
+
+void CObj::EffRender(HDC hdc)
+{
+	for (auto& col : m_vEffect)
+		col.EffRender(hdc);
+}

@@ -166,28 +166,28 @@ void CCreature::Move_Frame()
 		m_tFrame.dwTime = 0.f;
 	}
 
-}
+ }
 
-void CCreature::Move_EffectFrame()
-{
-	if (m_tEFFrame.dwTime == 0)
-	{
-		m_vEFPos = m_vPosition;
-	}
-	m_tEFFrame.dwTime += CTimeMgr::Get_Instance()->GetDeltaTime();
-
-
-
-	if (m_tEFFrame.dwTime >= m_tEFFrame.dwSpeed)
-	{
-		++m_tEFFrame.iStart;
-		
-		if (m_tEFFrame.iStart > m_tEFFrame.iEnd)
-			m_tEFFrame.iStart = 0;
-
-		m_tEFFrame.dwTime = 0.f;
-	}
-
-}
+//void CCreature::Move_EffectFrame()
+//{
+//	if (m_tEFFrame.dwTime == 0)
+//	{
+//		m_vEFPos = m_vPosition;
+//	}
+//	m_tEFFrame.dwTime += CTimeMgr::Get_Instance()->GetDeltaTime();
+//
+//
+//
+//	if (m_tEFFrame.dwTime >= m_tEFFrame.dwSpeed)
+//	{
+//		++m_tEFFrame.iStart;
+//		
+//		if (m_tEFFrame.iStart > m_tEFFrame.iEnd)
+//			m_tEFFrame.iStart = 0;
+//
+//		m_tEFFrame.dwTime = 0.f;
+//	}
+//
+//}
 
 

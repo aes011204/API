@@ -15,14 +15,15 @@
 #include "CBoss.h"
 #include "CWall.h"
 #include "CKeyMgr.h"
+#include "CSoundManager.h"
 
 void CBossStage::Initialize()
 {
 
 	{
 		//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossMap.bmp", L"BossMap");
-		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create({ WINCX * .5f,800.f}));
-		//CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
+		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create({ WINCX * .5f,600.f}));
+		dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetStop(false);
 
 		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CBoss>::Create());
 
@@ -40,12 +41,16 @@ void CBossStage::Initialize()
 	PlatformInit();
 
 	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI((CCreature*)CObjMgr::Get_Instance()->Get_Player()));
+	
 
 
 	float Ystart = WINCY * 0.8f;
 	Vector2 tPoint[2] =
 	{ {0.f,(Ystart)}, {150.f,Ystart} };
 	CLineManager::Get_Instance()->Create_Line(tPoint, 2);
+
+	float m_fVolume = 20.f;
+	CSoundManager::Get_Instance()->PlayBGM(L"JailBoss.wav", m_fVolume);
 
 }
 
@@ -108,12 +113,13 @@ void CBossStage::Release()
 	CTileMgr::Get_Instance()->Release();
 	CObjMgr::Get_Instance()->Release();
 	CUIMgr::Get_Instance()->Release();
+	CSoundManager::Get_Instance()->StopAll();
 }
 
 void CBossStage::PlatformInit()
 {
 	CObjMgr::Get_Instance()
-		->Add_Object(CAbstractFactory<CPlatform>::Create({ WINCX * .5f, 925.f }, { 1100,25 }));
+		->Add_Object(CAbstractFactory<CPlatform>::Create({ WINCX * .5f, 925.f }, { 1250,25 }));
 
 	CObjMgr::Get_Instance()
 		->Add_Object(CAbstractFactory<CPlatform>::Create({ 1056.f * .5f, 825.f }, { 380,20 }));
@@ -147,5 +153,8 @@ void CBossStage::PlatformInit()
 
 	CObjMgr::Get_Instance()
 		->Add_Object(CAbstractFactory<CWall>::Create({ 1056 * .5f , 45.f }, { 857,100 }));
+
+	CObjMgr::Get_Instance()
+		->Add_Object(CAbstractFactory<CWall>::Create({ WINCX * .5f, 965.f }, { 1250,90 }));
 
 }

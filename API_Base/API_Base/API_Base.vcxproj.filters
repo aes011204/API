@@ -49,11 +49,20 @@
     <Filter Include="05.Scene\00.Stage">
       <UniqueIdentifier>{68966643-8152-4f23-b551-3e314a1eef13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component">
-      <UniqueIdentifier>{34623d0c-cc73-4b3a-9e4b-b35a04d1164d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.Manager\01.Tile">
       <UniqueIdentifier>{77c336ce-b3f2-4775-aeee-06a5b0883bd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.ETC">
+      <UniqueIdentifier>{2bd490d0-9bee-4e0f-ba5c-f904000153a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.Component">
+      <UniqueIdentifier>{34623d0c-cc73-4b3a-9e4b-b35a04d1164d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Object\01.NonCreature\00.NPC">
+      <UniqueIdentifier>{6d938709-e913-4f7f-b3dc-e6ee9090539e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Object\00.Creature\00.Bullet">
+      <UniqueIdentifier>{b2156af5-6637-4e7f-805c-7a7bf0ecc2d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +81,6 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Define.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CMainGame.h">
       <Filter>00.MainGame</Filter>
     </ClInclude>
@@ -83,9 +89,6 @@
     </ClInclude>
     <ClInclude Include="CTimeMgr.h">
       <Filter>02.Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="CCreature.h">
-      <Filter>01.Object\00.Creature</Filter>
     </ClInclude>
     <ClInclude Include="CObjMgr.h">
       <Filter>01.Object</Filter>
@@ -162,9 +165,6 @@
     <ClInclude Include="CPlatform.h">
       <Filter>01.Object\01.NonCreature</Filter>
     </ClInclude>
-    <ClInclude Include="CNpc.h">
-      <Filter>01.Object\01.NonCreature</Filter>
-    </ClInclude>
     <ClInclude Include="CBoss.h">
       <Filter>01.Object\00.Creature</Filter>
     </ClInclude>
@@ -178,16 +178,76 @@
       <Filter>02.Manager\01.Tile</Filter>
     </ClInclude>
     <ClInclude Include="CColliderComp.h">
-      <Filter>Component</Filter>
+      <Filter>07.Component</Filter>
     </ClInclude>
     <ClInclude Include="CWall.h">
       <Filter>01.Object\01.NonCreature</Filter>
     </ClInclude>
-    <ClInclude Include="SoundMgr.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="CCreature.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.h">
+      <Filter>99.ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>99.ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>99.ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>99.ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>99.ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>99.ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>99.ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>99.ETC</Filter>
     </ClInclude>
     <ClInclude Include="CDungeonDoor.h">
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoundManager.h">
+      <Filter>02.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CNpc.h">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="CShop.h">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmith.h">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="CStat.h">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="CBullet.h">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffectComp.h">
+      <Filter>07.Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossHand.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossBullet.h">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterBullet.h">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerBullet.h">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -284,9 +344,6 @@
     <ClCompile Include="CPlatform.cpp">
       <Filter>01.Object\01.NonCreature</Filter>
     </ClCompile>
-    <ClCompile Include="CNpc.cpp">
-      <Filter>01.Object\01.NonCreature</Filter>
-    </ClCompile>
     <ClCompile Include="CBoss.cpp">
       <Filter>01.Object\00.Creature</Filter>
     </ClCompile>
@@ -300,16 +357,46 @@
       <Filter>02.Manager\01.Tile</Filter>
     </ClCompile>
     <ClCompile Include="CColliderComp.cpp">
-      <Filter>Component</Filter>
+      <Filter>07.Component</Filter>
     </ClCompile>
     <ClCompile Include="CWall.cpp">
       <Filter>01.Object\01.NonCreature</Filter>
     </ClCompile>
-    <ClCompile Include="SoundMgr.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CDungeonDoor.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>01.Object\01.NonCreature</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundManager.cpp">
+      <Filter>02.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CNpc.cpp">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="CShop.cpp">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="CSmith.cpp">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="CStat.cpp">
+      <Filter>01.Object\01.NonCreature\00.NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="CBullet.cpp">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffectComp.cpp">
+      <Filter>07.Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossHand.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossBullet.cpp">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterBullet.cpp">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerBullet.cpp">
+      <Filter>01.Object\00.Creature\00.Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,5 +411,15 @@
     <Image Include="API_Base.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.dll">
+      <Filter>99.ETC</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="fmod_vc.lib">
+      <Filter>99.ETC</Filter>
+    </Library>
   </ItemGroup>
 </Project>

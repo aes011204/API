@@ -4,6 +4,8 @@
 #include "CButton.h"
 #include "CCreature.h"
 #include "CTile.h"
+#include "CBossHand.h"
+
 template<typename T>
 class CAbstractFactory
 {
@@ -16,6 +18,13 @@ public:
 
 		return obj;
 	}
+	static CBossHand* CreateHand(CBossHand::LR lr)
+	{
+		CBossHand* obj = new T(lr);
+		obj->Initialize();
+
+		return obj;
+	}
 	static CObj* Create(Vector2 pos)
 	{
 		CObj* obj = new T;
@@ -23,6 +32,18 @@ public:
 
 		obj->SetPosition(pos);
 
+
+		return obj;
+	}
+
+	static CObj* Create(Vector2 pos, Vector2 size, Vector2 _dir)
+	{
+		CObj* obj = new T;
+		obj->Initialize();
+
+		obj->SetPosition(pos);
+		obj->SetSize(size);
+		obj->SetDirection(_dir);
 
 		return obj;
 	}
@@ -41,6 +62,8 @@ public:
 	{
 		CObj* obj = new T(pos, size);
 		obj->Initialize();
+
+
 
 		//obj->SetPosition(pos);
 		//obj->SetSize(size);
@@ -84,5 +107,20 @@ public:
 		ui->Initialize();
 		return ui;
 	}
+
+	//static CObj* CreateBullet(Vector2 _position, Vector2 _dir)
+	//{
+	//	CObj* pObj = new T;
+	//
+	//	pObj->Set_PosX(_position.x);
+	//	pObj->Set_PosY(_position.y);
+	//
+	//	pObj->Set_DirX(_dir.x);
+	//	pObj->Set_DirY(_dir.y);
+	//
+	//	pObj->Initialize();
+	//
+	//	return pObj;
+	//}
 };
 

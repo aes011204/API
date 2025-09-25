@@ -7,7 +7,7 @@
 #include "CAbstractFactory.h"
 #include "CButton.h"
 #include "CTimeMgr.h"
-#include "SoundMgr.h"
+#include "CSoundManager.h"
 
 float	g_fVolume = 20.f;
 
@@ -41,7 +41,7 @@ void CMainMenu::Initialize()
         CreateUIButton({ WINCX * .5f, WINCY * .8f }, { 21.f, 12.f }, L"ExitOff", L"ExitOn", []() {DestroyWindow(g_hWnd);}, 3.f));
 
 
-   CSoundMgr::Get_Instance()->PlayBGM(L"Title.wav", g_fVolume);
+    CSoundManager::Get_Instance()->PlayBGM(L"Title.wav", g_fVolume);
 
 }
 
@@ -132,7 +132,7 @@ void CMainMenu::Release()
     CUIMgr::Get_Instance()->Release();
     //?? bmp매니져는 release 해야하나?? 여기서?? 씬마다?? 근대 그럼 다시못만들지 않나? static이니까
 
-    CSoundMgr::Get_Instance()->StopAll();
+    CSoundManager::Get_Instance()->StopAll();
 }
 
 void CMainMenu::Render_MovingBG(HDC hdc, float _speed, const TCHAR* name, Vector2 size, float& accSpeed)

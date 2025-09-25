@@ -11,7 +11,12 @@
 #include "CUIMgr.h"
 #include "CStateBar.h"
 #include "CSceneMgr.h"
-#include "SoundMgr.h"
+#include "CSoundManager.h"
+#include "CDungeonDoor.h"
+#include "CNpc.h"
+#include "CShop.h"
+#include "CStat.h"
+#include "CSmith.h"
 
 
 
@@ -35,7 +40,11 @@ void CVillage::Initialize()
 
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
-	
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CDungeonDoor>::Create());
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CShop>::Create());
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CStat>::Create());
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CSmith>::Create());
+	//
 	CCamera::Get_Instance()->Bootstrap(CObjMgr::Get_Instance()->Get_Player()->GetPosition());
 	CCamera::Get_Instance()->SetBackSize(m_vSceneSize);
 	CCamera::Get_Instance()->SetTarget(CObjMgr::Get_Instance()->Get_Player());
@@ -47,8 +56,14 @@ void CVillage::Initialize()
 	float Ystart = m_vSceneSize.y -29.f;
 
 	Vector2 tPoint[2] =
-	{ {-30.f,Ystart },{ 295.f * 3 +30.f,Ystart }  };
+	{ {-30.f,Ystart},{ (2038.f * 3)+30,Ystart} };
 	CLineManager::Get_Instance()->Create_Line(tPoint, 2);
+
+
+//	Vector2 tPoint1[2] =
+//	{ {-30.f,Ystart - 30.f},{ (295.f * 3) + 30.f,Ystart - 30.f} };
+//	CLineManager::Get_Instance()->Create_Line(tPoint1, 2);
+
 
 	Vector2 tPoint2[5] =
 	{ {-30.f,Ystart - 370.f},{32.f,Ystart - 430.f} ,{ 1260.f,Ystart - 430.f },{ 1640.f ,Ystart - 50.f},{1690.f ,Ystart - 50.f} };
@@ -64,7 +79,7 @@ void CVillage::Initialize()
 	CLineManager::Get_Instance()->Create_Line(tPoint5, 5);
 
 	float m_fVolume = 20.f;
-	CSoundMgr::Get_Instance()->PlayBGM(L"BGM_Town.wav", m_fVolume);
+	CSoundManager::Get_Instance()->PlayBGM(L"BGM_Town.wav", m_fVolume);
 
 	m_SoundTime = 1.5f;
 
@@ -77,7 +92,7 @@ int CVillage::Update()
 	CObjMgr::Get_Instance()->Update();
 	CCamera::Get_Instance()->Update();
 
-
+	Vector2 tmp = CCamera::Get_Instance()->GetRealPos(CKeyMgr::Get_Instance()->GetMousePos());
 	
 
 	{
@@ -94,9 +109,9 @@ int CVillage::Update()
 	{
 		float m_fVolume = 20.f;
 
-		CSoundMgr::Get_Instance()->PlaySoundW(L"DungeonEat2.wav", SOUND_EAT2, m_fVolume);
+		CSoundManager::Get_Instance()->PlaySound(L"DungeonEat2.wav", SOUND_EAT2, m_fVolume);
 		
-		CSoundMgr::Get_Instance()->PlaySoundW(L"DungeonEat.wav", SOUND_EAT1,m_fVolume);
+		CSoundManager::Get_Instance()->PlaySound(L"DungeonEat.wav", SOUND_EAT1,m_fVolume);
 
 		Vector2  lookat = CCamera::Get_Instance()->GetRealPos( CKeyMgr::Get_Instance()->GetMousePos());
 		CCamera::Get_Instance()->SetLookAt(lookat); 
@@ -166,7 +181,7 @@ void CVillage::Release()
 	CObjMgr::Get_Instance()->Release();
 	CUIMgr::Get_Instance()->Release();
 	CLineManager::Get_Instance()->Release();
-	CSoundMgr::Get_Instance()->StopAll();
+	CSoundManager::Get_Instance()->StopAll();
 
 
 
