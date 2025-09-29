@@ -2,6 +2,7 @@
 #include "CSceneMgr.h"
 #include "CMainMenu.h"
 #include "CStage01.h"
+#include "CStage02.h"
 #include "CVillage.h"
 #include "CBossStage.h"
 #include "CEdit.h"
@@ -42,7 +43,7 @@ void CSceneMgr::Change_Stage(SCENEID eID)
 		m_pScene = new CBossStage;
 		break;
 	case SC_STAGE02:
-	//	m_pScene = new CStage02;
+		m_pScene = new CStage02;
 		break;
 	case SC_EDIT:
 		m_pScene = new CEdit;

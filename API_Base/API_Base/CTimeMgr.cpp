@@ -22,6 +22,8 @@ int CTimeMgr::Update()
 	m_dDeltaTime = (double)(m_llCurCount.QuadPart - m_llPrevCount.QuadPart) / (double) m_llFrequency.QuadPart;
 
 	m_llPrevCount = m_llCurCount; // 다음 계산을 위해
+	if (m_dDeltaTime > 0.04)
+		m_dDeltaTime = 0.04f;
 
 	++m_iCallCount;
 	m_dAcc += m_dDeltaTime;

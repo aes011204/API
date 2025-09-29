@@ -13,5 +13,7 @@ public:
 
 	
 	void RenderBG(HDC hdc, HDC hGroundDC, Vector2 startPos, Vector2 size);
+
+	Vector2 m_vSceneSize;
 };
 

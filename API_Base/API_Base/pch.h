@@ -1,5 +1,11 @@
 #pragma once
 
+//GDI+
+
+//#define NOMINMAX                 // <windows.h>의 min/max 매크로 무력화 (std::min/max 충돌 방지)
+//#include <windows.h>             // 반드시 gdiplus.h보다 먼저
+//#include <gdiplus.h>
+//#pragma comment(lib, "gdiplus.lib") 
 
 #include "framework.h"
 #include <cmath>
@@ -9,6 +15,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <array>
 #include <crtdbg.h>
 
 #include "Define.h"
@@ -17,6 +24,7 @@
 #include <unordered_map>
 //#include "CUtility.h"
 using namespace std;
+
 
 // 사운드 
 //#include <Vfw.h>

@@ -1,5 +1,7 @@
 #pragma once
 #include "CNpc.h"
+class CItem;
+class CUI;
 class CShop :
     public CNpc
 {
@@ -16,5 +18,17 @@ public:
 
 
 	void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other) override;
+
+	void Buy_Item(CItem* _pItem);
+
+	void Sell_Item(int iInput);
+
+	//void Sell_Item();
+
+private:
+	CUI* m_ShopUI;
+	bool m_OnShop;
+
+	vector<CItem*> m_vecShop;
 };
 

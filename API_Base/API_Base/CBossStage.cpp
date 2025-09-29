@@ -22,7 +22,7 @@ void CBossStage::Initialize()
 
 	{
 		//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossMap.bmp", L"BossMap");
-		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create({ WINCX * .5f,600.f}));
+		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create({10.f,850.f}));
 		dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetStop(false);
 
 		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CBoss>::Create());
@@ -33,7 +33,7 @@ void CBossStage::Initialize()
 
 
 	}
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/MapTile.bmp", L"Tile");
+	
 
 	//CTileMgr::Get_Instance()->Initialize();
 	CTileMgr::Get_Instance()->Load_Data();
@@ -44,11 +44,7 @@ void CBossStage::Initialize()
 	
 
 
-	float Ystart = WINCY * 0.8f;
-	Vector2 tPoint[2] =
-	{ {0.f,(Ystart)}, {150.f,Ystart} };
-	CLineManager::Get_Instance()->Create_Line(tPoint, 2);
-
+	
 	float m_fVolume = 20.f;
 	CSoundManager::Get_Instance()->PlayBGM(L"JailBoss.wav", m_fVolume);
 
@@ -104,8 +100,7 @@ void CBossStage::Render(HDC hdc)
 	CObjMgr::Get_Instance()->Render(hdc);
 	CUIMgr::Get_Instance()->Render(hdc);
 
-	//Line Å×½ºÆ®
-	CLineManager::Get_Instance()->Render(hdc);
+	
 }
 
 void CBossStage::Release()

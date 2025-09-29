@@ -4,7 +4,7 @@
 #include "CTimeMgr.h"
 #include "CLineManager.h"
 #include "CCollisionMgr.h"
-CCreature::CCreature() : m_bDead(false), m_tTarget(nullptr),  m_eDir(DIR_END),m_iDamage(0), m_iLevel(0), m_iMaxHP(0), m_iHP(0),
+CCreature::CCreature() :  m_tTarget(nullptr),  m_eDir(DIR_END),m_iDamage(0), m_iLevel(0), m_iMaxHP(0), m_iHP(0),
 			m_bJump(false),
 			m_fSpeedY(0.f),
 			m_iPlayerJumpCount(0),
@@ -151,43 +151,7 @@ void CCreature::Landed_Platform(CObj* pObj, CColliderComp& my, CColliderComp& ot
 	}
 }
 
-void CCreature::Move_Frame()
-{
-	m_tFrame.dwTime += CTimeMgr::Get_Instance()->GetDeltaTime();
 
-	if (m_tFrame.dwTime >= m_tFrame.dwSpeed)
-	{
-		++m_tFrame.iStart;
-		//_tprintf(_T("executed. %d\n"), m_tFrame.iStart);
 
-		if (m_tFrame.iStart > m_tFrame.iEnd)
-			m_tFrame.iStart = 0;
-
-		m_tFrame.dwTime = 0.f;
-	}
-
- }
-
-//void CCreature::Move_EffectFrame()
-//{
-//	if (m_tEFFrame.dwTime == 0)
-//	{
-//		m_vEFPos = m_vPosition;
-//	}
-//	m_tEFFrame.dwTime += CTimeMgr::Get_Instance()->GetDeltaTime();
-//
-//
-//
-//	if (m_tEFFrame.dwTime >= m_tEFFrame.dwSpeed)
-//	{
-//		++m_tEFFrame.iStart;
-//		
-//		if (m_tEFFrame.iStart > m_tEFFrame.iEnd)
-//			m_tEFFrame.iStart = 0;
-//
-//		m_tEFFrame.dwTime = 0.f;
-//	}
-//
-//}
 
 

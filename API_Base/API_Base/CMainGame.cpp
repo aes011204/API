@@ -20,7 +20,6 @@ CMainGame::~CMainGame()
 
 void CMainGame::Initialize()
 {
-
 	CSoundManager::Get_Instance()->Initialize();
 
 	m_hDC = GetDC(g_hWnd);
@@ -44,6 +43,7 @@ void CMainGame::Initialize()
 	CSceneMgr::Get_Instance()->Change_Stage(SC_MAINMENU);
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Ground.bmp", L"Back");
 
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/MapTile.bmp", L"Tile");
 
 
 }

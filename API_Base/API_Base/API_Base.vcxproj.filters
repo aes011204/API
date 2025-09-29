@@ -64,6 +64,12 @@
     <Filter Include="01.Object\00.Creature\00.Bullet">
       <UniqueIdentifier>{b2156af5-6637-4e7f-805c-7a7bf0ecc2d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08.Item">
+      <UniqueIdentifier>{491faafa-a710-4c51-a74e-e33193e8b3ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08.Item\00.Base">
+      <UniqueIdentifier>{3550dcba-3a44-4187-b5f9-66fc3ea37ff7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -249,6 +255,45 @@
     <ClInclude Include="CPlayerBullet.h">
       <Filter>01.Object\00.Creature\00.Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="CInventoryUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CInventory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CShopUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CAccecery.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CWeapon.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CItem.h">
+      <Filter>08.Item\00.Base</Filter>
+    </ClInclude>
+    <ClInclude Include="CItemDB.h">
+      <Filter>08.Item\00.Base</Filter>
+    </ClInclude>
+    <ClInclude Include="CGun.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CSword.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CSword01.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CInventoryCell.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CStage02.h">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CDoor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API_Base.cpp">
@@ -397,6 +442,45 @@
     </ClCompile>
     <ClCompile Include="CPlayerBullet.cpp">
       <Filter>01.Object\00.Creature\00.Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="CInventoryUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CInventory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CShopUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CWeapon.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CAccecery.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CItem.cpp">
+      <Filter>08.Item\00.Base</Filter>
+    </ClCompile>
+    <ClCompile Include="CItemDB.cpp">
+      <Filter>08.Item\00.Base</Filter>
+    </ClCompile>
+    <ClCompile Include="CSword.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CSword01.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CGun.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CInventoryCell.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CStage02.cpp">
+      <Filter>05.Scene\00.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="CDoor.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

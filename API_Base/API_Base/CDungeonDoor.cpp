@@ -70,7 +70,7 @@ int CDungeonDoor::Update()
 
 		if (m_tFrame.iStart == m_tFrame.iEnd)
 		{
-			CSceneMgr::Get_Instance()->Rq_changeScene(SC_BOSS);
+			CSceneMgr::Get_Instance()->Rq_changeScene(SC_STAGE01);
 		}
 	}
 

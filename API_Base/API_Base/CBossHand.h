@@ -50,7 +50,8 @@ private:
 
 
 	FRAME m_tEFFrameLR;
-	//FRAME m_tEFFrameBody;
 	FRAME m_tEFFrame;
+
+	bool m_bAttack;
 };
 

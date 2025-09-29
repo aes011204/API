@@ -27,6 +27,10 @@ public:
 	const RECT* Get_Rect() { return &m_tRect; }
 
 	void Set_Target(CCreature* tTarget) { m_tTarget = tTarget; }
+
+	bool Get_Dead() const { return m_bDead; }
+	void Set_Dead(bool v) { m_bDead = v; }
+
 protected:
 	RECT			m_tRect;		// °´Ã¼ÀÇ ·»´õ ¹üÀ§
 
@@ -37,6 +41,8 @@ protected:
 	Vector2			m_vCollSize;
 
 	CCreature* m_tTarget;
+
+	bool m_bDead;
 
 	virtual bool IsColl()= 0 ;
 public:

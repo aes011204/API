@@ -5,7 +5,7 @@
 #include "CCreature.h"
 #include "CTile.h"
 #include "CBossHand.h"
-
+#include "CItem.h"
 template<typename T>
 class CAbstractFactory
 {
@@ -91,7 +91,27 @@ public:
 
 		return ui;
 	}
-	static CUI* CreateUIButton(Vector2 pos, Vector2 Size, const TCHAR* off, const TCHAR* on,const function<void()>& fn, float SizeMul=1.f)
+
+	static CUI* CreateUI()
+	{
+		CUI* ui = new T;
+
+
+		ui->Initialize();
+
+		return ui;
+	}	
+	static CUI* CreateUI(Vector2 pos)
+	{
+		CUI* ui = new T;
+
+
+		ui->Initialize();
+		ui->SetPosition(pos);
+
+		return ui;
+	}
+	static CUI* CreateUIButton(Vector2 pos, Vector2 Size, const TCHAR* off, const TCHAR* on, const function<void()>& fn, float SizeMul = 1.f)
 	{
 		CButton* ui = new T;
 
@@ -108,19 +128,16 @@ public:
 		return ui;
 	}
 
-	//static CObj* CreateBullet(Vector2 _position, Vector2 _dir)
-	//{
-	//	CObj* pObj = new T;
-	//
-	//	pObj->Set_PosX(_position.x);
-	//	pObj->Set_PosY(_position.y);
-	//
-	//	pObj->Set_DirX(_dir.x);
-	//	pObj->Set_DirY(_dir.y);
-	//
-	//	pObj->Initialize();
-	//
-	//	return pObj;
-	//}
-};
+	static CItem* CreateItem(CItem::ITEMTYPE itemType, CItem::ITEMSTATE m_eItemState , CItem::ITEMCLASS m_eItemClass)
+	{
+		CItem* tmp = new T;
+		tmp->Initialize();
 
+		tmp->SetItemState(m_eItemState);
+		tmp->SetItemType(itemType);
+		tmp->Set_ItemClass(m_eItemClass);
+
+		return tmp;
+	}
+
+};

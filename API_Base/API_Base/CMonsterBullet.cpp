@@ -28,7 +28,7 @@ void CMonsterBullet::Initialize()
 
     m_eCurState = IDLE;
 
-    m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, m_vSize, this,true));
+    m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, m_vSize, this ,true));
 
 }
 

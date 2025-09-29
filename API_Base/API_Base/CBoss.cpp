@@ -9,6 +9,7 @@
 #include "CAbstractFactory.h"
 #include "CStateBar.h"
 #include "CUIMgr.h"
+#include "CUI.h"
 #include "CPlayer.h"
 #include "CMonsterBullet.h"
 #include "CBossHand.h"
@@ -31,10 +32,10 @@ void CBoss::Initialize()
 
 	m_vPosition = { 1056.f * .5f,1056.f * .5f };
 	m_vSize = { 210,285 };
-
-	m_iMaxHP = 500.f;
+	m_fSpeed = 500.f;
+	m_iMaxHP = 100.f;
 	m_iHP = m_iMaxHP;
-	m_iDamage = 1;
+	m_iDamage = 10;
 
 	m_ID = BOSS;
 
@@ -55,15 +56,19 @@ void CBoss::Initialize()
 	m_iBarrelNum = 4;
 	m_vBarrelDir = { -1,0 };
 
+	DeadTime = 10.f;
+	DeadTimeMax = DeadTime;
+
 	//m_TmpSword.reserve(SwordCountMax);
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossIdle.bmp", L"BossIdle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossAttack.bmp", L"BulletAttack");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/HandIdle.bmp", L"HandIdle");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/HandAttack.bmp", L"HandAttack");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/PlayerDie.bmp", L"PlayerDie");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/SkellBossDead.bmp", L"BossDead");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/SkellBossAttackHit.bmp", L"AttackHit");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/SkellBossIdleHit.bmp", L"IdleHit");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossFinish.bmp", L"BossFinish");
 
 	m_pFrameKey = L"BossIdle";
 	m_tFrame.iStart = 0;
@@ -71,13 +76,11 @@ void CBoss::Initialize()
 	m_tFrame.dwSpeed = .3f;
 	m_tFrame.dwTime = 0.f;
 	m_tFrame.vSize = { 210,285 };
-
-
-
 	m_eCurState = IDLE;
 
-	m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, { 100.f,100.f }, this));
-	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI(this));
+	m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 20,30 }, { 150.f,200.f }, this));
+	statebar = CAbstractFactory<CStateBar>::CreateUI(this);
+	CUIMgr::Get_Instance()->Add_Object(statebar);
 
 	m_LHand = CAbstractFactory<CBossHand>::CreateHand(CBossHand::LR::HAND_LEFT);
 	m_RHand = CAbstractFactory<CBossHand>::CreateHand(CBossHand::LR::HAND_RIGHT);
@@ -86,6 +89,11 @@ void CBoss::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(m_RHand);
 	CObjMgr::Get_Instance()->Add_Object(m_LHand);
 
+	m_tEFFrame.iStart = 0;
+	m_tEFFrame.iEnd =11;
+	m_tEFFrame.dwSpeed = .1f;
+	m_tEFFrame.dwTime = 0.f;
+	m_tEFFrame.vSize = { 120,120 };
 }
 
 int CBoss::Update()
@@ -93,6 +101,7 @@ int CBoss::Update()
 	if (m_bDead)
 	{
 		m_pFrameKey = L"BossDie";
+		statebar->Set_Dead(true);
 		return OBJ_DEAD;
 	}
 	float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
@@ -121,7 +130,8 @@ int CBoss::Update()
 			m_eCurState = IDLE;
 			bulletTime = bulletTimeMax;
 		}
-		BulletAttack();
+		else
+			BulletAttack();
 		break;
 	case BOSSSTATE::SWORDATTACK:
 
@@ -129,9 +139,10 @@ int CBoss::Update()
 		{
 			m_eCurState = IDLE;
 			SwordCount = 0;
+			m_bSwordDone = false;
 		}
-		//m_eCurState = IDLE;
-		SwordAttack();
+		else
+			SwordAttack();
 		break;
 	case BOSSSTATE::HANDATTACK:
 		//HandTime -= dt;
@@ -142,20 +153,24 @@ int CBoss::Update()
 			//HandTime = HandTimeMax;
 			HandCount = 0;
 		}
-		//m_eCurState = IDLE;
-		HandAttack();
+		else
+			HandAttack();
+		break;
+	case BOSSSTATE::DEAD:
+		DeadTime -= dt;
+		if (DeadTime <= 0.f)
+		{
+			m_bDead = true;
+		}
+		else
+			DeadEffect();
 		break;
 	}
-
+	__super::EffUpdate();
 	__super::UpdateColl(m_vPosition);
 
 
 	__super::Update_Rec();
-
-
-
-	//CCreature::Update();
-
 
 Motion_Change();
 
@@ -220,6 +235,9 @@ void CBoss::Render(HDC hdc)
 	//float LeftTopY = RenderPos.y - RenderSizeY * .5f;
 
 	//Rectangle(hdc, LeftTopX, LeftTopY, LeftTopX + RenderSizeX, LeftTopY + RenderSizeY);
+
+	__super::EffRender(hdc);
+
 }
 
 void CBoss::Release()
@@ -232,16 +250,16 @@ void CBoss::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 
 	switch (obj->Get_ID())
 	{
-	case PLAYER:
-	{
-		if (other.GetType() == ColliderType::ATTACK)
-		{
-			if (CPlayer* creature = dynamic_cast<CPlayer*>(obj))
-				Take_Damage(creature->Get_Damage());
-
-		}
-	}
-	break;
+	//case PLAYER:
+	//{
+	//	if (other.GetType() == ColliderType::ATTACK)
+	//	{
+	//		if (CPlayer* creature = dynamic_cast<CPlayer*>(obj))
+	//			Take_Damage(creature->Get_Damage());
+	//
+	//	}
+	//}
+	//break;
 	//case MON_BULLET:
 	//{
 	//	{
@@ -265,7 +283,7 @@ void CBoss::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 void CBoss::BulletAttack()
 {
 	accTime += CTimeMgr::Get_Instance()->GetDeltaTime();
-	if (.2f < accTime)
+	if (.15f < accTime)
 	{
 		m_iAngle += 10.0;
 		m_iAngle %= 360;
@@ -274,7 +292,7 @@ void CBoss::BulletAttack()
 		{
 			m_iAngle = (m_iAngle + (90 * j)) % 360;
 			Vector2 dir = RotateVector(m_vBarrelDir, m_iAngle);
-			CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBullet>::Create(m_vPosition, { 20,20 }, dir));
+			CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBullet>::Create({ m_vPosition.x + 15,m_vPosition.y+90 }, { 20,20 }, dir));
 
 		}
 		accTime = 0.f;
@@ -338,8 +356,6 @@ void CBoss::HandAttack()
 	{
 		Rand = RandInt(0, 1);
 
-
-
 		if (Rand == 0)
 		{
 			m_LHand->SetAttackPos(pos);
@@ -386,7 +402,7 @@ void CBoss::Motion_Change()
 			m_pFrameKey = L"BulletAttack";
 			m_tFrame.iStart = 0;
 			m_tFrame.iEnd = 9;
-			m_tFrame.dwSpeed = .2f;
+			m_tFrame.dwSpeed = .4f;
 			m_tFrame.dwTime = 0.f;
 			m_tFrame.vSize = { 210, 384 };
 			m_vSize = m_tFrame.vSize;
@@ -419,11 +435,12 @@ void CBoss::Motion_Change()
 			break;
 
 		case DEAD:
+			m_pFrameKey = L"BossDead";
 			m_tFrame.iStart = 0;
-			m_tFrame.iEnd = 3;
-			m_tFrame.dwSpeed = .2f;
+			m_tFrame.iEnd = 0;
+			m_tFrame.dwSpeed = .0f;
 			m_tFrame.dwTime = 0.f;
-			m_tFrame.vSize = { 78.f, 75.f };
+			m_tFrame.vSize = { 210.f, 231.f };
 			m_vSize = m_tFrame.vSize;
 			break;
 
@@ -451,12 +468,14 @@ void CBoss::Take_Damage(int _damage)
 	else
 	{
 		Set_HP(0);
-		m_bDead = true;
+		m_eCurState = DEAD;
 		//todo 죽었어! 플레이어 사망 조건 true로 설정
 	}
 
 	m_hitFlash = true;
 	m_HitTime = m_HitTimeMax;
+
+	cout << m_iHP << endl;
 
 }
 
@@ -471,4 +490,29 @@ Vector2 CBoss::RotateVector(Vector2& v, float angle)
 	result.x = v.x * cosX - v.y * sinY;
 	result.y = v.x * sinY - v.y * cosX;
 	return result;
+}
+
+void CBoss::DeadEffect()
+{
+	int k = RandInt(-150, 150);
+	int j = RandInt(-150, 150);
+	
+	for (int i = 0; i < 10; i++)
+	{
+		m_vEffect.push_back(CEffectComp({ k,j }, this, m_tEFFrame, { 40,40 }, L"BossFinish"));
+
+	}
+	if (m_LHand)
+	{
+	m_LHand->Set_Dead(true);
+	m_LHand = nullptr;
+	}
+	if (m_RHand)
+	{
+	m_RHand->Set_Dead(true);
+	m_RHand = nullptr;
+	}
+
+	if(m_vPosition.y <= (528.f + 170.f))
+	m_vPosition.y += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
 }

@@ -17,6 +17,7 @@
 #include "CShop.h"
 #include "CStat.h"
 #include "CSmith.h"
+#include "CInventoryUI.h"
 
 
 
@@ -38,10 +39,10 @@ void CVillage::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Village/TownLayer_Day.bmp", L"VillageBG2");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Village/Village.bmp", L"Village");
 
-	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
-	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
-	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CDungeonDoor>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CShop>::Create());
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
+	//CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CDungeonDoor>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CStat>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CSmith>::Create());
 	//
@@ -51,6 +52,7 @@ void CVillage::Initialize()
 
 	
 	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
+	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CInventoryUI>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
 
 	//Line 테스트
 	float Ystart = m_vSceneSize.y -29.f;
@@ -97,7 +99,7 @@ int CVillage::Update()
 
 	{
 		// 테스트 용
-		CUIMgr::Get_Instance()->Update();
+	
 		if (GetAsyncKeyState('3'))//CKeyMgr::Get_Instance()->Key_Down(VK_RETURN))
 		{
 			CSceneMgr::Get_Instance()->Change_Stage(SC_BOSS);

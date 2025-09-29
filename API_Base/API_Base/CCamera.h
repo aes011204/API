@@ -32,6 +32,7 @@ public:
 		RenderSize.y = (WorldSize.y * m_fZoom);
 		return RenderSize;
 	}
+	
 
 	Vector2 GetRealPos(Vector2 vRenderPos) {
 		Vector2 center = vWinResolution * 0.5f;

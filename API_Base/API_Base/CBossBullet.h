@@ -38,6 +38,14 @@ private:
 	float endtimeMax;
 
 	bool tmpboo;
+
+
+	//회전 이미지
+
+	Vector2 RealCorners[4];
+	Vector2 half;
+	Vector2 corners[4];
+	POINT plgCorner[3];
 	
 };
 

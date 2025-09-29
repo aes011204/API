@@ -23,12 +23,15 @@ void CStateBar::Initialize()
 
 int CStateBar::Update()
 {
+	if (m_tTarget->Get_Dead())
+		return 1;
+
 	if (m_tTarget)
 	{
 		TargetCurInfo = m_tTarget->Get_HP();
 		TargetMaxInfo = m_tTarget->Get_MaxHP();
 		if (m_tTarget->Get_ID() == PLAYER)
-			OtherInfo = m_tTarget->Get_Level();;
+			OtherInfo = m_tTarget->Get_Level();
 
 		// 추후 수저 ㅇ 주소 값으로
 	}
@@ -38,12 +41,17 @@ int CStateBar::Update()
 
 int CStateBar::Late_Update()
 {
+	if (m_bDead)
+		return 1;
     return 0;
 }
 
 
 void CStateBar::Render(HDC hdc)
 {
+	if (m_tTarget == nullptr)
+		return;
+
 
 	if (m_tTarget->Get_ID() == PLAYER)
 	{

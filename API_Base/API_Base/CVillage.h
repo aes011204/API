@@ -14,7 +14,7 @@ public:
     void Release() override;
 
 private:
-    Vector2 m_vSceneSize;
+    
 
     float m_SoundTime;
 };

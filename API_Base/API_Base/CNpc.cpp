@@ -45,6 +45,7 @@ int CNpc::Update()
 
 void CNpc::Late_Update()
 {
+	
 }
 
 void CNpc::Render(HDC hdc)
@@ -105,6 +106,8 @@ void CNpc::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 				m_OnPlayer = true;
 
 		}
+
+
 
 	}
 

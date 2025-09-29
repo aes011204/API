@@ -18,9 +18,9 @@ public:
 
 	//void Landed_Platform(CObj* pObj);
 
-	void Move_Frame();
 
-	void Move_EffectFrame();
+
+	
 
 	//virtual void On_Collision(CObj* obj, ColliderType my, ColliderType other) = 0;
 	//virtual void On_Collision(CObj* obj, vector<CColliderComp>::iterator my, vector<CColliderComp>::iterator other) = 0;
@@ -50,18 +50,21 @@ public: // Object's stats getter-setter
 	void Set_Jump(bool bJump) { m_bJump = bJump; }
 	void Set_JumpCount(int JumpCount) { m_iPlayerJumpCount = JumpCount; }
 	void Set_SpeedY(float SpeedY) { m_fSpeedY = SpeedY; }
+
+	Vector2 GetBarrelDir() const { return m_vBarrelDir; }
+	Vector2 GetBarrelPos() const { return m_vBarrelPos; }
+
+	void SetBarrelDir(const Vector2& vDir) { m_vBarrelDir = vDir; }
+	void SetBarrelPos(const Vector2& vPos) { m_vBarrelPos = vPos; }
 protected:
 
 	Vector2 m_vBarrelDir;
 	Vector2 m_vBarrelPos;
 	CObj* m_tTarget;
 
-	bool m_bDead;
-	//DIRECTION	m_eDir;
 
 	// 애니메이션
-	FRAME		m_tFrame;
-	const TCHAR* m_pFrameKey;
+
 	DR		m_eDir;
 
 	////이팩트 애니메이션

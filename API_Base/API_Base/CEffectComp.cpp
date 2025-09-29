@@ -22,9 +22,9 @@ void CEffectComp::EffRender(HDC hdc)
 		hdc, RenderPos.x - RenderEFSize.x * .5f, RenderPos.y - RenderEFSize.y * .5f,
 		RenderEFSize.x, RenderEFSize.y,
 		hEFMemDC,
-		m_tEffFrame.iStart * m_tEffFrame.vSize.x,
+		m_tEffFrame.iStart * m_vSize.x,
 		0,
-		m_tEffFrame.vSize.x, m_tEffFrame.vSize.y,
+		m_vSize.x, m_vSize.y,
 		RGB(255, 0, 255));
 
 	}

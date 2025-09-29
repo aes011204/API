@@ -50,7 +50,12 @@ public:
 	//void EffUpdate(Vector2& objPos);
 	void EffRender(HDC hdc);
 
+	void Move_Frame();
+
 	vector<CColliderComp>& Get_Collider() { return m_vCollider; }
+
+	int Get_Money() const { return m_iMoney; }
+	void Set_Money(int iMoney) { m_iMoney = iMoney; }
 
 protected:
 
@@ -65,6 +70,7 @@ protected:
 	Vector2			m_vDirection;	// 按眉狼 规氢
 	Vector2			m_vSize;		// 按眉狼 农扁
 
+	int m_iMoney = 0;
 
 	float m_fSpeed;
 	
@@ -72,5 +78,8 @@ protected:
 
 	vector<CColliderComp> m_vCollider;
 	vector<CEffectComp> m_vEffect;
+
+	const TCHAR* m_pFrameKey;
+	FRAME		m_tFrame;
 };
 

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CUI.h"
 #include "CCreature.h"
-CUI::CUI() : m_tTarget(nullptr)
+CUI::CUI() : m_tTarget(nullptr), m_bDead(false)
 {
 	ZeroMemory(&m_tRect, sizeof(m_tRect));
 }
@@ -31,6 +31,7 @@ void CUI::Render(HDC hdc)
 
 void CUI::Release()
 {
+	
 }
 
 void CUI::Update_Rect()

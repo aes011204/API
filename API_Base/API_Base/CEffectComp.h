@@ -5,7 +5,7 @@ class CEffectComp
 
 public:
 	CEffectComp() {}
-	CEffectComp( Vector2 offset, CObj* obj, FRAME	frame, const TCHAR* FrameKey) : m_vEffOffset(offset)/*, m_vEffSize(size)*/,  m_obj(obj), m_tEffFrame(frame), m_pEffFrameKey(FrameKey)
+	CEffectComp( Vector2 offset, CObj* obj, FRAME frame, Vector2 size, const TCHAR* FrameKey) : m_vEffOffset(offset)/*, m_vEffSize(size)*/,  m_obj(obj), m_tEffFrame(frame), m_pEffFrameKey(FrameKey), m_vSize(size)
 	{
 	}
 	virtual ~CEffectComp() {};
@@ -43,7 +43,7 @@ private:
 	RECT m_tEffRect;
 	Vector2 m_vEffOffset;
 	Vector2 m_vEffPosition;
-
+	Vector2 m_vSize;
 
 	CObj* m_obj;
 

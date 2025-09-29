@@ -1,6 +1,6 @@
 #pragma once
 
-#define	WINCX			950//1280
+#define	WINCX			 950//1280
 #define	WINCY			550//720
 
 //#define TILECX		16
@@ -68,7 +68,6 @@ enum OBJID
 	BOSS,
 	PET,
 	ITEM,
-	WEAPON,
 	BULLET,
 	PLATFORM,
 	EFFECT,
@@ -76,6 +75,7 @@ enum OBJID
 	NPC,
 	OBJ_END
 };
+
 
 
 enum SCENEID

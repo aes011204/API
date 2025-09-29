@@ -50,7 +50,7 @@ int CUIMgr::Late_Update()
 			//if (!m_UIList.empty())
 			{
 				Safe_Delete<CUI*>(*it);
-				m_UIList.erase(it);
+				it = m_UIList.erase(it);
 
 			}
 			//else

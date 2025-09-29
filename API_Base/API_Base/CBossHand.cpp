@@ -6,7 +6,7 @@
 #include "CTimeMgr.h"
 
 
-CBossHand::CBossHand() : m_eCurState(HS_END), m_ePreState(HS_END), m_LeftRight(HAND_END), m_isAttack(false)//, m_AttackDone (false)
+CBossHand::CBossHand() : m_eCurState(HS_END), m_ePreState(HS_END), m_LeftRight(HAND_END), m_isAttack(false), m_bAttack(false)//, m_AttackDone (false)
 {
 }
 
@@ -20,8 +20,9 @@ void CBossHand::Initialize()
 	m_fSpeed = 400.f;
 	m_fSpeedY = 400.f;
 
-	m_iDamage = 1.f;
+	m_iDamage = 10.f;
 	m_ID = BOSS;
+
 	m_vPosition = { 300,300 };
 	m_vSize = { 171, 189 };
 
@@ -166,32 +167,32 @@ void CBossHand::Do_Attack()
 		{
 			if (m_tFrame.iStart == 10)
 			{
-				m_vEffect.push_back(CEffectComp({ 120,5 }, this, m_tEFFrameLR, L"LaserHeadL"));
-				m_vEffect.push_back(CEffectComp({ 100 + m_tEFFrame.vSize.x  ,0.f }, this, m_tEFFrame, L"LaserBody"));
-
+				m_vEffect.push_back(CEffectComp({ 120,5 }, this, m_tEFFrameLR, { m_tEFFrameLR.vSize.x,m_tEFFrameLR.vSize.y }, L"LaserHeadL"));
+				m_vEffect.push_back(CEffectComp({ 100 + m_tEFFrame.vSize.x  ,0.f }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y }, L"LaserBody"));
+		
 				for (int i = 2; i < 10;i++)
 				{
-				m_vEffect.push_back(CEffectComp({ 100 + m_tEFFrame.vSize.x *i ,0.f }, this, m_tEFFrame, L"LaserBody"));
-
+				m_vEffect.push_back(CEffectComp({ 100 + m_tEFFrame.vSize.x *i ,0.f }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y }, L"LaserBody"));
+		
 				}
-
+				m_bAttack = true;
 			}
-
+		
 		}
 		else if (m_LeftRight == HAND_RIGHT)
 		{
 			if (m_tFrame.iStart == 10)
 			{
-				m_vEffect.push_back(CEffectComp({ -120,5 }, this, m_tEFFrameLR, L"LaserHeadR"));
+				m_vEffect.push_back(CEffectComp({ -120,5 }, this, m_tEFFrameLR, { m_tEFFrameLR.vSize.x,m_tEFFrameLR.vSize.y }, L"LaserHeadR"));
 				
-					m_vEffect.push_back(CEffectComp({-100 - m_tEFFrame.vSize.x  ,0.f }, this, m_tEFFrame, L"LaserBody"));
-
+					m_vEffect.push_back(CEffectComp({-100 - m_tEFFrame.vSize.x  ,0.f }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y },L"LaserBody"));
+		
 				for (int i = 2; i < 10;i++)
 				{
-					m_vEffect.push_back(CEffectComp({ -100 - m_tEFFrame.vSize.x * i ,0.f }, this, m_tEFFrame, L"LaserBody"));
-
+					m_vEffect.push_back(CEffectComp({ -100 - m_tEFFrame.vSize.x * i ,0.f }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y }, L"LaserBody"));
+		
 				}
-			
+				m_bAttack = true;
 			}
 
 		}
@@ -201,6 +202,7 @@ void CBossHand::Do_Attack()
 		{
 			m_eCurState = IDLE;
 			m_isAttack = false;
+			m_bAttack = false;
 		}
 	}
 	else if (m_AttackPos.y >= m_vPosition.y)
@@ -218,6 +220,13 @@ void CBossHand::Do_Attack()
 
 void CBossHand::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
+	if (obj->Get_ID() == PLAYER&& other.GetType() == ColliderType::BODY)
+	{
+		if (m_bAttack == true)
+		{
+			dynamic_cast <CCreature*>(obj)->Take_Damage(m_iDamage);
+		}
+	}
 }
 
 void CBossHand::Take_Damage(int _damage)

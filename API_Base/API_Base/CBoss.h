@@ -1,6 +1,7 @@
 #pragma once
 #include "CMonster.h"
 #include "CBossHand.h"
+class CUI;
 class CBoss :
 	public CCreature
 {
@@ -30,6 +31,7 @@ public:
 	void Take_Damage(int damage);
 
 	Vector2 RotateVector(Vector2& v, float angle);
+	void DeadEffect();
 
 private:
 
@@ -66,12 +68,18 @@ private:
 	int m_iBarrelNum;
 	int Rand = 0;
 
+	float DeadTime = 0.f;
+	float DeadTimeMax = 0.f;
 
 	Vector2 LeftHandPos;
 	Vector2 RightHandPos;
 
 	CBossHand* m_RHand;
 	CBossHand* m_LHand;
+
+	CUI* statebar;
+
+	FRAME m_tEFFrame;
 
 };
 
