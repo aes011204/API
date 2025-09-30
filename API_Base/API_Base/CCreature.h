@@ -6,6 +6,14 @@ class CCreature :
 {
 public:
 	CCreature();
+	CCreature(Vector2 pos, Vector2 size) : CObj(pos, size), m_tTarget(nullptr), m_eDir(DIR_END), m_iDamage(0), m_iLevel(0), m_iMaxHP(0), m_iHP(0),
+		m_bJump(false),
+		m_fSpeedY(0.f),
+		m_iPlayerJumpCount(0),
+		m_iPlayerMaxJump(2),
+		m_fGroundY(0.f),
+		m_bPlayerLanded(false) 
+	{}
 	virtual ~CCreature();
 public:
 	void Initialize();

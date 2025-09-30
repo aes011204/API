@@ -255,12 +255,6 @@
     <ClInclude Include="CPlayerBullet.h">
       <Filter>01.Object\00.Creature\00.Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="CInventoryUI.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CInventory.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CShopUI.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -285,13 +279,31 @@
     <ClInclude Include="CSword01.h">
       <Filter>08.Item</Filter>
     </ClInclude>
-    <ClInclude Include="CInventoryCell.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CStage02.h">
       <Filter>05.Scene\00.Stage</Filter>
     </ClInclude>
     <ClInclude Include="CDoor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CInventoryUI.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CInventoryCell.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterBat.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterBow.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="CInventory.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterBullet01.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterBigSkull.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -443,12 +455,6 @@
     <ClCompile Include="CPlayerBullet.cpp">
       <Filter>01.Object\00.Creature\00.Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="CInventoryUI.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="CInventory.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CShopUI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -473,13 +479,31 @@
     <ClCompile Include="CGun.cpp">
       <Filter>08.Item</Filter>
     </ClCompile>
-    <ClCompile Include="CInventoryCell.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CStage02.cpp">
       <Filter>05.Scene\00.Stage</Filter>
     </ClCompile>
     <ClCompile Include="CDoor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CInventory.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CInventoryUI.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CInventoryCell.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterBat.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterBow.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterBullet01.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterBigSkull.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

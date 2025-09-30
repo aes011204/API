@@ -106,6 +106,8 @@ int CBoss::Update()
 	}
 	float dt = CTimeMgr::Get_Instance()->GetDeltaTime();
 
+	
+
 	if (m_hitFlash == true)
 	{
 		m_HitTime -= dt;
@@ -119,6 +121,7 @@ int CBoss::Update()
 		idelTime -= dt;
 		if (idelTime <= 0.f)
 		{
+
 			Do_Attack();
 			idelTime = idelTimeMax;
 		}

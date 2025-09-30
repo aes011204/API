@@ -50,8 +50,7 @@ int CSword::Update()
 	if (diff < -maxStep) diff = -maxStep;
 	m_OffsetCur += diff;
 
-	// 4) ★ 오프셋 라디안은 '현재' 마우스 좌우에 따라 동적으로 추가
-	//    - 클릭 후에 마우스가 좌/우로 바뀌어도 항상 반영됨
+
 	const float kFlipEps = 0.006f; // 오프셋용 미세 보정
 	if (worldmouse.x >= m_vPosition.x)
 	{

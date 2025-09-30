@@ -40,7 +40,7 @@ void CMainGame::Initialize()
 	}
 	CTimeMgr::Get_Instance()->Initialize();
 	CCamera::Get_Instance()->SetLookAt({ WINCX * .5, WINCY * .5f });
-	CSceneMgr::Get_Instance()->Change_Stage(SC_MAINMENU);
+	CSceneMgr::Get_Instance()->Change_Stage(SC_MAINMENU/*SC_STAGE01*/);
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Ground.bmp", L"Back");
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/MapTile.bmp", L"Tile");

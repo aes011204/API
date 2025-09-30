@@ -163,7 +163,11 @@
     <ClInclude Include="CMainMenu.h" />
     <ClInclude Include="CMainUI.h" />
     <ClInclude Include="CMonster.h" />
+    <ClInclude Include="CMonsterBat.h" />
+    <ClInclude Include="CMonsterBigSkull.h" />
+    <ClInclude Include="CMonsterBow.h" />
     <ClInclude Include="CMonsterBullet.h" />
+    <ClInclude Include="CMonsterBullet01.h" />
     <ClInclude Include="CMyBmp.h" />
     <ClInclude Include="CNonCreature.h" />
     <ClInclude Include="CNpc.h" />
@@ -239,7 +243,11 @@
     <ClCompile Include="CMainMenu.cpp" />
     <ClCompile Include="CMainUI.cpp" />
     <ClCompile Include="CMonster.cpp" />
+    <ClCompile Include="CMonsterBat.cpp" />
+    <ClCompile Include="CMonsterBigSkull.cpp" />
+    <ClCompile Include="CMonsterBow.cpp" />
     <ClCompile Include="CMonsterBullet.cpp" />
+    <ClCompile Include="CMonsterBullet01.cpp" />
     <ClCompile Include="CMyBmp.cpp" />
     <ClCompile Include="CNonCreature.cpp" />
     <ClCompile Include="CNpc.cpp" />

@@ -338,15 +338,27 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 
 	case MONSTER:
 	{
-		if(CMonster* creature = dynamic_cast<CMonster*>(obj))
-			Take_Damage(creature->Get_Damage());
+		//if(CMonster* creature = dynamic_cast<CMonster*>(obj))
+		//	Take_Damage(creature->Get_Damage());
+		if (my.GetType() == ColliderType::ATTACK && other.GetType() == ColliderType::BODY)
+		{
+			if (m_bOnAttack == true)
+			{
+				if (CCreature* creature = dynamic_cast<CCreature*>(obj))
+					creature->Take_Damage(m_iDamage);
+
+			}
+		}
+	
 	}
 	break;
 	case BULLET:
 	{
-		if(CMonsterBullet* mon = dynamic_cast<CMonsterBullet*>(obj))
+		if (dynamic_cast<CPlayer*>(obj))
+			return;
+		else
 		{
-			Take_Damage(mon->Get_Damage());
+			Take_Damage(dynamic_cast<CCreature*>(obj)->Get_Damage());
 	
 			//Vector2 dir = m_vPosition - mon->Get_Position();
 			//dir = Vector2::Nomalize(dir);
@@ -479,8 +491,6 @@ void CPlayer::Key_Input()
 
 	// 마우스 정보 가져오기
 	Vector2 mouse = CKeyMgr::Get_Instance()->GetMousePos();
-	mouse = CCamera::Get_Instance()->GetRealPos(mouse);
-	cout << mouse.x << "," << mouse.y << endl;
 	
 	//CCamera::Get_Instance()->GetRealPos(LeftRight);
 	//Vector2 RenderPos = CCamera::Get_Instance()->GetRenderPos(m_vPosition);

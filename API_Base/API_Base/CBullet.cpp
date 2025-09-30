@@ -19,14 +19,15 @@ void CBullet::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 	break;
 	case MONSTER:
 	{
-
+		if (other.GetType() == ColliderType::BODY)
+			dynamic_cast<CCreature*>(obj)->Take_Damage(m_iDamage);
 			m_bDead = true;
 	}
 	break;
 	case BOSS:
 	{
 
-		// m_bDead = true;
+		 m_bDead = true;
 	}
 	break;
 

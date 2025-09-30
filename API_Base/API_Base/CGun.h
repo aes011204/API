@@ -12,5 +12,7 @@ public:
     void Late_Update();
     void Render(HDC hdc);
     void Release();
+
+    float  m_Length = 0.f;
 };
 

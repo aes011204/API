@@ -12,6 +12,8 @@
 #include "CWall.h"
 #include "CStateBar.h"
 #include "CDoor.h"
+#include "CMonsterBat.h"
+#include "CMonsterBigSkull.h"
 
 CStage01::CStage01()
 {
@@ -29,6 +31,8 @@ void CStage01::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/untitled.bmp", L"Stage01");
 
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBat>::Create({ 475, 345 }, { 60,66 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBigSkull>::Create({ 550, 400 } , { 99,144 }));
 
 	CCamera::Get_Instance()->Bootstrap(CObjMgr::Get_Instance()->Get_Player()->GetPosition());
 	CCamera::Get_Instance()->SetBackSize(m_vSceneSize);

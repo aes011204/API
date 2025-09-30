@@ -57,6 +57,7 @@ void CObjMgr::Late_Update()
 	CCollisionMgr::Collision_Rect(m_ObjList[MONSTER], m_ObjList[PLAYER]);
 	CCollisionMgr::Collision_Rect(m_ObjList[BOSS], m_ObjList[PLAYER]);
 	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[PLAYER]);
+	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[MONSTER]);
 
 	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[DOOR]);
 	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[NPC]);

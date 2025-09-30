@@ -1,6 +1,6 @@
 #pragma once
 #include "CUI.h"
-#include "CCreature.h"
+
 class CStateBar :
     public CUI
 {

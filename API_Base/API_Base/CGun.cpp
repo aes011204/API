@@ -2,6 +2,9 @@
 #include "CGun.h"
 #include "CKeyMgr.h"
 #include "CBmpMgr.h"
+#include "CObjMgr.h"
+#include "CAbstractFactory.h"
+#include "CPlayerBullet.h"
 
 CGun::CGun()
 {
@@ -37,7 +40,7 @@ void CGun::Initialize()
 	m_pIconKey = L"BambooSwordIcon";
 
 	CWeapon::Initialize();
-	
+	m_Length = 70.f;
 
 }
 
@@ -51,7 +54,14 @@ int CGun::Update()
 	m_vDirection = Vector2::Nomalize(worldmouse - m_vPosition);
 
 
-	angle = atan2f(m_vDirection.y, m_vDirection.x) + PI / 2.f + PI / 2.f;
+	angle = atan2f(m_vDirection.y, m_vDirection.x) + PI / 2.f ;
+
+	Vector2 endBarrel = m_vDirection * m_Length;
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+	{
+		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayerBullet>::Create((endBarrel+m_vPosition), {16,3}, m_vDirection));
+
+	}
 
 	CWeapon::Update();
 	return 0;

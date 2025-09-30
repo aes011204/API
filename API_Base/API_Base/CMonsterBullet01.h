@@ -1,13 +1,14 @@
 #pragma once
 #include "CBullet.h"
-class CPlayerBullet :
-    public CBullet
+class CMonsterBullet01 :
+	public CBullet
 {
 public:
-	CPlayerBullet();
 
-	~CPlayerBullet() override;
-	 
+
+	CMonsterBullet01();
+	~CMonsterBullet01() override;
+
 public:
 	void Initialize() override;
 	int  Update() override;
@@ -23,5 +24,7 @@ public:
 	void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other) override;
 	void Take_Damage(int _damage) override;
 	void Motion_Change();
+
+
 };
 

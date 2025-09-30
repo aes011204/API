@@ -1,15 +1,16 @@
 #pragma once
 #include "CMonster.h"
-#include "CBossHand.h"
 class CUI;
-class CBoss :
-	public CCreature
+class CMonsterBat :
+    public CMonster
 {
 public:
-	enum BOSSSTATE { IDLE = 0, BULLETATTACK, SWORDATTACK, HANDATTACK, DEMAGE, DEAD, ST_END };
+	enum MONSTATE { IDLE = 0, BULLETATTACK, SWORDATTACK, DEMAGE, DEAD, ST_END };
 public:
-	CBoss();
-	virtual ~CBoss();
+	CMonsterBat();
+	CMonsterBat(Vector2 pos, Vector2 size)
+		: CMonster(pos, size), m_eCurState(ST_END), m_ePreState(ST_END), m_hitFlash(false), m_bSwordDone(false), SwordCountMax(5) {}
+	virtual ~CMonsterBat();
 public:
 	void Initialize();
 	int Update();
@@ -22,7 +23,7 @@ public:
 
 	void BulletAttack();
 	void SwordAttack();
-	void HandAttack();
+
 
 	void Motion_Change();
 	void Do_Attack();
@@ -35,8 +36,8 @@ public:
 
 private:
 
-	BOSSSTATE	m_eCurState;
-	BOSSSTATE	m_ePreState;
+	MONSTATE	m_eCurState;
+	MONSTATE	m_ePreState;
 	int m_nextIndex = 0;
 
 	bool m_hitFlash;
@@ -62,7 +63,7 @@ private:
 	int SwordCount = 0;
 	int SwordCountMax;
 	bool m_bSwordDone;
-	vector<CObj*>* m_TmpSword;
+	
 
 	int m_iAngle;
 	int m_iBarrelNum;
@@ -71,17 +72,9 @@ private:
 	float DeadTime = 0.f;
 	float DeadTimeMax = 0.f;
 
-	Vector2 LeftHandPos;
-	Vector2 RightHandPos;
-
-	CBossHand* m_RHand;
-	CBossHand* m_LHand;
-
 	CUI* statebar;
 
 	FRAME m_tEFFrame;
-
-	bool m_NearPlayer = false;
-
+	Vector2 m_vRealSize;
 };
 

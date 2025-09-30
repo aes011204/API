@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CStateBar.h"
 #include "CBmpMgr.h"
-
+#include "CCreature.h"
 CStateBar::CStateBar() :TargetCurInfo(0), TargetMaxInfo(0), OtherInfo(0)
 {
 }
@@ -19,6 +19,8 @@ void CStateBar::Initialize()
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/BossLifeBase.bmp", L"BossBase");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/BossLifeBack.bmp", L"BossBack");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/monster/MonsterHpBar.bmp", L"MonsterHpBar");
 }
 
 int CStateBar::Update()
@@ -110,6 +112,13 @@ void CStateBar::Render(HDC hdc)
 		Vector2 resize = size * .8f;
 		HPBarRender(hdc, L"BossBack", L"BossBase", { WINCX * .5f  -resize.x * .5f ,WINCY - 90.f}, size, resize);
 	}
+	else if (m_tTarget->Get_ID() == MONSTER)
+	{
+		Vector2 size = { 74,20 };
+		Vector2 resize = { size.x*.9f,size.y * 0.6f };
+		Vector2 pos = m_tTarget->GetPosition();
+		HPBarRender(hdc, L"MonsterHpBar", L"NULL", { pos.x-m_tTarget->GetSize().x*.5f, pos.y + m_tTarget->GetSize().y*.8f }, size, resize);
+	}
 	
 }
 
@@ -126,6 +135,13 @@ bool CStateBar::IsColl()
 void CStateBar::HPBarRender(HDC hdc, const TCHAR* back,const TCHAR* base, Vector2 pos, Vector2 size, Vector2 resize)
 {
 
+	if (m_tTarget->Get_ID() == MONSTER)
+	{
+		resize = CCamera::Get_Instance()->GetRenderSize(resize);
+		pos = CCamera::Get_Instance()->GetRenderPos(pos);
+		if (m_tTarget->Get_HP() == m_tTarget->Get_MaxHP())
+			return;
+	}
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(back);
 
 	// 스프라이트시트에서 가져올 소스 사각형(프레임)
@@ -143,11 +159,20 @@ void CStateBar::HPBarRender(HDC hdc, const TCHAR* back,const TCHAR* base, Vector
 	Vector2 redPos = { pos.x + 80 , pos.y };// 좌상단 기준
 	Vector2 redSize = { resize.x - 80 - 5,resize.y - 1 };
 
+	if (m_tTarget->Get_ID() == MONSTER)
+	{
+		redPos = { pos.x +1.5f, pos.y+1.5f };// 좌상단 기준
+		redSize = { resize.x  - 3,resize.y - 3 };
+		//redSize = CCamera::Get_Instance()->GetRenderSize(redSize);
+		//redPos = CCamera::Get_Instance()->GetRenderSize(redPos);
+	}
+
 	CUI::DrawHP(hdc, redPos.x, redPos.y, redSize.x, redSize.y, TargetCurInfo, TargetMaxInfo);
 
+	if (base == L"NULL")
+		return;
 
 	HDC	hMemDC2 = CBmpMgr::Get_Instance()->Find_Img(base);
-
 
 	GdiTransparentBlt(
 		hdc,

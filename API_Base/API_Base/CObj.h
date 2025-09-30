@@ -50,6 +50,7 @@ public:
 	//void EffUpdate(Vector2& objPos);
 	void EffRender(HDC hdc);
 
+
 	void Move_Frame();
 
 	vector<CColliderComp>& Get_Collider() { return m_vCollider; }

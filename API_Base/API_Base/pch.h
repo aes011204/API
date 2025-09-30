@@ -1,12 +1,5 @@
 #pragma once
 
-//GDI+
-
-//#define NOMINMAX                 // <windows.h>의 min/max 매크로 무력화 (std::min/max 충돌 방지)
-//#include <windows.h>             // 반드시 gdiplus.h보다 먼저
-//#include <gdiplus.h>
-//#pragma comment(lib, "gdiplus.lib") 
-
 #include "framework.h"
 #include <cmath>
 #include <list>
@@ -27,13 +20,6 @@ using namespace std;
 
 
 // 사운드 
-//#include <Vfw.h>
-//#pragma comment(lib, "vfw32.lib")
-//
-//#include "fmod.h"
-//#include "fmod.hpp"
-//
-//#pragma comment(lib, "fmodex_vc.lib")
 
 #include "fmod.hpp"
 #include "fmod_errors.h"

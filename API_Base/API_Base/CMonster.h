@@ -6,6 +6,8 @@ class CMonster :
 public:
 public:
 	CMonster();
+	CMonster(Vector2 pos, Vector2 size) : CCreature(pos, size) {}
+
 	virtual ~CMonster();
 public:
 	void Initialize();
@@ -14,12 +16,6 @@ public:
 	void Render(HDC hdc);
 	void Release();
 
- 
-	
-	//void On_Collision(CObj* obj, vector<CColliderComp>& myCollider, vector<CColliderComp>& otherCollider);
-	//void On_Collision(CObj* obj, ColliderType my, ColliderType other);
-	//void On_Collision(CObj* obj, vector<CColliderComp>::iterator my, vector<CColliderComp>::iterator other);
-	// CCreature을(를) 통해 상속됨
 	void Take_Damage(int _damage) override;
 
 	virtual void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other);

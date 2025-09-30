@@ -1,29 +1,34 @@
 #include "pch.h"
-#include "CPlayerBullet.h"
+#include "CMonsterBullet01.h"
 #include "CBmpMgr.h"
+#include "CCamera.h"
 
-CPlayerBullet::CPlayerBullet()
+CMonsterBullet01::CMonsterBullet01()
 {
 }
 
-CPlayerBullet::~CPlayerBullet()
+CMonsterBullet01::~CMonsterBullet01()
 {
 }
 
-void CPlayerBullet::Initialize()
+void CMonsterBullet01::Initialize()
 {
     CBullet::Initialize();
-    m_vSize = { 18,10 };
+    m_vSize = { 13,16 };
+    m_fSpeed = 300.f;
+    m_fSpeedY = 300.f;
 
-    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Item/Bullet02.bmp", L"Bullet07");
-    //CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Item/BossBulletEffect.bmp", L"BossBulletDead");
+    m_iDamage = 1.f;
 
-    m_pFrameKey = L"Bullet07";
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BansheeBulletSprite.bmp", L"BansheeBullet");
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BansheeBulletBoomSprite.bmp", L"BansheeBulletBoom");
+
+    m_pFrameKey = L"BansheeBullet";
     m_tFrame.iStart = 0;
-    m_tFrame.iEnd = 0;
+    m_tFrame.iEnd = 3;
     m_tFrame.dwSpeed = .3f;
     m_tFrame.dwTime = 0.f;
-    m_tFrame.vSize = { 18,10 };
+    m_tFrame.vSize = { 13,16 };
 
     m_eCurState = IDLE;
 
@@ -31,7 +36,7 @@ void CPlayerBullet::Initialize()
 
 }
 
-int CPlayerBullet::Update()
+int CMonsterBullet01::Update()
 {
     CBullet::Update();
     if (m_bDead)
@@ -46,7 +51,7 @@ int CPlayerBullet::Update()
     return 0;
 }
 
-void CPlayerBullet::Late_Update()
+void CMonsterBullet01::Late_Update()
 {
     CBullet::Late_Update();
 
@@ -60,7 +65,7 @@ void CPlayerBullet::Late_Update()
 
 }
 
-void CPlayerBullet::Render(HDC hDC)
+void CMonsterBullet01::Render(HDC hDC)
 {
 
 
@@ -70,48 +75,48 @@ void CPlayerBullet::Render(HDC hDC)
 
 }
 
-void CPlayerBullet::Release()
+void CMonsterBullet01::Release()
 {
     CBullet::Release();
 
 }
 
-void CPlayerBullet::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
+void CMonsterBullet01::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
-    if (obj->Get_ID() == PLAYER )
+    if (obj->Get_ID() == MONSTER || obj->Get_ID() == BOSS)
         return;
     CBullet::On_Collision(obj, my, other);
 
 }
 
-void CPlayerBullet::Take_Damage(int _damage)
+void CMonsterBullet01::Take_Damage(int _damage)
 {
 }
 
-void CPlayerBullet::Motion_Change()
+void CMonsterBullet01::Motion_Change()
 {
     if (m_ePreState != m_eCurState)
     {
         switch (m_eCurState)
         {
         case IDLE:
+            m_pFrameKey = L"BansheeBullet";
             m_tFrame.iStart = 0;
-            m_tFrame.iEnd = 0;
+            m_tFrame.iEnd = 3;
             m_tFrame.dwSpeed = .3f;
             m_tFrame.dwTime = 0.f;
-            m_tFrame.vSize = { 18,10 };
-
+            m_tFrame.vSize = { 13,16 };
             m_vSize = m_tFrame.vSize;
             break;
 
 
         case DEAD:
-            m_pFrameKey = L"BossBulletDead";
+            m_pFrameKey = L"BansheeBulletBoom";
             m_tFrame.iStart = 0;
-            m_tFrame.iEnd = 3;
+            m_tFrame.iEnd = 5;
             m_tFrame.dwSpeed = .2f;
             m_tFrame.dwTime = 0.f;
-            m_tFrame.vSize = { 16,3 };
+            m_tFrame.vSize = { 20,27 };
             m_vSize = m_tFrame.vSize;
             break;
 
