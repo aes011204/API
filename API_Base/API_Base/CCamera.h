@@ -14,6 +14,8 @@ public:
 	void SetTarget(CObj* obj) { m_tTargetObj = obj; }
 	void CalDiff();
 
+	void Shack(int a, int b);
+
 
 	void SetBackSize(Vector2 _backSize) {m_vBackSize = _backSize;}
 
@@ -42,6 +44,7 @@ public:
 	float GetZoom() { return m_fZoom; }
 
 	Vector2 Get_WorldSize() {return m_vBackSize;}
+	void Set_Shack(bool b) { m_Shack = b; }
 
 	void Update();
 private:
@@ -60,6 +63,11 @@ private:
 	float m_fZoom ;
 
 	Vector2 m_vBackSize;
+
+	float m_accTimetmp;
+	bool m_Shack = false;
+	Vector2 m_vShake;
+	bool bSw = false;
 
 #pragma region Singleton
 public:

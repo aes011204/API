@@ -4,6 +4,7 @@
 #include "CCamera.h"
 #include "CObjMgr.h"
 #include "CTimeMgr.h"
+#include "CSoundManager.h"
 
 
 CBossHand::CBossHand() : m_eCurState(HS_END), m_ePreState(HS_END), m_LeftRight(HAND_END), m_isAttack(false), m_bAttack(false)//, m_AttackDone (false)
@@ -161,12 +162,16 @@ void CBossHand::Do_Attack()
 
 	if (m_AttackPos.y + 10 >= m_vPosition.y && m_AttackPos.y - 10 <= m_vPosition.y)
 	{
+
 		m_eCurState = ATTACK;
 		Motion_Change();
 		if (m_LeftRight == HAND_LEFT)
 		{
 			if (m_tFrame.iStart == 10)
 			{
+				float m_fVolume = 20.f;
+				CSoundManager::Get_Instance()->PlayFX(L"Belial_lazer.wav", SOUND_EFFECT, m_fVolume);
+
 				m_vEffect.push_back(CEffectComp({ 120,5 }, this, m_tEFFrameLR, { m_tEFFrameLR.vSize.x,m_tEFFrameLR.vSize.y }, L"LaserHeadL"));
 				m_vEffect.push_back(CEffectComp({ 100 + m_tEFFrame.vSize.x  ,0.f }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y }, L"LaserBody"));
 		
@@ -183,6 +188,9 @@ void CBossHand::Do_Attack()
 		{
 			if (m_tFrame.iStart == 10)
 			{
+				float m_fVolume = 20.f;
+				CSoundManager::Get_Instance()->PlayFX(L"Belial_lazer.wav", SOUND_EFFECT, m_fVolume);
+
 				m_vEffect.push_back(CEffectComp({ -120,5 }, this, m_tEFFrameLR, { m_tEFFrameLR.vSize.x,m_tEFFrameLR.vSize.y }, L"LaserHeadR"));
 				
 					m_vEffect.push_back(CEffectComp({-100 - m_tEFFrame.vSize.x  ,0.f }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y },L"LaserBody"));

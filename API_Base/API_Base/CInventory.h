@@ -33,7 +33,7 @@ public:
 
 	bool Is_Sell_Item(int _ItemIndex, int& iMoney);
 
-
+	
 	//void Equip_Item();
 	//void Unequip_Item();
 

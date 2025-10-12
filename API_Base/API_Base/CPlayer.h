@@ -34,7 +34,9 @@ public:
 	void Dash(Vector2 tmpdir);
 	void LimitPlayerPos();
 
-	int Equip_Item(int invenIndex, CItem* pInvenItem, int num);
+	int Equip_Item(int invenIndex, CItem* pInvenItem, int num, int setIndex);
+
+	//int Equip_Item(int invenIndex, CItem* pInvenItem, int num);
 
 	//int Equip_Item(CItem* pInvenItem, int num);
 
@@ -53,6 +55,17 @@ public:
 
 	bool Get_OnAttack() const { return m_bOnAttack; }
 	void Set_OnAttack(bool value) { m_bOnAttack = value; }
+
+	bool GetVisible() { return m_visible; }
+	void SetVisible(bool visible) { m_visible = visible; }
+
+	bool GetChangeEquip() { return m_ChangeEquip; }
+
+	void SetQuest(bool accept) { m_quest = accept; }
+
+
+	int GetFromInven() { return fromInven; }
+	void SetFromInven(int index) {fromInven = index; }
 
 private:
 
@@ -85,8 +98,7 @@ private:
 	array<CItem*, 2> m_Equipweapon02;
 	array<CItem*, 4> m_EquipAcc;
 	CInventory* m_Inven;
-	bool m_ChangeEquip = 0; // flase = 1, true =2 ¸¸°¡´É
-
+	bool m_ChangeEquip = false; //
 	int m_equipSlot = 4;
 
 	bool m_bOnAttack =false; 
@@ -96,5 +108,12 @@ private:
 	float m_AttackTimeMax =0.f;
 
 	CItem* weapon;
+
+	bool m_visible = true;
+
+	bool m_quest = false;
+
+	int fromInven = -1;
+	
 };
 

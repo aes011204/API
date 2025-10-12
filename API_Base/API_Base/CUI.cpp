@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CUI.h"
 #include "CCreature.h"
+#include "CNonCreature.h"
 CUI::CUI() : m_tTarget(nullptr), m_bDead(false)
 {
 	ZeroMemory(&m_tRect, sizeof(m_tRect));
@@ -110,4 +111,26 @@ void CUI::DrawHP(HDC hDC, float x, float y, float width, float height, float Hp,
 	SelectObject(hDC, prevPen);
 	DeleteObject(newBrush);
 	DeleteObject(newPen);
+}
+void CUI::text(HDC hdc, RECT rc, const WCHAR* str, int nHeight, int nWidth, int nWeight )
+{
+	AddFontResource((L"../Font/AaCassiopeia.ttf"));
+	HFONT currentFont = CreateFont(nHeight, nWidth, 0, 0, nWeight, 0, 0, 0,
+		HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("AaCassiopeia"));
+	HFONT oldFont = (HFONT)SelectObject(hdc, currentFont);
+
+	SetBkMode(hdc, TRANSPARENT); // µﬁπË∞Ê ≈ı∏Ì
+
+	SetTextColor(hdc, 0x00ffffff);
+
+	
+	//RECT rcTop = { rc.left, rc.top, rc.right, rc.bottom };
+	//DrawText(hdc, str, -1, &rcTop, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	//
+	//SetTextColor(hdc, 0x00000000);
+
+	//TextOut(hdc, pos.x, pos.y, str, wcslen(str));
+	DrawText(hdc, str, -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	SelectObject(hdc, oldFont);
+	DeleteObject(currentFont);
 }

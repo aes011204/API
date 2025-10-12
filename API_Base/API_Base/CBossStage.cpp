@@ -16,16 +16,19 @@
 #include "CWall.h"
 #include "CKeyMgr.h"
 #include "CSoundManager.h"
+#include "Mouse.h"
 
 void CBossStage::Initialize()
 {
 
 	{
 		//CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossMap.bmp", L"BossMap");
-		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create({10.f,850.f}));
+		//CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create({10.f,850.f}));
 		dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetStop(false);
+		dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetPosition({15,860});
 
 		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CBoss>::Create());
+		CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<Mouse>::Create());
 
 		CCamera::Get_Instance()->Bootstrap(CObjMgr::Get_Instance()->Get_Player()->GetPosition());
 		CCamera::Get_Instance()->SetBackSize({ 1056.f,1056.f });
@@ -40,7 +43,7 @@ void CBossStage::Initialize()
 
 	PlatformInit();
 
-	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI((CCreature*)CObjMgr::Get_Instance()->Get_Player()));
+	//CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI((CCreature*)CObjMgr::Get_Instance()->Get_Player()));
 	
 
 
@@ -52,6 +55,12 @@ void CBossStage::Initialize()
 
 int CBossStage::Update()
 {
+
+	//Vector2 mouse = CKeyMgr::Get_Instance()->GetMousePos();
+	//Vector2 worldmouse = CCamera::Get_Instance()->GetRealPos(mouse);
+	//cout << worldmouse.x << " , " << worldmouse.y << endl;
+	//
+
 	CTileMgr::Get_Instance()->Update();
 
 	CUIMgr::Get_Instance()->Update();
@@ -107,7 +116,7 @@ void CBossStage::Release()
 {
 	CTileMgr::Get_Instance()->Release();
 	CObjMgr::Get_Instance()->Release();
-	CUIMgr::Get_Instance()->Release();
+	//CUIMgr::Get_Instance()->Release();
 	CSoundManager::Get_Instance()->StopAll();
 }
 

@@ -25,7 +25,10 @@ public:
 
 	CPlayer* Get_Target() const { return m_tTarget; }
 	void Set_Target(CPlayer* pTarget) { m_tTarget = pTarget; }
-
+	WEAPONTYPE GetWeaponType() {
+		return m_eWeaponType
+			;
+	}
 	
 protected:
 	WEAPONTYPE m_eWeaponType = WT_END;

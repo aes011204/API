@@ -15,6 +15,7 @@
 #include "CBossHand.h"
 #include "CBossBullet.h"
 #include "CMonsterBullet01.h"
+#include "CSoundManager.h"
 
 
 
@@ -232,7 +233,7 @@ void CMonsterBigSkull::Render(HDC hdc)
 
 void CMonsterBigSkull::Release()
 {
-
+	statebar->Set_Dead(true);
 }
 
 void CMonsterBigSkull::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
@@ -292,13 +293,23 @@ void CMonsterBigSkull::On_Collision(CObj* obj, CColliderComp& my, CColliderComp&
 void CMonsterBigSkull::SwordAttack()
 {
 
-	if(m_tFrame.iStart >= 2 && m_tFrame.iStart <= 5)
+	if (m_tFrame.iStart >= 2 && m_tFrame.iStart <= 5)
+	{
 	m_bOnAttack = true;
+	if (m_tFrame.iStart >=0)
+	{
+
+	float m_fVolume = 20.f;
+	CSoundManager::Get_Instance()->PlaySound(L"swing0.wav", CHANNELID::SOUND_EAT1, m_fVolume);
+
+	}
+	}
 	else
 		m_bOnAttack = false;
 
 	if (m_tFrame.iStart >= m_tFrame.iEnd)
 		m_bStart = false;
+
 
 
 }
@@ -377,7 +388,7 @@ void CMonsterBigSkull::Take_Damage(int _damage)
 //	m_hitFlash = true;
 //	m_HitTime = m_HitTimeMax;
 //
-	cout << m_iHP << endl;
+	
 
 }
 
@@ -414,7 +425,7 @@ void CMonsterBigSkull::DeadEffect()
 
 void CMonsterBigSkull::Move()
 {
-	if (m_bStart == true || m_eCurState == DEAD || m_eCurState == SWORDATTACK)
+	if (m_bStart == true || m_eCurState == DEAD /*|| m_eCurState == SWORDATTACK*/)
 		return;
 	m_eCurState = MOVE;
 	if (m_tTarget->GetPosition().x -50 >= m_vPosition.x)// ¿ÞÂÊ

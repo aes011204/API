@@ -3,6 +3,7 @@
 #include "CBmpMgr.h"
 #include "CTimeMgr.h"
 #include "CObjMgr.h"
+#include "CSoundManager.h"
 
 CBossBullet::CBossBullet() :tmpboo(false),endtime(0.f)
 {
@@ -106,6 +107,10 @@ void CBossBullet::Late_Update()
 
     if (delayT <= 0)
     {
+
+        float m_fVolume = 20.f;
+        CSoundManager::Get_Instance()->PlayFX(L"Belial_sword_shoot.wav", SOUND_EFFECT, m_fVolume);
+
        // cout << tmpDir.x << " , " << tmpDir.x  << endl;
         m_vPosition += m_vDirection * (m_fSpeed * (float)CTimeMgr::Get_Instance()->GetDeltaTime());
     }

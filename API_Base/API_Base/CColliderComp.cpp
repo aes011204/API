@@ -2,9 +2,15 @@
 #include "CColliderComp.h"
 #include "CCamera.h"
 #include "CObj.h"
+#include "CKeyMgr.h"
 
 void CColliderComp::ColUpdate(Vector2& objPos)
 {
+
+	if (CKeyMgr::Get_Instance()->Key_Down('0'))
+	{
+		m_visible = !m_visible;
+	}
 	{
 
 		m_vDirection = m_obj->GetDirection();
@@ -52,6 +58,8 @@ void CColliderComp::ColUpdate(Vector2& objPos)
 
 void CColliderComp::ColRender(HDC hdc, Vector2& objPos)
 {
+	if (m_visible)
+	{
 
 	HPEN hBluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	HPEN hRedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
@@ -119,6 +127,7 @@ void CColliderComp::ColRender(HDC hdc, Vector2& objPos)
 	DeleteObject(hGreenPen);
 
 	ReleaseDC(g_hWnd, hdc);
+	}
 }
 
 Vector2 CColliderComp::GetColPosition()

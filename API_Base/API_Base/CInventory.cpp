@@ -9,6 +9,8 @@
 #include "CGun.h"
 #include "CAccecery.h"
 #include "CKeyMgr.h"
+#include "CSword02.h"
+#include "CSword03.h"
 
 CInventory::CInventory() : m_iSlotNum(15)
 {
@@ -36,10 +38,10 @@ m_vecInvenSlot[2] = (tmp2);
 
 void CInventory::Update()
 {
-	if (CKeyMgr::Get_Instance()->Key_Down('0'))
-	{
-		Equip_Item(0, 0);
-	}
+	//if (CKeyMgr::Get_Instance()->Key_Down('0'))
+	//{
+	//	Equip_Item(0, 0);
+	//}
 
 	//for (int i = 0; i < m_vecInvenSlot.size(); ++i)
 	//{
@@ -74,11 +76,15 @@ void CInventory::Remove_Item(int index)
 }
 bool CInventory::Get_Is_Full()
 {
-	if (m_vecInvenSlot.size() >= m_iSlotNum)
+
+
+	for (size_t i = 0; i < m_vecInvenSlot.size(); ++i)
 	{
-		return true;
+		if (m_vecInvenSlot[i] == nullptr)
+			return false;
+		
 	}
-	return false;
+	return true;
 }
 
 void CInventory::Swap_Item(int src, int dst)
@@ -117,11 +123,12 @@ int CInventory::Put_Item(CItem* _BuyItem)
 		{
 			m_vecInvenSlot[slot] = new CAccecery(*a);
 		}
-		else if (auto* a = dynamic_cast<CGun*>(_BuyItem))
-		{
-			m_vecInvenSlot[slot] = new CGun(*a);
+		else if (auto* w = dynamic_cast<CSword02*>(_BuyItem)) {
+			m_vecInvenSlot[slot] = new CSword02(*w);
 		}
-
+		else if (auto* w = dynamic_cast<CSword03*>(_BuyItem)) {
+			m_vecInvenSlot[slot] = new CSword03(*w);
+		}
 
 		return 0;
 	}
@@ -165,23 +172,24 @@ int CInventory::Unequip_Item(CItem* item, int dst)
 
 bool CInventory::Is_Sell_Item(int _ItemIndex, int& iMoney)
 {
-//
-//	CItem* item = dynamic_cast<CItem*>(m_vecInvenSlot[_ItemIndex]);
-//
-//	if (item->GetItemState() == CItem::EQUIP)
-//	{
-//		dynamic_cast<CPlayer*>(m_pPlayer)->Unequip_Item(m_vecInvenSlot[_ItemIndex]);
-//	}
-//
-//	vector<CItem*>::iterator iter = m_vecInvenSlot.begin();
-//
-//	iter += _ItemIndex;
-//
-//	iMoney = (*iter)->Get_Cost() >> 1; // 비트연산 /2 와 같음
-//
-//	Safe_Delete<CItem*>(*iter);
-//	m_vecInvenSlot.erase(iter);
-//
+	if (m_vecInvenSlot[_ItemIndex] == nullptr)
+		return false;
+	CItem* item = dynamic_cast<CItem*>(m_vecInvenSlot[_ItemIndex]);
+
+	//if (item->GetItemState() == CItem::EQUIP)
+	//{
+	//	dynamic_cast<CPlayer*>(m_pPlayer)->Unequip_Item(m_vecInvenSlot[_ItemIndex]);
+	//}
+
+	vector<CItem*>::iterator iter = m_vecInvenSlot.begin();
+
+	iter += _ItemIndex;
+
+	iMoney = (*iter)->Get_Money() >> 1; // 비트연산 /2 와 같음
+
+	Safe_Delete<CItem*>(*iter);
+	//m_vecInvenSlot.erase(iter);
+
 return true;
 
 }
@@ -189,10 +197,9 @@ return true;
 
 CItem* CInventory::Get_InvenItem(int index)
 {
-	if (index <0 && index > m_vecInvenSlot.size())
+	if (index < 0 || static_cast<size_t>(index) >= m_vecInvenSlot.size())
 		return nullptr;
-	else
-		return m_vecInvenSlot[index];
+	return m_vecInvenSlot[index];
 }
 
 void CInventory::moved_Item(int index)

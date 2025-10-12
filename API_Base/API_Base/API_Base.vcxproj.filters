@@ -303,7 +303,28 @@
     <ClInclude Include="CMonsterBullet01.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CText.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CQuest.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CShopCell.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CCoin.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CSword02.h">
+      <Filter>08.Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CSword03.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="CMonsterBigSkull.h">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -503,7 +524,28 @@
     <ClCompile Include="CMonsterBullet01.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CQuest.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CShopCell.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CCoin.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CText.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CSword02.cpp">
+      <Filter>08.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CSword03.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="CMonsterBigSkull.cpp">
+      <Filter>01.Object\00.Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

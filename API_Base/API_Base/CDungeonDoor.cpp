@@ -6,6 +6,7 @@
 #include "CCamera.h"
 #include "CPlayer.h"
 #include"CSceneMgr.h"
+#include "CSoundManager.h"
 
 void CDungeonDoor::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 {
@@ -23,6 +24,10 @@ void CDungeonDoor::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& oth
 					m_OnPlayer = true;
 				dynamic_cast<CPlayer*>(obj)->SetStop(true);
 
+				if (m_tFrame.iStart >= 9)
+				{
+					dynamic_cast<CPlayer*>(obj)->SetVisible(false);
+				}
 				}
 			}
 
@@ -67,6 +72,15 @@ int CDungeonDoor::Update()
 	if (m_OnPlayer == true)
 	{
 		CNonCreature::Move_Frame();
+		
+			float m_fVolume = 20.f;
+
+			CSoundManager::Get_Instance()->PlaySound(L"DungeonEat2.wav", SOUND_EFFECT, m_fVolume);
+
+			CSoundManager::Get_Instance()->PlaySound(L"DungeonEat.wav", SOUND_EFFECT, m_fVolume);
+
+
+		
 
 		if (m_tFrame.iStart == m_tFrame.iEnd)
 		{

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CScene.h"
 #include "CCamera.h"
+#include "CCoin.h"
+#include "CAbstractFactory.h"
 
 CScene::CScene()
 {
@@ -9,6 +11,7 @@ CScene::CScene()
 CScene::~CScene()
 {
 }
+
 
 void CScene::RenderBG(HDC hdc, HDC	hGroundDC,Vector2 startPos, Vector2 size)
 {
@@ -29,3 +32,8 @@ void CScene::RenderBG(HDC hdc, HDC	hGroundDC,Vector2 startPos, Vector2 size)
 		StretchBlt(hdc, dstX, dstY, dstW, dstH, hGroundDC, 0, 0, 1920, 1280, SRCCOPY);
 	}
 }
+
+//void CScene::Drop_Money(Vector2 pos)
+//{
+//	m_vecCoin.push_back(CAbstractFactory<CCoin>::Create(pos));
+//}

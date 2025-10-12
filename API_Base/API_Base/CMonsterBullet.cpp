@@ -18,7 +18,7 @@ void CMonsterBullet::Initialize()
 
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossBullet.bmp", L"BossBullet");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Boss/BossBulletEffect.bmp", L"BossBulletDead");
-
+   
     m_pFrameKey = L"BossBullet";
     m_tFrame.iStart = 0;
     m_tFrame.iEnd = 1;

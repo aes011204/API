@@ -9,6 +9,11 @@
 #include "CCamera.h"
 #include "CKeyMgr.h"
 #include "CSoundManager.h"
+#include "CUIMgr.h"
+
+#include <psapi.h>
+#include "Mouse.h"
+
 CMainGame::CMainGame() :m_hDC(nullptr)
 {
 }
@@ -20,7 +25,15 @@ CMainGame::~CMainGame()
 
 void CMainGame::Initialize()
 {
+	InitRand();
+
 	CSoundManager::Get_Instance()->Initialize();
+
+	HDC hmdm = CBmpMgr::Get_Instance()->Find_Img(L"BatBullet");
+	if (hmdm == nullptr)
+	{
+		cout << "sd" << endl;
+	}
 
 	m_hDC = GetDC(g_hWnd);
 
@@ -44,8 +57,8 @@ void CMainGame::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Ground.bmp", L"Back");
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/MapTile.bmp", L"Tile");
-
-
+	
+	Mouse::Get_Instance()->Initialize();
 }
 
 int CMainGame::Update()
@@ -56,6 +69,8 @@ int CMainGame::Update()
 	CSceneMgr::Get_Instance()->Update();
 
 	CKeyMgr::Get_Instance()->Key_Update();
+
+	Mouse::Get_Instance()->Update();
 	return 0;
 }
 
@@ -63,6 +78,7 @@ void CMainGame::Late_Update()
 {
 	
 	CSceneMgr::Get_Instance()->Late_Update();
+
 }
 
 void CMainGame::Render()
@@ -76,6 +92,7 @@ void CMainGame::Render()
 	//HDC	hBackDC = CBmpMgr::Get_Instance()->Find_Img(L"Back");
 
 	CSceneMgr::Get_Instance()->Render(hBackDC); 
+		Mouse::Get_Instance()->Render(hBackDC);
 
 	SetStretchBltMode(hBackDC, COLORONCOLOR); // (부드럽게면 HALFTONE)
 
@@ -86,13 +103,34 @@ void CMainGame::Render()
 		BitBlt(m_hDC, 0, 0, m_rect.right, m_rect.bottom, hBackDC, 0, 0, SRCCOPY);
 		PatBlt(hBackDC, 0, 0, m_rect.right, m_rect.bottom, WHITENESS);
 	}
+
+
+	static DWORD lastTick = 0;
+	
+		DWORD now = GetTickCount();
+		if (now - lastTick < 1000) return;
+		lastTick = now;
+
+		HANDLE hProc = GetCurrentProcess();
+		// GR_GDIOBJECTS = 0, GR_USEROBJECTS = 1
+		DWORD gdi = GetGuiResources(hProc, GR_GDIOBJECTS);
+		DWORD usr = GetGuiResources(hProc, GR_USEROBJECTS);
+
+		PROCESS_MEMORY_COUNTERS pmc{};
+		GetProcessMemoryInfo(hProc, &pmc, sizeof(pmc));
+
+		wchar_t buf[256];
+		swprintf(buf, 256, L"[RES] GDI=%u, USER=%u, WSPrivate=%.1fMB\n",
+			gdi, usr, pmc.WorkingSetSize / (1024.0 * 1024.0));
+		OutputDebugStringW(buf);
+
 }
 
 void CMainGame::Release()
 {
 	CSoundManager::Destroy_Instance();
 	CSceneMgr::Get_Instance()->Release();
-
+	CUIMgr::Get_Instance()->Release();
 
 	ReleaseDC(g_hWnd, m_hDC);
 }

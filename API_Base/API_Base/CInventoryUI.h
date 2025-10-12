@@ -22,12 +22,15 @@ public:
     bool IsColl() override;
     void KeyInput();
     void Put_Down(CInventoryUI::INVENTYPE type, int index);
+
+    void SetOnInven(bool b) { m_bOnInven = b; }
 public:
 
 private:
     CInventory* m_Inven = nullptr;
     
     bool m_bOnInven= false;
+    //CUI* m_Equipweapon01[2];
 
     CUI* m_Equipweapon01[2];
     CUI* m_Equipweapon02[2];

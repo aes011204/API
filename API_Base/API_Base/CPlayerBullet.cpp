@@ -14,7 +14,7 @@ void CPlayerBullet::Initialize()
 {
     CBullet::Initialize();
     m_vSize = { 18,10 };
-
+    m_fSpeed = 800;
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Item/Bullet02.bmp", L"Bullet07");
     //CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Item/BossBulletEffect.bmp", L"BossBulletDead");
 

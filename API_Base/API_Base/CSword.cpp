@@ -19,7 +19,7 @@ CSword::~CSword()
 void CSword::Initialize()
 {
 
-	
+	m_eWeaponType = CWeapon::SWORD;
 }
 
 int CSword::Update()
@@ -39,7 +39,9 @@ int CSword::Update()
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 	{
 		m_IsFlipped = !m_IsFlipped;
-		m_OffsetDst = m_IsFlipped ? PI : 0.f;
+		//m_OffsetDst = m_IsFlipped ? PI : 0.f;
+		constexpr float kFlipAngle = PI * (160.f / 180.f);
+		m_OffsetDst = m_IsFlipped ? kFlipAngle : 0.f;
 	}
 
 	// 3) 오프셋 보간 (그대로)
@@ -67,7 +69,7 @@ int CSword::Update()
 		angle = atan2f(sinf(finalAngle), cosf(finalAngle)); // 래핑
 
 	}
-	// 5) 최종 각도 = base + 오프셋 + (플립 상태일 때만 측면 보정)
+
 
 
 

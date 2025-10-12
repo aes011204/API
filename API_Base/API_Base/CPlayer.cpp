@@ -13,6 +13,12 @@
 #include "CSword01.h"
 #include "CAccecery.h"
 #include "CInventoryUI.h"
+#include "CUIMgr.h"
+#include "CStateBar.h"
+#include "CQuest.h"
+#include "CSoundManager.h"
+#include "CCoin.h"
+#include "CPlayerBullet.h"
 
 CPlayer::CPlayer() :
 	m_eCurState(PS_END), m_ePreState(PS_END), m_fInvincibleTime(0.f), m_bDash(false), m_DashDuration(0.f), m_DashSpeed(0.f), m_DashTime(0.f),
@@ -36,7 +42,7 @@ void CPlayer::Initialize()
     m_vSize = { 78.f, 60.f };
     m_vPosition = { WINCX*.5f,WINCY*.5f };
     m_fSpeed = 500.f;
-	
+	m_fSpeedY = 500.f;
 	m_iMaxHP = 80;
 	m_iHP = m_iMaxHP;
 
@@ -45,6 +51,7 @@ void CPlayer::Initialize()
 
 	m_fInvincibleTime = 0.5f;
 
+	m_iMoney = 1000;
 
 	m_DashSpeed = 500.f;
 	m_DashDuration = 5.f;
@@ -87,6 +94,10 @@ void CPlayer::Initialize()
 	m_Inven = new CInventory();
 	m_Inven->Initialize();
 	m_Inven->Set_Player(this);
+
+	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI(this));
+	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CInventoryUI>::CreateUI(this));
+
 }
 
 int CPlayer::Update()
@@ -177,6 +188,13 @@ int CPlayer::Update()
 
 	m_Inven->Update();
 
+
+	if (m_quest == true)
+	{
+		//CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CQuest>::CreateUI(this));
+		m_quest = false;
+	}
+
     return 0;
 
 }
@@ -226,7 +244,8 @@ void CPlayer::Late_Update()
 
 void CPlayer::Render(HDC hdc)
 {
-
+	if (m_visible == false)
+		return;
 	{
 		// 장착 무기 업데이트
 		if (!m_ChangeEquip)
@@ -286,8 +305,8 @@ void CPlayer::Render(HDC hdc)
 
 	//m_vBarrelPos = centerS + ( m_vBarrelDir*30);
 
-	MoveToEx(hdc, static_cast<int>(centerS.x) , static_cast<int>(centerS.y) , nullptr);
-	LineTo(hdc, static_cast<int>(RenderBarrelPos.x) , static_cast<int>(RenderBarrelPos.y));
+	//MoveToEx(hdc, static_cast<int>(centerS.x) , static_cast<int>(centerS.y) , nullptr);
+	//LineTo(hdc, static_cast<int>(RenderBarrelPos.x) , static_cast<int>(RenderBarrelPos.y));
 
 	
 	{
@@ -331,6 +350,8 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 				{
 					if (CBoss* creature = dynamic_cast<CBoss*>(obj))
 						creature->Take_Damage(m_iDamage);
+					float m_fVolume = 20.f;
+					CSoundManager::Get_Instance()->PlayFX(L"Hit_Monster.wav", SOUND_EFFECT, m_fVolume);
 
 				}
 			}
@@ -346,6 +367,8 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 			{
 				if (CCreature* creature = dynamic_cast<CCreature*>(obj))
 					creature->Take_Damage(m_iDamage);
+				float m_fVolume = 20.f;
+				CSoundManager::Get_Instance()->PlayFX(L"Hit_Monster.wav", SOUND_EFFECT, m_fVolume);
 
 			}
 		}
@@ -354,7 +377,7 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 	break;
 	case BULLET:
 	{
-		if (dynamic_cast<CPlayer*>(obj))
+		if (dynamic_cast<CPlayerBullet*>(obj))
 			return;
 		else
 		{
@@ -370,12 +393,12 @@ void CPlayer::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 	break;
 	case ITEM:
 	{
-		//todo 아이템도 다양해지면...
-		/*
-		 * 아이템별로 세부 태그에 따라 작업이 나뉘어야 정석임
-		 * 그 작업은 새로운 아이템 분류용 enum을 만들어서,
-		 * 이를 아이템용 새로운 멤버변수에 넣어줘야 할듯
-		 */
+		if (dynamic_cast <CCoin*>(obj))
+		{
+			m_iMoney += obj->Get_Money();
+			obj->Set_Dead(true);
+		}
+
 	}
 	break;
 	case PLATFORM:
@@ -417,6 +440,9 @@ void CPlayer::Key_Input()
 		mos = CCamera::Get_Instance()->GetRealPos(mos);
 		m_vDashDir = (mos - m_vPosition).GetNomalized();
 		m_bDash = true;
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlayFX(L"Dash.wav", SOUND_EFFECT, m_fVolume);
+
 	}
 	else if ( CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && (CKeyMgr::Get_Instance()->Key_Pressing('S')))
 	{
@@ -424,10 +450,16 @@ void CPlayer::Key_Input()
 		m_dropRemain = .2f;
 			m_pFrameKey = L"PlayerJump";
 		m_eCurState = JUMP;
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlayFX(L"Jumping.wav", SOUND_EFFECT, m_fVolume);
+		CSoundManager::Get_Instance()->StopSound(CHANNELID::WALK);
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE))
 	{
 		m_bJump = true;
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlayFX(L"Jumping.wav", SOUND_EFFECT, m_fVolume);
+		CSoundManager::Get_Instance()->StopSound(CHANNELID::WALK);
 	}
 	 else if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
 	{
@@ -440,6 +472,10 @@ void CPlayer::Key_Input()
 			m_vEffect.push_back(CEffectComp({ 24,10 }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y },L"RushDust"));
 			EffTime = EffTimeMax;
 		}
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlaySound(L"step_lth1.wav", CHANNELID::WALK, m_fVolume);
+
+
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing('D'))
 	{
@@ -452,6 +488,8 @@ void CPlayer::Key_Input()
 			m_vEffect.push_back(CEffectComp({ -24,10 }, this, m_tEFFrame, { m_tEFFrame.vSize.x,m_tEFFrame.vSize.y }, L"RushDust"));
 			EffTime = EffTimeMax;
 		}
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlaySound(L"step_lth1.wav", CHANNELID::WALK, m_fVolume);
 
 	}
 	else if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
@@ -476,7 +514,41 @@ void CPlayer::Key_Input()
 
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 	{
-		m_bOnAttack = true;
+
+		if (!m_ChangeEquip)
+		{
+			for (auto& wep : m_Equipweapon01)
+			{
+				if (wep == nullptr)
+					continue;
+				if (dynamic_cast<CWeapon*>(wep)->GetWeaponType() == CWeapon::SWORD)
+				{
+					m_bOnAttack = true;
+					/*float m_fVolume = 20.f;
+					CSoundManager::Get_Instance()->PlayFX(L"Equip.wav", SOUND_EFFECT, m_fVolume);*/
+
+				}
+			}
+		}
+		else
+		{
+			for (auto& wep : m_Equipweapon02)
+			{
+				if (wep == nullptr)
+					continue;
+				//if (wep->GetItemType() == CItem::ONEHAND || wep->GetItemType() == CItem::TWOHAND)
+				//	m_bOnAttack = true;
+				if (dynamic_cast<CWeapon*>(wep)->GetWeaponType() == CWeapon::SWORD)
+				{
+					m_bOnAttack = true;
+					//float m_fVolume = 20.f;
+					//CSoundManager::Get_Instance()->PlayFX(L"Equip.wav", SOUND_EFFECT, m_fVolume);
+
+				}
+			}
+		}
+
+		
 	}
 
 
@@ -487,6 +559,9 @@ void CPlayer::Key_Input()
 	if (CKeyMgr::Get_Instance()->Key_Down('Q'))
 	{
 		m_ChangeEquip = !m_ChangeEquip;
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlayFX(L"Swap_weapon.wav", SOUND_EFFECT, m_fVolume);
+
 	}
 
 	// 마우스 정보 가져오기
@@ -585,10 +660,12 @@ void CPlayer::Motion_Change()
 
 void CPlayer::Take_Damage(int damage)
 {
-
 	
 	if (accTime > m_fInvincibleTime)
 	{
+	float m_fVolume = 20.f;
+	CSoundManager::Get_Instance()->PlayFX(L"Hit_Player.wav", SOUND_EFFECT, m_fVolume);
+
 		if (m_iHP - damage > 0)
 			Set_HP(m_iHP - damage);
 		else
@@ -634,8 +711,10 @@ void CPlayer::LimitPlayerPos()
 
 
 
-int CPlayer::Equip_Item(int invenIndex, CItem* pInvenItem, int num)
+int CPlayer::Equip_Item(int invenIndex, CItem* pInvenItem, int num, int setIndex)
 {
+
+	array<CItem*,2>& weaponSlots = (setIndex == 0) ? m_Equipweapon01 : m_Equipweapon02;
 
 	CItem::ITEMTYPE eType = pInvenItem->GetItemType();
 
@@ -666,22 +745,24 @@ int CPlayer::Equip_Item(int invenIndex, CItem* pInvenItem, int num)
 		if (num == 0)
 			return-1;
 	
-		if (m_Equipweapon01[0]!= nullptr && m_Equipweapon01[0]->GetItemType() == CItem::TWOHAND) // 2번에 잩
+		if (weaponSlots[0]!= nullptr && weaponSlots[0]->GetItemType() == CItem::TWOHAND) // 2번에 잩
 			return-1;
 	
-		if (m_Equipweapon01[num] != nullptr)
+		if (weaponSlots[num] != nullptr)
 		{
-			Item_Ability(-m_Equipweapon01[num]->GetDamage(), -m_Equipweapon01[num]->Get_Defense());
-			m_Equipweapon01[num]->SetItemState(CItem::UNEQUIP);
+			Item_Ability(-weaponSlots[num]->GetDamage(), -weaponSlots[num]->Get_Defense());
+			weaponSlots[num]->SetItemState(CItem::UNEQUIP);
 			if (m_Inven->Check_emptySlot() == -1)
 				return-1;
-			m_Inven->Unequip_Item(m_Equipweapon01[num], m_Inven->Check_emptySlot());
-			m_Equipweapon01[num] = nullptr;
+			m_Inven->Unequip_Item(weaponSlots[num], m_Inven->Check_emptySlot());
+			dynamic_cast<CWeapon*>(weaponSlots[num])->Set_Target(nullptr);//
+			weaponSlots[num] = nullptr;
 		}
 
 		Item_Ability(pInvenItem->GetDamage(), pInvenItem->Get_Defense());
 		pInvenItem->SetItemState(CItem::EQUIP);
-		m_Equipweapon01[num] = pInvenItem;
+		dynamic_cast<CWeapon*>(pInvenItem)->Set_Target(this);//
+		weaponSlots[num] = pInvenItem;
 		m_Inven->moved_Item(invenIndex);
 
 	}
@@ -690,24 +771,32 @@ int CPlayer::Equip_Item(int invenIndex, CItem* pInvenItem, int num)
 		if (num == 1)
 			return-1;
 
-		if(m_Equipweapon01[0]&&m_Equipweapon01[0]->GetItemType() == CItem::TWOHAND) // 2번에 잩
-			return-1;
-		
-		if (m_Equipweapon01[num] != nullptr)
+		if (weaponSlots[num] != nullptr)
 		{
-			Item_Ability(-m_Equipweapon01[num]->GetDamage(), -m_Equipweapon01[num]->Get_Defense());
-			m_Equipweapon01[num]->SetItemState(CItem::UNEQUIP);
+			Item_Ability(-weaponSlots[num]->GetDamage(), -weaponSlots[num]->Get_Defense());
+			weaponSlots[num]->SetItemState(CItem::UNEQUIP);
 			if (m_Inven->Check_emptySlot() == -1)
 				return-1;
-			m_Inven->Unequip_Item(m_Equipweapon01[num], m_Inven->Check_emptySlot());
-			dynamic_cast<CWeapon*>(m_Equipweapon01[num])->Set_Target(nullptr);//
-			m_Equipweapon01[num] = nullptr;
+			m_Inven->Unequip_Item(weaponSlots[num], m_Inven->Check_emptySlot());
+			dynamic_cast<CWeapon*>(weaponSlots[num])->Set_Target(nullptr);//
+			weaponSlots[num] = nullptr;
+		}
+		
+		if (weaponSlots[num] != nullptr)
+		{
+			Item_Ability(-weaponSlots[num]->GetDamage(), -weaponSlots[num]->Get_Defense());
+			weaponSlots[num]->SetItemState(CItem::UNEQUIP);
+			if (m_Inven->Check_emptySlot() == -1)
+				return-1;
+			m_Inven->Unequip_Item(weaponSlots[num], m_Inven->Check_emptySlot());
+			dynamic_cast<CWeapon*>(weaponSlots[num])->Set_Target(nullptr);//
+			weaponSlots[num] = nullptr;
 		}
 		
 			Item_Ability(pInvenItem->GetDamage(), pInvenItem->Get_Defense());
 			pInvenItem->SetItemState(CItem::EQUIP);
 			dynamic_cast<CWeapon*>(pInvenItem)->Set_Target(this);//
-			m_Equipweapon01[num] = pInvenItem;
+			weaponSlots[num] = pInvenItem;
 			m_Inven->moved_Item(invenIndex);
 		
 	}
@@ -716,34 +805,34 @@ int CPlayer::Equip_Item(int invenIndex, CItem* pInvenItem, int num)
 		if (num == 1) // 1번은 양손 무기 장착 안됨
 			return-1;
 		
-		if (m_Equipweapon01[num] != nullptr)
+		if (weaponSlots[num] != nullptr)
 		{
-			Item_Ability(-m_Equipweapon01[num]->GetDamage(), -m_Equipweapon01[num]->Get_Defense());
-			m_Equipweapon01[num]->SetItemState(CItem::UNEQUIP);
+			Item_Ability(-weaponSlots[num]->GetDamage(), -weaponSlots[num]->Get_Defense());
+			weaponSlots[num]->SetItemState(CItem::UNEQUIP);
 			if (m_Inven->Check_emptySlot() == -1)
 				return-1;
-			m_Inven->Unequip_Item(m_Equipweapon01[num], m_Inven->Check_emptySlot());
-			dynamic_cast<CWeapon*>(m_Equipweapon01[num])->Set_Target(nullptr);//
-			m_Equipweapon01[num] = nullptr;
+			m_Inven->Unequip_Item(weaponSlots[num], m_Inven->Check_emptySlot());
+			dynamic_cast<CWeapon*>(weaponSlots[num])->Set_Target(nullptr);//
+			weaponSlots[num] = nullptr;
 		}
 		
 			Item_Ability(pInvenItem->GetDamage(), pInvenItem->Get_Defense());
 			pInvenItem->SetItemState(CItem::EQUIP);
 			dynamic_cast<CWeapon*>(pInvenItem)->Set_Target(this);//
-			m_Equipweapon01[num] = pInvenItem;
+			weaponSlots[num] = pInvenItem;
 			m_Inven->moved_Item(invenIndex);
 
 
-			if (m_Equipweapon01[1] != nullptr)
+			if (weaponSlots[1] != nullptr)
 			{
 				// 1번창 장착 해제
-				Item_Ability(-m_Equipweapon01[1]->GetDamage(), -m_Equipweapon01[1]->Get_Defense());
-				m_Equipweapon01[1]->SetItemState(CItem::UNEQUIP);
+				Item_Ability(-weaponSlots[1]->GetDamage(), -weaponSlots[1]->Get_Defense());
+				weaponSlots[1]->SetItemState(CItem::UNEQUIP);
 				if (m_Inven->Check_emptySlot() == -1)
 					return-1;
-				m_Inven->Unequip_Item(m_Equipweapon01[num], m_Inven->Check_emptySlot());
-				dynamic_cast<CWeapon*>(m_Equipweapon01[1])->Set_Target(nullptr);//
-				m_Equipweapon01[1] = nullptr;
+				m_Inven->Unequip_Item(weaponSlots[1], m_Inven->Check_emptySlot());
+				dynamic_cast<CWeapon*>(weaponSlots[1])->Set_Target(nullptr);//
+				weaponSlots[1] = nullptr;
 			}
 		
 	}
@@ -775,7 +864,7 @@ int CPlayer::Unequip_Item(int num, CInventoryUI::INVENTYPE type, int dst)
 
 			m_Equipweapon01[num] = nullptr;
 		}
-		m_Inven->Unequip_Item(m_Equipweapon01[num], dst);
+		//m_Inven->Unequip_Item(m_Equipweapon01[num], dst);
 
 	}
 	else if (type == CInventoryUI::EQUIP02)
@@ -787,10 +876,10 @@ int CPlayer::Unequip_Item(int num, CInventoryUI::INVENTYPE type, int dst)
 			dynamic_cast<CWeapon*>(m_Equipweapon02[num])->Set_Target(nullptr);//
 			if (m_Inven->Check_emptySlot() == -1)
 				return-1;
-			m_Inven->Unequip_Item(m_Equipweapon01[num], dst);
+			m_Inven->Unequip_Item(m_Equipweapon02[num], dst);
 			m_Equipweapon02[num] = nullptr;
 		}
-		m_Inven->Unequip_Item(m_Equipweapon02[num],dst);
+		//m_Inven->Unequip_Item(m_Equipweapon02[num],dst);
 
 	}
 	else if (type == CInventoryUI::ACC)
@@ -802,10 +891,10 @@ int CPlayer::Unequip_Item(int num, CInventoryUI::INVENTYPE type, int dst)
 			dynamic_cast<CWeapon*>(m_EquipAcc[num])->Set_Target(nullptr);//
 			if (m_Inven->Check_emptySlot() == -1)
 				return-1;
-			m_Inven->Unequip_Item(m_Equipweapon01[num], dst);
+			m_Inven->Unequip_Item(m_EquipAcc[num], dst);
 			m_EquipAcc[num] = nullptr;
 		}
-		m_Inven->Unequip_Item(m_EquipAcc[num], dst);
+		//m_Inven->Unequip_Item(m_EquipAcc[num], dst);
 	}
 	//else // 인밴인 경우
 	//{
@@ -834,21 +923,21 @@ CItem* CPlayer::Get_InvenItem(int index, int EquipInvenNum)
 {
 	if (EquipInvenNum == 0)
 	{
-		if (index <0 && index > m_Equipweapon01.size())
+		if (index <0 || index > m_Equipweapon01.size())
 			return nullptr;
 		else
 			return m_Equipweapon01[index];
 	}
 	else if (EquipInvenNum == 1)
 	{
-		if (index <0 && index > m_Equipweapon02.size())
+		if (index <0 || index > m_Equipweapon02.size())
 			return nullptr;
 		else
 			return m_Equipweapon02[index];
 	}
 	else if (EquipInvenNum == 2)
 	{
-		if (index <0 && index > m_EquipAcc.size())
+		if (index <0 || index > m_EquipAcc.size())
 			return nullptr;
 		else
 			return m_EquipAcc[index];
@@ -857,3 +946,4 @@ CItem* CPlayer::Get_InvenItem(int index, int EquipInvenNum)
 		return nullptr;
 
 }
+

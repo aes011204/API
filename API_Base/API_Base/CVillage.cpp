@@ -18,6 +18,7 @@
 #include "CStat.h"
 #include "CSmith.h"
 #include "CInventoryUI.h"
+#include "Mouse.h"
 
 
 
@@ -39,20 +40,20 @@ void CVillage::Initialize()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Village/TownLayer_Day.bmp", L"VillageBG2");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Village/Village.bmp", L"Village");
 
-	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CShop>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
 	//CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonster>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CDungeonDoor>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CStat>::Create());
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CSmith>::Create());
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CShop>::Create());
 	//
 	CCamera::Get_Instance()->Bootstrap(CObjMgr::Get_Instance()->Get_Player()->GetPosition());
 	CCamera::Get_Instance()->SetBackSize(m_vSceneSize);
 	CCamera::Get_Instance()->SetTarget(CObjMgr::Get_Instance()->Get_Player());
 
 	
-	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
-	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CInventoryUI>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
+	//CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
+	//CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CInventoryUI>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
 
 	//Line 테스트
 	float Ystart = m_vSceneSize.y -29.f;
@@ -85,6 +86,7 @@ void CVillage::Initialize()
 
 	m_SoundTime = 1.5f;
 
+	Mouse::Get_Instance()->SetIsShoot(1);
 
 }
 
@@ -107,17 +109,17 @@ int CVillage::Update()
 		}
 	}
 	// 테스트
-	if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-	{
-		float m_fVolume = 20.f;
+	//if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+	//{
+	//	float m_fVolume = 20.f;
 
-		CSoundManager::Get_Instance()->PlaySound(L"DungeonEat2.wav", SOUND_EAT2, m_fVolume);
-		
-		CSoundManager::Get_Instance()->PlaySound(L"DungeonEat.wav", SOUND_EAT1,m_fVolume);
+	//	CSoundManager::Get_Instance()->PlaySound(L"DungeonEat2.wav", SOUND_EAT2, m_fVolume);
+	//	
+	//	CSoundManager::Get_Instance()->PlaySound(L"DungeonEat.wav", SOUND_EAT1,m_fVolume);
 
-		Vector2  lookat = CCamera::Get_Instance()->GetRealPos( CKeyMgr::Get_Instance()->GetMousePos());
-		CCamera::Get_Instance()->SetLookAt(lookat); 
-	}
+	//	Vector2  lookat = CCamera::Get_Instance()->GetRealPos( CKeyMgr::Get_Instance()->GetMousePos());
+	//	CCamera::Get_Instance()->SetLookAt(lookat); 
+	//}
 
 	return 0;
 }
@@ -181,7 +183,7 @@ void CVillage::Render(HDC hdc)
 void CVillage::Release()
 {
 	CObjMgr::Get_Instance()->Release();
-	CUIMgr::Get_Instance()->Release();
+	//CUIMgr::Get_Instance()->Release();
 	CLineManager::Get_Instance()->Release();
 	CSoundManager::Get_Instance()->StopAll();
 

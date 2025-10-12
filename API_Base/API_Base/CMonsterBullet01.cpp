@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CMonsterBullet01.h"
+
 #include "CBmpMgr.h"
 #include "CCamera.h"
 
@@ -14,21 +15,18 @@ CMonsterBullet01::~CMonsterBullet01()
 void CMonsterBullet01::Initialize()
 {
     CBullet::Initialize();
-    m_vSize = { 13,16 };
-    m_fSpeed = 300.f;
-    m_fSpeedY = 300.f;
+    m_vSize = { 45,45 };
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/BatBullet.bmp.bmp", L"BatBullet");
 
-    m_iDamage = 1.f;
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BulletSprite.bmp", L"BulletSprite");
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BulletBoomSprite.bmp", L"BulletBoomSprite");
 
-    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BansheeBulletSprite.bmp", L"BansheeBullet");
-    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BansheeBulletBoomSprite.bmp", L"BansheeBulletBoom");
-
-    m_pFrameKey = L"BansheeBullet";
+    m_pFrameKey = L"BatBullet";
     m_tFrame.iStart = 0;
-    m_tFrame.iEnd = 3;
+    m_tFrame.iEnd = 1;
     m_tFrame.dwSpeed = .3f;
     m_tFrame.dwTime = 0.f;
-    m_tFrame.vSize = { 13,16 };
+    m_tFrame.vSize = { 45,45 };
 
     m_eCurState = IDLE;
 
@@ -100,23 +98,24 @@ void CMonsterBullet01::Motion_Change()
         switch (m_eCurState)
         {
         case IDLE:
-            m_pFrameKey = L"BansheeBullet";
+            m_pFrameKey = L"BatBullet";
             m_tFrame.iStart = 0;
-            m_tFrame.iEnd = 3;
+            m_tFrame.iEnd = 1;
             m_tFrame.dwSpeed = .3f;
             m_tFrame.dwTime = 0.f;
-            m_tFrame.vSize = { 13,16 };
+            m_tFrame.vSize = {45,45 };
+
             m_vSize = m_tFrame.vSize;
             break;
 
 
         case DEAD:
-            m_pFrameKey = L"BansheeBulletBoom";
+            m_pFrameKey = L"BatBullet";
             m_tFrame.iStart = 0;
-            m_tFrame.iEnd = 5;
+            m_tFrame.iEnd = 3;
             m_tFrame.dwSpeed = .2f;
             m_tFrame.dwTime = 0.f;
-            m_tFrame.vSize = { 20,27 };
+            m_tFrame.vSize = { 45,45 };
             m_vSize = m_tFrame.vSize;
             break;
 
@@ -125,3 +124,27 @@ void CMonsterBullet01::Motion_Change()
         m_ePreState = m_eCurState;
     }
 }
+
+//{
+//    m_vSize = { 42.f,42.f };
+//    m_fSpeed = 300.f;
+//    m_fSpeedY = 300.f;
+//
+//    m_iDamage = 1.f;
+//    // CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/BatBullet.bmp.bmp", L"BatBullet");
+//
+//    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BulletSprite.bmp", L"BulletSprite");
+//    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/Mon/Bat/BulletBoomSprite.bmp", L"BulletBoomSprite");
+//
+//    m_pFrameKey = L"BatBullet";
+//    m_tFrame.iStart = 0;
+//    m_tFrame.iEnd = 3;
+//    m_tFrame.dwSpeed = .3f;
+//    m_tFrame.dwTime = 0.f;
+//    m_tFrame.vSize = { 42.f,42.f };
+//
+//    m_eCurState = IDLE;
+//
+//    m_vCollider.push_back(CColliderComp(ColliderType::BODY, { 0,0 }, m_vSize, this, true));
+//
+//}

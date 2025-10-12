@@ -19,7 +19,9 @@ public:
     //bool IsColl() override;
     void KeyInput();
 
-    void RenderIcon(HDC hdc, CItem* item);
+    void RenderIcon(HDC hdc, CItem* item, Vector2 pos = {0,0});
+
+    //void RenderIcon(HDC hdc, CItem* item);
 
    //  void RenderIcon(CItem* item);
     bool m_bOnMouse= false;

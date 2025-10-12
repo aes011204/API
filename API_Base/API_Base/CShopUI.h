@@ -1,5 +1,6 @@
 #pragma once
 #include "CUI.h"
+class CShop;
 class CShopUI :
     public CUI
 {
@@ -18,7 +19,12 @@ public:
     void Set_OnShop(bool value) { m_bOnShop = value; }
 
 private:
+    CShop* m_Shop = nullptr;
     bool m_bOnShop;
     Vector2 m_ImgSize;
+
+    POINT mouse;
+
+    CUI* m_ShopItem[4];
 };
 

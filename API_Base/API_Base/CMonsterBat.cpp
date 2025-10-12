@@ -15,6 +15,7 @@
 #include "CBossHand.h"
 #include "CBossBullet.h"
 #include "CMonsterBullet01.h"
+#include "CSoundManager.h"
 
 
 
@@ -201,7 +202,7 @@ void CMonsterBat::Render(HDC hdc)
 
 void CMonsterBat::Release()
 {
-
+	statebar->Set_Dead(true);
 }
 
 void CMonsterBat::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
@@ -244,6 +245,9 @@ void CMonsterBat::BulletAttack()
 	accTime += CTimeMgr::Get_Instance()->GetDeltaTime();
 	if (1.8f < accTime)
 	{
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlaySound(L"Banshee_ATK.wav", CHANNELID::SOUND_EFFECT, m_fVolume);
+
 		//m_iAngle += 10.0;
 		//m_iAngle %= 360;
 		//
@@ -251,7 +255,7 @@ void CMonsterBat::BulletAttack()
 		{
 			m_iAngle = (/*m_iAngle +*/ (30 * j)) % 360;
 			Vector2 dir = RotateVector(m_vBarrelDir, m_iAngle);
-			CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBullet01>::Create({ m_vPosition.x ,m_vPosition.y  }, {13, 16}, dir));
+			CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBullet>::Create({ m_vPosition.x ,m_vPosition.y  }, {45,45}, dir));
 		}
 		accTime = 0.f;
 	}
@@ -371,7 +375,7 @@ void CMonsterBat::Take_Damage(int _damage)
 	m_hitFlash = true;
 	m_HitTime = m_HitTimeMax;
 
-	cout << m_iHP << endl;
+	
 
 }
 
@@ -402,4 +406,5 @@ void CMonsterBat::DeadEffect()
 	//if (m_vPosition.y <= (528.f + 170.f))
 	//	m_vPosition.y += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
 	m_bDead = true;
+
 }

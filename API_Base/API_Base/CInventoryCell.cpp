@@ -3,6 +3,7 @@
 #include "CBmpMgr.h"
 #include "CKeyMgr.h"
 #include "CItem.h"
+#include "CWeapon.h"
 
 CInventoryCell::CInventoryCell()
 {
@@ -109,17 +110,39 @@ void CInventoryCell::KeyInput()
 {
 }
 
-void CInventoryCell::RenderIcon(HDC hdc, CItem* item)
+void CInventoryCell::RenderIcon(HDC hdc, CItem* item, Vector2 pos)
 {
 	if (item == nullptr)
 		return;
 	Vector2 iconSize = item->Get_IconImgSize();
-
+	if (pos.x == 0 && pos.y == 0)
+	{
+		pos = m_vPosition;
+	}
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(item->Get_IconKey());
 
+	if (dynamic_cast<CWeapon*>(item)->GetWeaponType() == CWeapon::GUN)
+	{
+		Vector2 iconReSize = iconSize * 2;
+
+		GdiTransparentBlt(hdc,
+			pos.x - iconReSize.x * .5f,
+			pos.y - iconReSize.y * .5f,
+			(int)iconReSize.x,
+			(int)iconReSize.y,
+			hMemDC,
+			0,
+			0,
+			(int)iconSize.x,
+			(int)iconSize.y,
+			RGB(255, 0, 255));
+	}
+	else
+	{
+
 	GdiTransparentBlt(hdc,
-		m_vPosition.x - iconSize.x * .5f,
-		m_vPosition.y - iconSize.y * .5f,
+		pos.x - iconSize.x * .5f,
+		pos.y - iconSize.y * .5f,
 		(int)iconSize.x,
 		(int)iconSize.y,
 		hMemDC,
@@ -128,6 +151,8 @@ void CInventoryCell::RenderIcon(HDC hdc, CItem* item)
 		(int)iconSize.x,
 		(int)iconSize.y,
 		RGB(255, 0, 255));			// 제거할 픽셀의 색상
+	}
+
 }
 
 bool CInventoryCell::IsColl()

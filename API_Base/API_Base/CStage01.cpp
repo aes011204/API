@@ -14,6 +14,8 @@
 #include "CDoor.h"
 #include "CMonsterBat.h"
 #include "CMonsterBigSkull.h"
+#include "CKeyMgr.h"
+#include "CMonsterBow.h"
 
 CStage01::CStage01()
 {
@@ -29,21 +31,33 @@ void CStage01::Initialize()
 	m_vSceneSize = { 640.f * 3.5f, 320.f * 3.5f };
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/untitled.bmp", L"Stage01");
-
-	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
-	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBat>::Create({ 475, 345 }, { 60,66 }));
-	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBigSkull>::Create({ 550, 400 } , { 99,144 }));
+	dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetStop(false);
+	dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetVisible(true);
+	//CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CPlayer>::Create());
+	CObjMgr::Get_Instance()->Get_Player()->SetPosition({ 100,400 });
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBat>::Create({ 475, 310 }, { 60,66 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBat>::Create({ 1779,252 }, { 60,66 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBat>::Create({ 2057,608 }, { 60,66 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBat>::Create({1459,613 }, { 60,66 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBigSkull>::Create({ 550, 400 }, { 99,144 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBow>::Create({ 1759, 400 }, { 99,144 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBow>::Create({ 1259, 400 }, { 99,144 }));
+	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CMonsterBigSkull>::Create({ 1973,608 } , { 99,144 }));
 
 	CCamera::Get_Instance()->Bootstrap(CObjMgr::Get_Instance()->Get_Player()->GetPosition());
 	CCamera::Get_Instance()->SetBackSize(m_vSceneSize);
 	CCamera::Get_Instance()->SetTarget(CObjMgr::Get_Instance()->Get_Player());
 
 	//
-	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI((CCreature*)CObjMgr::Get_Instance()->Get_Player()));
-	CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CInventoryUI>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
+	//CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CStateBar>::CreateUI((CCreature*)CObjMgr::Get_Instance()->Get_Player()));
+	//CUIMgr::Get_Instance()->Add_Object(CAbstractFactory<CInventoryUI>::CreateUI(dynamic_cast<CCreature*>(CObjMgr::Get_Instance()->Get_Player())));
 
 	CObjMgr::Get_Instance()->Add_Object(CAbstractFactory<CDoor>::Create({ m_vSceneSize.x-50,m_vSceneSize.y - 300 }, { 100,300 }));
-	
+
+
+	float m_fVolume = 20.f;
+	CSoundManager::Get_Instance()->PlayBGM(L"JailField.wav", m_fVolume);
+
 	platformInit();
 }
 
@@ -52,6 +66,10 @@ int CStage01::Update()
 	CUIMgr::Get_Instance()->Update();
 	CObjMgr::Get_Instance()->Update();
 	CCamera::Get_Instance()->Update();
+
+	//Vector2 mouse = CKeyMgr::Get_Instance()->GetMousePos();
+	//Vector2 worldmouse = CCamera::Get_Instance()->GetRealPos(mouse);
+	//cout << worldmouse.x << " , " << worldmouse.y << endl;
 	return 0;
 }
 
@@ -76,13 +94,29 @@ void CStage01::Render(HDC hdc)
 	//Line Å×½ºÆ®
 	CLineManager::Get_Instance()->Render(hdc);
 	CUIMgr::Get_Instance()->Render(hdc);
+
+	HDC h = CBmpMgr::Get_Instance()->Find_Img(L"BatBullet");
+	if (h == nullptr)
+	{
+		printf("");
+	}
+
+	GdiTransparentBlt(
+		hdc,
+		/*centerS.x - RenderSize.x * 0.5f,
+		centerS.y - RenderSize.y * 0.5f,*/WINCX * .5f, WINCY * .5f,
+		42, 42,
+		h, 0, 0, 42, 42,
+		RGB(255, 0, 255));
+
+
 }
 
 void CStage01::Release()
 {
 	CObjMgr::Get_Instance()->Release();
 
-	CUIMgr::Get_Instance()->Release();
+	//CUIMgr::Get_Instance()->Release();
 	CLineManager::Get_Instance()->Release();
 	CSoundManager::Get_Instance()->StopAll();
 }

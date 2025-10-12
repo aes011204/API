@@ -8,6 +8,7 @@
 #include "CInventoryCell.h"
 #include "CInventory.h"
 #include "CPlayer.h"
+#include "CSoundManager.h"
 
 CInventoryUI::CInventoryUI()
 {
@@ -25,11 +26,13 @@ void CInventoryUI::Initialize()
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/inven/EquipSlot1On.bmp", L"EquipSlot1On");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/inven/EquipSlot2On.bmp", L"EquipSlot2On");
 
+    CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/inven/EquippedWeaponBase.bmp", L"EquippedWeaponBase");
+
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/inven/accessory.bmp", L"accessory");
     CBmpMgr::Get_Instance()->Insert_Bmp(L"../Image/UI/inven/EquippedWeaponBase.bmp", L"EquippedWeaponBase");
     m_vPosition = {WINCX*.8f+10,WINCY*.5f};	// 객체의 위치, 중점
     m_vSize = {369,564};
-    m_tTarget = dynamic_cast<CCreature*>( CObjMgr::Get_Instance()->Get_Player());
+    //m_tTarget = dynamic_cast<CCreature*>( CObjMgr::Get_Instance()->Get_Player());
 
     Vector2 startpos = { 645 ,303 };
 
@@ -62,112 +65,28 @@ void CInventoryUI::Initialize()
 int CInventoryUI::Update()
 {
 
-    GetCursorPos(&mouse);
-    ScreenToClient(g_hWnd, &mouse);
 
-    for (int i = 0; i < 2;i++)
+    if(m_bOnInven)
     {
-        m_Equipweapon01[i]->Update();
-        CInventoryCell* cell = dynamic_cast<CInventoryCell*>(m_Equipweapon01[i]);
-        if (cell->IsColl(mouse))
+        float m_fVolume = 20.f;
+
+
+        GetCursorPos(&mouse);
+        ScreenToClient(g_hWnd, &mouse);
+
+        for (int i = 0; i < 2;i++)
         {
-            if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-            {
-                // 드래그 시작
-                m_pDragFrom = cell;
-                m_pDragFromIndex = i;
-                m_pDragFromType = EQUIP01;
-                m_pDragItem = m_Inven->Get_InvenItem(i);
-                m_isDrag = true;
-            }
-
-            if (CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON))
-            {
-                // 드래그 종료 / 드롭 처리
-                if (m_isDrag)
-                {
-                    Put_Down(EQUIP01, i);
-                    //  m_Inven->Swap_Item(m_pDragFromIndex, i * m_iCol + j);
-
-                    m_isDrag = false;
-                }
-            }
-        }
-
-        m_Equipweapon02[i]->Update();
-
-        CInventoryCell* cell2 = dynamic_cast<CInventoryCell*>(m_Equipweapon02[i]);
-        if (cell2->IsColl(mouse))
-        {
-            if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-            {
-                // 드래그 시작
-                m_pDragFrom = cell2;
-                m_pDragFromIndex = i;
-                m_pDragFromType = EQUIP02;
-                m_pDragItem = m_Inven->Get_InvenItem(i);
-                m_isDrag = true;
-            }
-
-            if (CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON))
-            {
-                // 드래그 종료 / 드롭 처리
-                if (m_isDrag)
-                {
-                    Put_Down(EQUIP02, i);
-                    //  m_Inven->Swap_Item(m_pDragFromIndex, i * m_iCol + j);
-
-                    m_isDrag = false;
-                }
-            }
-        }
-
-    }
-    for (int i = 0; i < 4;i++)
-    {
-        m_EquipAcc[i]->Update();
-        CInventoryCell* cell = dynamic_cast<CInventoryCell*>(m_EquipAcc[i]);
-        if (cell->IsColl(mouse))
-        {
-            if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-            {
-                // 드래그 시작
-                m_pDragFrom = cell;
-                m_pDragFromIndex = i;
-                m_pDragFromType = ACC;
-                m_pDragItem = m_Inven->Get_InvenItem(i);
-                m_isDrag = true;
-            }
-
-            if (CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON))
-            {
-                // 드래그 종료 / 드롭 처리
-                if (m_isDrag)
-                {
-                    Put_Down(ACC, i);
-                    //  m_Inven->Swap_Item(m_pDragFromIndex, i * m_iCol + j);
-
-                    m_isDrag = false;
-                }
-            }
-        }
-
-    }
-    for (int i = 0; i < m_iRow;i++)
-    {
-        for (int j = 0; j < m_iCol;j++)
-        {
-            m_cell[i * m_iCol + j]->Update();
-            CInventoryCell* cell = dynamic_cast<CInventoryCell*>(m_cell[i * m_iCol + j]);
+            m_Equipweapon01[i]->Update();
+            CInventoryCell* cell = dynamic_cast<CInventoryCell*>(m_Equipweapon01[i]);
             if (cell->IsColl(mouse))
             {
                 if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
                 {
                     // 드래그 시작
                     m_pDragFrom = cell;
-                    m_pDragFromIndex = i * m_iCol + j;
-                    m_pDragFromType = INVEN;
-                    m_pDragItem = m_Inven->Get_InvenItem(i * m_iCol + j);
+                    m_pDragFromIndex = i;
+                    m_pDragFromType = EQUIP01;
+                    m_pDragItem = m_Inven->Get_InvenItem(i);
                     m_isDrag = true;
                 }
 
@@ -176,19 +95,124 @@ int CInventoryUI::Update()
                     // 드래그 종료 / 드롭 처리
                     if (m_isDrag)
                     {
-
-
-                        Put_Down(INVEN, i * m_iCol + j);
+                        Put_Down(EQUIP01, i);
                         //  m_Inven->Swap_Item(m_pDragFromIndex, i * m_iCol + j);
 
+                        m_isDrag = false;
+                        if (m_bOnInven == true)
+                            CSoundManager::Get_Instance()->PlayFX(L"Equip.wav", SOUND_EFFECT, m_fVolume);
+                    }
+                }
+            }
+
+            m_Equipweapon02[i]->Update();
+
+            CInventoryCell* cell2 = dynamic_cast<CInventoryCell*>(m_Equipweapon02[i]);
+            if (cell2->IsColl(mouse))
+            {
+                if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+                {
+                    // 드래그 시작
+                    m_pDragFrom = cell2;
+                    m_pDragFromIndex = i;
+                    m_pDragFromType = EQUIP02;
+                    m_pDragItem = m_Inven->Get_InvenItem(i);
+                    m_isDrag = true;
+                }
+
+                if (CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON))
+                {
+                    // 드래그 종료 / 드롭 처리
+                    if (m_isDrag)
+                    {
+                        Put_Down(EQUIP02, i);
+                        //  m_Inven->Swap_Item(m_pDragFromIndex, i * m_iCol + j);
 
                         m_isDrag = false;
+                        if (m_bOnInven == true)
+                            CSoundManager::Get_Instance()->PlayFX(L"Equip.wav", SOUND_EFFECT, m_fVolume);
+                    }
+                }
+            }
+
+        }
+        for (int i = 0; i < 4;i++)
+        {
+            m_EquipAcc[i]->Update();
+            CInventoryCell* cell = dynamic_cast<CInventoryCell*>(m_EquipAcc[i]);
+            if (cell->IsColl(mouse))
+            {
+
+                if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+                {
+                    // 드래그 시작
+                    m_pDragFrom = cell;
+                    m_pDragFromIndex = i;
+                    m_pDragFromType = ACC;
+                    m_pDragItem = m_Inven->Get_InvenItem(i);
+                    m_isDrag = true;
+                }
+
+                if (CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON))
+                {
+                    // 드래그 종료 / 드롭 처리
+                    if (m_isDrag)
+                    {
+                        Put_Down(ACC, i);
+                        //  m_Inven->Swap_Item(m_pDragFromIndex, i * m_iCol + j);
+
+                        m_isDrag = false;
+                        if (m_bOnInven == true)
+                            CSoundManager::Get_Instance()->PlayFX(L"Equip.wav", SOUND_EFFECT, m_fVolume);
+                    }
+                }
+            }
+
+        }
+        for (int i = 0; i < m_iRow;i++)
+        {
+            for (int j = 0; j < m_iCol;j++)
+            {
+                m_cell[i * m_iCol + j]->Update();
+                CInventoryCell* cell = dynamic_cast<CInventoryCell*>(m_cell[i * m_iCol + j]);
+                if (cell->IsColl(mouse))
+                {
+                    if (CKeyMgr::Get_Instance()->Key_Down('P'))
+                    {
+                        dynamic_cast<CPlayer*>(m_tTarget)->SetFromInven(i* m_iCol + j);
+                    }
+                    if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+                    {
+                        // 드래그 시작
+                        m_pDragFrom = cell;
+                        m_pDragFromIndex = i * m_iCol + j;
+                        m_pDragFromType = INVEN;
+                        m_pDragItem = m_Inven->Get_InvenItem(i * m_iCol + j);
+                        m_isDrag = true;
+                    }
+
+                    if (CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON))
+                    {
+                        // 드래그 종료 / 드롭 처리
+                        if (m_isDrag)
+                        {
+
+
+                            Put_Down(INVEN, i * m_iCol + j);
+                            //  m_Inven->Swap_Item(m_pDragFromIndex, i * m_iCol + j);
+
+
+                            m_isDrag = false;
+                            if (m_bOnInven == true)
+                                CSoundManager::Get_Instance()->PlayFX(L"Equip.wav", SOUND_EFFECT, m_fVolume);
+                        }
                     }
                 }
             }
         }
-    }
 
+      
+    }
     if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
     {
 
@@ -201,23 +225,17 @@ int CInventoryUI::Update()
 int CInventoryUI::Late_Update()
 {
 
-    if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
-    {
-    }
-    if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
-    {
-    }
-    if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
-    {
-        //랜더 이미지 따라 다니기 
-        if (m_isDrag)
-        {
-            POINT mouse = {};
-            GetCursorPos(&mouse);
-            ScreenToClient(g_hWnd, &mouse);
-        }
-
-    }
+    //if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+    //{
+    //    //랜더 이미지 따라 다니기 
+    //    if (m_isDrag)
+    //    {
+    //        POINT mouse = {};
+    //        GetCursorPos(&mouse);
+    //        ScreenToClient(g_hWnd, &mouse);
+    //    }
+    //
+    //}
 
 
     return 0;
@@ -225,8 +243,26 @@ int CInventoryUI::Late_Update()
 
 void CInventoryUI::Render(HDC hdc)
 {
+    
 
     m_Inven = dynamic_cast<CPlayer*>(m_tTarget)->Get_Inven();
+    HDC	hMemDC1 = CBmpMgr::Get_Instance()->Find_Img(L"EquippedWeaponBase");
+    Vector2 sizeEquip = { 102,72 };
+    Vector2 resize = { sizeEquip.x * 1.5f,sizeEquip.y };
+  
+    GdiTransparentBlt(hdc, WINCX*.8f+10, WINCY*.8f+10, resize.x, resize.y, hMemDC1, 0, 0, sizeEquip.x, sizeEquip.y, RGB(255,0,255));
+    GdiTransparentBlt(hdc, WINCX * .8f, WINCY * .8f, resize.x, resize.y, hMemDC1, 0, 0, sizeEquip.x, sizeEquip.y, RGB(255, 0, 255));
+
+    if(dynamic_cast<CPlayer*>(m_tTarget)->GetChangeEquip() == false)
+    {
+    dynamic_cast<CInventoryCell*>(m_Equipweapon01[0])->RenderIcon(hdc, dynamic_cast<CPlayer*>(m_tTarget)->Get_InvenItem(0, 0), { WINCX * .8f + resize.x * .5f, WINCY * .8f + resize.y * .5f });
+    
+    }
+    else
+    {
+        dynamic_cast<CInventoryCell*>(m_Equipweapon02[0])->RenderIcon(hdc, dynamic_cast<CPlayer*>(m_tTarget)->Get_InvenItem(0, 1 ), { WINCX * .8f + resize.x * .5f, WINCY * .8f + resize.y * .5f });
+
+    }
 
     if (m_bOnInven)
     {
@@ -263,7 +299,12 @@ void CInventoryUI::Render(HDC hdc)
             }
         }
 
-        
+        WCHAR buffer1[32];
+        swprintf_s(buffer1, 32, L"%d", CObjMgr::Get_Instance()->Get_Player()->Get_Money());
+
+        RECT rc = { m_tRect.left + 100,m_tRect.top + 470, m_tRect.right ,m_tRect.bottom  };
+        CUI::text(hdc, rc, buffer1, 30, 20, 800);
+
 
     }
 
@@ -272,6 +313,9 @@ void CInventoryUI::Render(HDC hdc)
 
 void CInventoryUI::Release()
 {
+    if (m_bOnInven != true)
+        return;
+
     for (int i = 0; i < m_iRow;i++)
     {
         for (int j = 0; j < m_iCol;j++)
@@ -293,22 +337,37 @@ void CInventoryUI::KeyInput()
     {
         // 인벤토리 
         m_bOnInven = !m_bOnInven;
+        float m_fVolume = 20.f;
+        CSoundManager::Get_Instance()->PlayFX(L"Inventory_open.wav", SOUND_EFFECT, m_fVolume);
+
     }
 
 }
 
 void CInventoryUI::Put_Down(CInventoryUI::INVENTYPE type, int index)
 {
-    if(type==ACC)
-
-    if (m_pDragFromIndex == index)
+    if (m_pDragFromType == type && m_pDragFromIndex == index)
         return;
 
+    //if (m_pDragFromIndex == index)
+    //    return;
+    //
     if (m_pDragFromType == INVEN && type == INVEN)
         m_Inven->Swap_Item(m_pDragFromIndex, index);
 
     if (m_pDragFromType == INVEN && type != INVEN)
-        dynamic_cast<CPlayer*>(m_tTarget)->Equip_Item(m_pDragFromIndex,m_pDragItem, index);
+    {
+        if (type == EQUIP01)
+        {
+            dynamic_cast<CPlayer*>(m_tTarget)->Equip_Item(m_pDragFromIndex, m_pDragItem, index, 0);
+
+        }
+        else if (type == EQUIP02)
+        {
+            dynamic_cast<CPlayer*>(m_tTarget)->Equip_Item(m_pDragFromIndex, m_pDragItem, index, 1);
+
+        }
+    }
 
     if (m_pDragFromType != INVEN && type == INVEN)
         dynamic_cast<CPlayer*>(m_tTarget)->Unequip_Item(m_pDragFromIndex, m_pDragFromType, index);

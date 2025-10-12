@@ -23,6 +23,7 @@ void CWeapon::Initialize()
         corners[2] = { half.x, half.y }; // 우하
         corners[3] = { -half.x, half.y }; // 좌하
     }
+    
 }
 
 int CWeapon::Update()
@@ -106,6 +107,7 @@ void CWeapon::Render(HDC hdc)
 
 
             //DC 정리
+            DeleteObject(hBrush);
             SelectObject(hMemDC, hOldBmp);
             DeleteObject(hTempBmp);
             DeleteDC(hMemDC);

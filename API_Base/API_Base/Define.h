@@ -19,7 +19,7 @@
 #define VK_MAX			0xff
 
 enum RENDERID { RENDER_BACKGROUND, RENDER_GAMEBOJECT, RENDER_EFFECT, RENDER_UI, RENDER_END };
-enum CHANNELID { SOUND_BGM, SOUND_EFFECT, SOUND_EAT1, SOUND_EAT2, MAXCHANNEL };
+enum CHANNELID { SOUND_BGM, SOUND_EFFECT, SOUND_EAT1, SOUND_EAT2, WALK,MAXCHANNEL };
 
 /////////////////////////////////
 
@@ -64,15 +64,16 @@ enum OBJID
 {
 	DOOR,
 	MONSTER,
-	PLAYER,
-	BOSS,
 	PET,
 	ITEM,
-	BULLET,
-	PLATFORM,
-	EFFECT,
-	WALL,
 	NPC,
+	PLAYER,
+	BOSS,
+	WALL,
+	EFFECT,
+	PLATFORM,
+	BULLET,
+	MOUSE,
 	OBJ_END
 };
 
@@ -129,3 +130,5 @@ inline void InitRand() { std::srand((unsigned)std::time(nullptr)); } // 게임 시�
 
 inline int RandInt(int a, int b) { return a + std::rand() % (b - a + 1); }        // [a, b]
 inline float RandFloat(float a, float b) { return a + (std::rand() / (float)RAND_MAX) * (b - a); } // [a, b]
+
+

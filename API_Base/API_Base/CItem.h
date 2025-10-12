@@ -24,8 +24,8 @@ public:
 	//static Item* CreateItem( const char* _name, ITEMTYPE _type, int _hpAmount, int _MpAmount, int _attackAmount);
 
 	virtual void ItemInfo() = 0;
-	string GetName() { return strName; }
-	void SetName(string _name) { strName = _name; }
+	const TCHAR* GetName() { return strName; }
+	void SetName(TCHAR* _name) { strName = _name; }
 
 	ITEMTYPE GetItemType() { return itemType; }
 	void SetItemType(ITEMTYPE _itemType) { itemType = _itemType; }
@@ -48,8 +48,9 @@ public:
 	void Set_IconKey(const TCHAR* key) { m_pIconKey = key; }
 	Vector2 Get_IconImgSize() const { return m_iconImgSize; }
 	const TCHAR* Get_IconKey() const { return m_pIconKey; }
+	
 protected:
-	string strName;
+	const TCHAR* strName;
 	ITEMTYPE itemType = IT_END;
 	ITEMSTATE m_eItemState = ST_END;
 	ITEMCLASS m_eItemClass = IC_END;
@@ -61,7 +62,8 @@ protected:
 	int iCost = 0;
 
 	// CObj을(를) 통해 상속됨
-	void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other) override;
+
+	void On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other) ;
 
 	Vector2 m_iconImgSize;
 	//Vector2 m_

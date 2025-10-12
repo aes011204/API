@@ -52,17 +52,41 @@ void CSoundManager::PlaySound(const TCHAR* pSoundKey, CHANNELID eID, float fVolu
 	if (iter == m_mapSound.end())
 		return;
 
-	FMOD_BOOL bPlay = FALSE;
+	FMOD_BOOL playing = FALSE;
+	FMOD_RESULT r = FMOD_Channel_IsPlaying(m_pChannelArr[eID], &playing);
 
-	if (FMOD_Channel_IsPlaying(m_pChannelArr[eID], &bPlay))
+	// 채널이 없거나(r != FMOD_OK) OR 지금 안 재생 중(!playing) → 새로 재생
+	if (r != FMOD_OK || !playing)
 	{
 		FMOD_System_PlaySound(m_pSystem, iter->second, nullptr, FALSE, &m_pChannelArr[eID]);
 	}
 
 	FMOD_Channel_SetVolume(m_pChannelArr[eID], fVolume);
-
 	FMOD_System_Update(m_pSystem);
 }
+
+void CSoundManager::PlayFX(const TCHAR* pSoundKey, CHANNELID eID, float fVolume)
+{
+	unordered_map<TCHAR*, FMOD_SOUND*>::iterator iter;
+
+	// iter = find_if(m_mapSound.begin(), m_mapSound.end(), CTag_Finder(pSoundKey));
+	iter = find_if(m_mapSound.begin(), m_mapSound.end(),
+		[&](auto& iter)->bool
+		{
+			return !lstrcmp(pSoundKey, iter.first);
+		});
+
+	if (iter == m_mapSound.end())
+		return;
+
+	FMOD_CHANNEL* ch = nullptr;
+	FMOD_System_PlaySound(m_pSystem, iter->second, nullptr, FALSE, &ch);
+	if (ch) {
+		FMOD_Channel_SetVolume(ch, fVolume);
+	}
+	FMOD_System_Update(m_pSystem);
+}
+
 
 void CSoundManager::PlayBGM(const TCHAR* pSoundKey, float fVolume)
 {

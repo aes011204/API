@@ -14,6 +14,7 @@
 #include "CMonsterBullet.h"
 #include "CBossHand.h"
 #include "CBossBullet.h"
+#include "CSoundManager.h"
 
 
 
@@ -28,7 +29,7 @@ CBoss::~CBoss()
 
 void CBoss::Initialize()
 {
-	InitRand();
+
 
 	m_vPosition = { 1056.f * .5f,1056.f * .5f };
 	m_vSize = { 210,285 };
@@ -56,7 +57,7 @@ void CBoss::Initialize()
 	m_iBarrelNum = 4;
 	m_vBarrelDir = { -1,0 };
 
-	DeadTime = 10.f;
+	DeadTime = 5.f;
 	DeadTimeMax = DeadTime;
 
 	//m_TmpSword.reserve(SwordCountMax);
@@ -163,6 +164,7 @@ int CBoss::Update()
 		DeadTime -= dt;
 		if (DeadTime <= 0.f)
 		{
+			CCamera::Get_Instance()->Set_Shack(false);
 			m_bDead = true;
 		}
 		else
@@ -291,6 +293,9 @@ void CBoss::BulletAttack()
 		m_iAngle += 10.0;
 		m_iAngle %= 360;
 
+		float m_fVolume = 20.f;
+		CSoundManager::Get_Instance()->PlayFX(L"BelialBullet.wav", SOUND_EFFECT, m_fVolume);
+
 		for (int j = 0; j < m_iBarrelNum; j++)
 		{
 			m_iAngle = (m_iAngle + (90 * j)) % 360;
@@ -311,6 +316,9 @@ void CBoss::SwordAttack()
 
 		if (SwordTime <= 0.f)
 		{
+			float m_fVolume = 20.f;
+			CSoundManager::Get_Instance()->PlayFX(L"Belial_sword.wav", SOUND_EFFECT, m_fVolume);
+
 			Vector2 dir = { 0,-1 };
 			CObj* tmp = CAbstractFactory<CBossBullet>::Create({ m_vPosition.x - 150 + 80 * SwordCount,m_vPosition.y - 200 }, { 20,20 }, dir);
 
@@ -466,6 +474,7 @@ void CBoss::Do_Attack()
 
 void CBoss::Take_Damage(int _damage)
 {
+
 	if (m_iHP - _damage > 0)
 		Set_HP(m_iHP - _damage);
 	else
@@ -478,7 +487,7 @@ void CBoss::Take_Damage(int _damage)
 	m_hitFlash = true;
 	m_HitTime = m_HitTimeMax;
 
-	cout << m_iHP << endl;
+	
 
 }
 
@@ -518,4 +527,12 @@ void CBoss::DeadEffect()
 
 	if(m_vPosition.y <= (528.f + 170.f))
 	m_vPosition.y += m_fSpeed * CTimeMgr::Get_Instance()->GetDeltaTime();
+
+	tmp += CTimeMgr::Get_Instance()->GetDeltaTime();
+
+	CCamera::Get_Instance()->Set_Shack(true);
+
+
+		
+
 }

@@ -65,6 +65,7 @@ private:
 	Vector2 corners[4];
 
 	CObj* m_obj;
+	bool m_visible= false;
 
 };
 

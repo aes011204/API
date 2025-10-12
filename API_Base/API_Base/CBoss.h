@@ -83,5 +83,7 @@ private:
 
 	bool m_NearPlayer = false;
 
+
+	float tmp=0.f;
 };
 

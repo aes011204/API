@@ -1,4 +1,5 @@
 #pragma once
+class CItem;
 class CScene
 {
 public:
@@ -13,7 +14,8 @@ public:
 
 	
 	void RenderBG(HDC hdc, HDC hGroundDC, Vector2 startPos, Vector2 size);
-
+	void Drop_Money(Vector2 pos);
 	Vector2 m_vSceneSize;
+	//vector<CObj*> m_vecCoin;
 };
 

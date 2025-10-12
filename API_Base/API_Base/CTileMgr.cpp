@@ -249,7 +249,7 @@ void CTileMgr::Load_Data()
 
 	CloseHandle(hFile);
 	
-	MessageBox(g_hWnd, L"Load Success", _T("축하"), MB_OK);
+	//MessageBox(g_hWnd, L"Load Success", _T("축하"), MB_OK);
 }
 
 void CTileMgr::Picking(Vector2 pt, Vector2 iDrawID, int iOption, TILEDIR dir)

@@ -30,10 +30,10 @@ void CLineManager::Late_Update()
 
 void CLineManager::Render(HDC hDC)
 {
-	for (auto& line : m_LineList)
-	{
-		line->Render(hDC);
-	}
+	//for (auto& line : m_LineList)
+	//{
+	//	line->Render(hDC);
+	//}
 }
 
 void CLineManager::Release()

@@ -124,6 +124,7 @@ void CStateBar::Render(HDC hdc)
 
 void CStateBar::Release()
 {
+	
 }
 
 bool CStateBar::IsColl()

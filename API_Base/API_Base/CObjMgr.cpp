@@ -4,6 +4,8 @@
 #include "CNonCreature.h"
 #include "CObj.h"
 #include "CCollisionMgr.h"
+#include "CCoin.h"
+#include "CAbstractFactory.h"
 CObjMgr::CObjMgr()
 {
 }
@@ -25,6 +27,10 @@ int CObjMgr::Update()
 
 			if (result == OBJ_DEAD)
 			{
+				if ((*it)->Get_ID() == MONSTER)
+				{
+					Add_Object(CAbstractFactory<CCoin>::Create((*it)->GetPosition()));
+				}
 				Safe_Delete<CObj*>(*it);
 				it = m_ObjList[i].erase(it);
 				
@@ -58,9 +64,12 @@ void CObjMgr::Late_Update()
 	CCollisionMgr::Collision_Rect(m_ObjList[BOSS], m_ObjList[PLAYER]);
 	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[PLAYER]);
 	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[MONSTER]);
+	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[BOSS]);
 
 	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[DOOR]);
 	CCollisionMgr::Collision_Rect(m_ObjList[PLAYER], m_ObjList[NPC]);
+	CCollisionMgr::Collision_Rect(m_ObjList[ITEM], m_ObjList[WALL]);
+	CCollisionMgr::Collision_Rect(m_ObjList[ITEM], m_ObjList[PLATFORM]);
 	
 	CCollisionMgr::Collision_Rect(m_ObjList[BULLET], m_ObjList[WALL]);
 
@@ -71,6 +80,7 @@ void CObjMgr::Late_Update()
 
 #pragma region ¸ó½ºÅÍ - ÇÃ·§Æû °£ Ãæµ¹
 	CCollisionMgr::Collision_Rect(m_ObjList[MONSTER], m_ObjList[PLATFORM]);
+	CCollisionMgr::Collision_RectEx(m_ObjList[MONSTER], m_ObjList[WALL]);
 #pragma endregion
 
 
@@ -99,16 +109,40 @@ void CObjMgr::Render(HDC hdc)
 
 void CObjMgr::Release()
 {
+	//for (int i = 0; i < OBJ_END; i++)
+	//{
+	//	
+	//
+	//	for_each(m_ObjList[i].begin(), m_ObjList[i].end(),
+	//		[](auto& p) 
+	//		{
+	//			if (p) 
+	//		{ 
+	//		delete p; p = nullptr; 
+	//		}
+	//		});
+	//
+	//	m_ObjList[i].clear();
+	//}
+
+
 	for (int i = 0; i < OBJ_END; i++)
 	{
-		for_each(m_ObjList[i].begin(), m_ObjList[i].end(),
-			[](auto& p) {if (p) { delete p; p = nullptr; }});
+		for (auto it = m_ObjList[i].begin(); it != m_ObjList[i].end();)
+		{
+			
+			if ((*it)->Get_ID() != PLAYER)
+			{
+				Safe_Delete<CObj*>(*it);
+				it = m_ObjList[i].erase(it);
 
-		m_ObjList[i].clear();
+			}
+			else
+			{
+				++it;
+			}
+		}
 	}
-
-
-
 
 }
 

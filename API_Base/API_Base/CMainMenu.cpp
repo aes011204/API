@@ -43,6 +43,7 @@ void CMainMenu::Initialize()
 
     CSoundManager::Get_Instance()->PlayBGM(L"Title.wav", g_fVolume);
 
+
 }
 
 int CMainMenu::Update()

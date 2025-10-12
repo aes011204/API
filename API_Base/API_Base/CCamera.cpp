@@ -54,7 +54,29 @@ void CCamera::Update()
 		{
 			m_vCurLookAt = m_tTargetObj->GetPosition();
 		}
+
+		if (m_Shack == true)
+		{
+
+			m_accTimetmp += CTimeMgr::Get_Instance()->GetDeltaTime();
+			float time = RandFloat(.2f, .3f);
+			
+			if (m_accTimetmp >= 0.02f) {
+				m_accTimetmp = 0.f;
+				// 토글 대신 매 간격마다 새 랜덤 오프셋
+				m_vShake.x = (float)RandInt(-20, 20);
+				m_vShake.y = (float)RandInt(-20, 20);
+			}
+		}
+		else {
+			m_vShake = { 0.f, 0.f };
+		}
 	}
+
+	// ★★★ 마지막에 한 번만 더해주기 (핵심)
+	m_vCurLookAt.x += m_vShake.x;
+	m_vCurLookAt.y += m_vShake.y;
+
 	//if (m_vBackSize.x && m_vBackSize.y)
 	//{
 	//	if (m_vCurLookAt.x <= 0 + WINCX * .5f)
@@ -137,3 +159,21 @@ void CCamera::CalDiff()
 }
 
 
+void CCamera::Shack(int a, int b)
+{
+	m_accTimetmp += CTimeMgr::Get_Instance()->GetDeltaTime();
+	float time = RandFloat(.1f, .2f);
+
+	if (m_accTimetmp >= time)
+	{
+	int k = RandInt(-a, b);
+	int j = RandInt(-a, b);
+
+	{
+		m_vCurLookAt.x += k;
+		m_vCurLookAt.y += j;
+
+	}
+	m_accTimetmp = 0.f;
+	}
+}

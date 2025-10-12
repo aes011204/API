@@ -21,5 +21,6 @@ public:
    //     bool  m_IsFlipped = false;
    // float m_FlipDir = 0.f; // 현재 적용된 오프셋(보간 대상)
    // float m_OffsetDst = 0.f; // 목표 오프셋(0 또는 PI)
+    FRAME m_tEFFrame;
 };
 

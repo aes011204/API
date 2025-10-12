@@ -20,14 +20,21 @@ void CBullet::On_Collision(CObj* obj, CColliderComp& my, CColliderComp& other)
 	case MONSTER:
 	{
 		if (other.GetType() == ColliderType::BODY)
+		{
 			dynamic_cast<CCreature*>(obj)->Take_Damage(m_iDamage);
 			m_bDead = true;
+
+		}
 	}
 	break;
 	case BOSS:
 	{
-
+		if (other.GetType() == ColliderType::BODY)
+		{
+			dynamic_cast<CCreature*>(obj)->Take_Damage(m_iDamage);
 		 m_bDead = true;
+
+		}
 	}
 	break;
 
@@ -109,7 +116,10 @@ void CBullet::Render(HDC hDC)
 	//Ellipse(hDC, LeftTopX, LeftTopY, LeftTopX + RenderSizeX, LeftTopY + RenderSizeY);
 
 	HDC	hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKey);
-
+	if (hMemDC == nullptr)
+	{
+		cout << "sjfjkfls" << endl;
+	}
 
 	Vector2 centerS = CCamera::Get_Instance()->GetRenderPos(m_vPosition);
 	Vector2 RenderSize = CCamera::Get_Instance()->GetRenderSize(m_vSize);
