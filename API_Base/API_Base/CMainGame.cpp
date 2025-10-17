@@ -92,7 +92,7 @@ void CMainGame::Render()
 	//HDC	hBackDC = CBmpMgr::Get_Instance()->Find_Img(L"Back");
 
 	CSceneMgr::Get_Instance()->Render(hBackDC); 
-		Mouse::Get_Instance()->Render(hBackDC);
+	Mouse::Get_Instance()->Render(hBackDC);
 
 	SetStretchBltMode(hBackDC, COLORONCOLOR); // (부드럽게면 HALFTONE)
 
