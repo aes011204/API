@@ -15,6 +15,10 @@
 | 개발 환경 | Windows · Visual Studio |
 | 주요 라이브러리 | FMOD |
 
+## 플레이 영상
+
+[플레이 영상 보기 · YouTube](https://youtu.be/kDRAhhgnm5A)
+
 ## 주요 구현
 
 - 게임 루프와 시간·입력·씬·오브젝트·리소스 관리 구조를 갖춘 Win32 API 기반 2D 게임 프레임워크
